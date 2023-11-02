@@ -1,35 +1,28 @@
-import { rowInterface } from "../../interfaces/rowInterface";
+import { IallTypeDataListing } from "../../interfaces/IcommonInterface";
+import { IrowInterface } from "../../interfaces/IrowInterface";
+import { ItableHeader } from "../../interfaces/ItableInterface";
+import TableHeader from "./TableHeader";
 import TableList from "./TableList";
 import { TableWrapper } from "./TableStyled";
 
-const Table = ({ employeeArray }: { employeeArray: rowInterface[] }) => {
+const Table = ({
+  data = [],
+  column = [],
+}: {
+  data: IallTypeDataListing[];
+  column: ItableHeader[];
+}) => {
+  const columnIds = column.reduce((prevState, currentIteration) => {
+    prevState.push(currentIteration.id);
+    return prevState;
+  }, [] as string[]);
+  console.log(columnIds);
   return (
     <TableWrapper>
-      <thead>
-        <tr>
-          <th>
-            <div className="flex-row arrow-direction">Employee Id</div>
-          </th>
-          <th>
-            <div className="flex-row arrow-direction">First Name</div>
-          </th>
-          <th>
-            <div className="flex-row arrow-direction">Last Name</div>
-          </th>
-          <th>
-            <div className="flex-row arrow-direction">Role</div>
-          </th>
-          <th>
-            <div className="flex-row arrow-direction">Department</div>
-          </th>
-          <th>
-            <div className="flex-row arrow-direction">Actions</div>
-          </th>
-        </tr>
-      </thead>
+      <TableHeader column={column} />
       <tbody>
-        {employeeArray.map((emp) => (
-          <TableList key={emp.id} {...emp} />
+        {data.map((emp, index) => (
+          <TableList columnIds={columnIds} key={index} data={emp} />
         ))}
       </tbody>
     </TableWrapper>

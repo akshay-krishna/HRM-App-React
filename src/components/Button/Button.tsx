@@ -1,4 +1,5 @@
-import { buttonAttributes } from "../../interfaces/butonInterface";
+import { IbuttonAttributes } from "../../interfaces/IbutonInterface";
+import { ButtonWrapper } from "./ButtonStyled";
 
 const Button = ({
   btnType,
@@ -6,12 +7,12 @@ const Button = ({
   description,
   src,
   alt,
-}: buttonAttributes) => {
+}: IbuttonAttributes) => {
   return (
-    <button className={btnType ? btnType : ""} type={type_name}>
+    <ButtonWrapper className={btnType ? btnType : ""} type={type_name}>
       {description && <span>{description}</span>}
       {src && <img src={src} alt={alt} />}
-    </button>
+    </ButtonWrapper>
   );
 };
 
