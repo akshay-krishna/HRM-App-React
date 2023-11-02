@@ -29,3 +29,12 @@ body {
 ::-webkit-scrollbar {
   width: 10px;
 }
+
+.flex-row {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
