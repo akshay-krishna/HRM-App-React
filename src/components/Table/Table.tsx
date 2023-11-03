@@ -1,5 +1,4 @@
 import { IallTypeDataListing } from "../../interfaces/IcommonInterface";
-import { IrowInterface } from "../../interfaces/IrowInterface";
 import { ItableHeader } from "../../interfaces/ItableInterface";
 import TableHeader from "./TableHeader";
 import TableList from "./TableList";

@@ -18,5 +18,24 @@ export const ButtonWrapper = styled.button`
     gap: 10px;
     padding: 1px 10px;
     cursor: pointer;
+    &:hover {
+      background-color: var(--light);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      svg {
+        fill: var(--primary);
+      }
+    }
+  }
+
+  &.tohover {
+    svg {
+      fill: red;
+    }
+    &:hover {
+      svg {
+        fill: green;
+      }
+    }
   }
 `;
