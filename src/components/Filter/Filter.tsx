@@ -1,4 +1,5 @@
 import { IskillInterface } from "../../interfaces/IskillInterface";
+import FilterIcon from "../Icons/FilterIcon";
 import { SearchBySkill } from "./FIlterStyled";
 import FilterList from "./FilterList";
 
@@ -13,7 +14,8 @@ const Filter = ({ dataSkills = [] }: { dataSkills: IskillInterface[] }) => {
         formNoValidate
         autoComplete="off"
       />
-      <ul className="skill-list">
+      <FilterIcon />
+      <ul className="skill-list close">
         {dataSkills.map((data) => {
           return <FilterList dataSkills={data} />;
         })}

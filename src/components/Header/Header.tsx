@@ -7,7 +7,7 @@ const Header = () => {
     <HeaderWrapper>
       <div className="header">
         <h1>
-          <a href="#">
+          <a href="/">
             <img src={logo} alt="logo" />
           </a>
         </h1>

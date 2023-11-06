@@ -1,13 +1,15 @@
 import "./App.css";
 import Layout from "./layout/Layout";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import ViewDetails from "./pages/ViewDetails/ViewDetails";
+import Routing from "./routing/Routing";
+// import AddEdit from "./pages/AddEdit/AddEdit";
+// import Dashboard from "./pages/Dashboard/Dashboard";
+// import ViewDetails from "./pages/ViewDetails/ViewDetails";
+import { RouterProvider } from "react-router-dom";
 
 function App() {
   return (
     <Layout>
-      <Dashboard />
-      <ViewDetails />
+      <RouterProvider router={Routing}></RouterProvider>
     </Layout>
   );
 }

@@ -54,3 +54,13 @@ p {
 .open {
   display: block;
 }
+
+.filter-icon {
+  position: absolute;
+  right: 22px;
+  top: 17px;
+  color: var(--primary);
+  font-size: 30px;
+  padding: 0;
+  cursor: pointer;
+}

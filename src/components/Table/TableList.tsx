@@ -3,12 +3,17 @@ import { CdataInvalid } from "../../utils/constant";
 import editIcon from "../../assets/images/edit-icon.svg";
 import deleteIcon from "../../assets/images/delete-icon.svg";
 import { ActionIconWrapper } from "./ActionIconStyled";
+import { Link, useNavigate } from "react-router-dom";
 
 type tableListingProps = {
   columnIds: string[];
   data: IallTypeDataListing;
 };
 const TableList = (props: tableListingProps) => {
+  const navigate = useNavigate();
+  const handleNaviagtion=()=>{
+    navigate("/view_page")
+  }
   const { columnIds = [], data } = props;
   return (
     <tr>
@@ -24,7 +29,9 @@ const TableList = (props: tableListingProps) => {
           );
         } else {
           const value = data[ele] ? data[ele] : CdataInvalid;
-          return <td>{value}</td>;
+          return (
+              <td onClick={handleNaviagtion}>{value}</td>
+          );
         }
       })}
     </tr>

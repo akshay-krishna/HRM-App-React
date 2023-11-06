@@ -1,7 +1,7 @@
 const AddEmployeeIcon = ({ width = "24px", height = "24px" }) => {
   return (
     <svg
-      fill="#fff"
+      fill="var(--light)"
       width={width}
       height={height}
       viewBox="0 0 24 24"

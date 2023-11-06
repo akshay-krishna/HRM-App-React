@@ -8,12 +8,20 @@ import {
   employeeHeaderArray,
   skills,
 } from "./dashboardConstant";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const handleNaviagtion=()=>{
+    navigate("/add_edit_page")
+  }
   return (
     <MainWrapper>
       <SectionWrapper className="flex-row">
-        <Button className="primary flex-row" onClick={() => {}}>
+        <Button
+          className="primary flex-row"
+          onClick={handleNaviagtion}
+        >
           <AddEmployeeIcon /> Add Employee
         </Button>
         <Filter dataSkills={skills} />

@@ -27,15 +27,4 @@ export const ButtonWrapper = styled.button`
       }
     }
   }
-
-  &.tohover {
-    svg {
-      fill: red;
-    }
-    &:hover {
-      svg {
-        fill: green;
-      }
-    }
-  }
 `;
