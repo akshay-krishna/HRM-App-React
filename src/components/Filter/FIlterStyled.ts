@@ -6,7 +6,7 @@ export const SearchBySkill = styled.div`
   height: 60px;
   .filter-search {
     height: 100%;
-    width: 94%;
+    width: 100%;
     border: 1px solid var(--primary);
     border-radius: 7px;
     padding-left: 10px;
@@ -33,8 +33,6 @@ export const SkillListStyle = styled.li`
   border-bottom: 1px solid var(--primary);
   font-size: 14px;
   font-weight: 500;
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
   cursor: pointer;
 
   &:nth-child(even) {
@@ -43,5 +41,34 @@ export const SkillListStyle = styled.li`
 
   &:hover {
     background-color: var(--hover-color);
+  }
+`;
+
+export const SelectedSkills = styled.div`
+  white-space: nowrap;
+  overflow: auto;
+  padding: 10px 0 20px;
+  gap: 10px;
+
+  .individual-skills {
+    gap: 10px;
+    align-items: center;
+    background-color: var(--light);
+    border-radius: 20px;
+    border: 1px solid var(--primary);
+    padding: 5px;
+  }
+
+  .individual-skills:nth-child(even) {
+    background-color: var(--secondary);
+  }
+
+  .close-icon {
+    cursor: pointer;
+    transition: 0.5s;
+  }
+
+  .close-icon:hover {
+    transform: scale(0.8);
   }
 `;

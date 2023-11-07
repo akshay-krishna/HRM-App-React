@@ -55,7 +55,8 @@ p {
   display: block;
 }
 
-.filter-icon {
+.filter-icon,
+.close-filter-icon {
   position: absolute;
   right: 22px;
   top: 17px;

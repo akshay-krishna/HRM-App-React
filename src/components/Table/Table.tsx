@@ -15,13 +15,13 @@ const Table = ({
     prevState.push(currentIteration.id);
     return prevState;
   }, [] as string[]);
-  console.log(columnIds);
+  // console.log(columnIds);
   return (
     <TableWrapper>
       <TableHeader column={column} />
       <tbody>
-        {data.map((emp, index) => (
-          <TableList columnIds={columnIds} key={index} data={emp} />
+        {data.map((emp) => (
+          <TableList columnIds={columnIds} key={emp.id as string} data={emp} />
         ))}
       </tbody>
     </TableWrapper>
