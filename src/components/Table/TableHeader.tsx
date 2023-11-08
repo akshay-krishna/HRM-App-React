@@ -1,4 +1,4 @@
-import { ItableHeader } from "../../interfaces/ItableInterface";
+import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 
 type TableHeaderProps = {
   column: ItableHeader[];

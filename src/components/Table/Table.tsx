@@ -1,5 +1,5 @@
-import { IallTypeDataListing } from "../../interfaces/IcommonInterface";
-import { ItableHeader } from "../../interfaces/ItableInterface";
+import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
+import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 import TableHeader from "./TableHeader";
 import TableList from "./TableList";
 import { TableWrapper } from "./TableStyled";

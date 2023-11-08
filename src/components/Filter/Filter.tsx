@@ -1,9 +1,9 @@
-import { IskillInterface } from "../../interfaces/IskillInterface";
+import { Iskill } from "../../interfaces/CommonInterfaces/Iskill";
 import FilterIcon from "../Icons/FilterIcon";
 import { SearchBySkill } from "./FIlterStyled";
 import FilterList from "./FilterList";
 
-const Filter = ({ dataSkills = [] }: { dataSkills: IskillInterface[] }) => {
+const Filter = ({ dataSkills = [] }: { dataSkills: Iskill[] }) => {
   return (
     <SearchBySkill>
       <input
