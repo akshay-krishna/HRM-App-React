@@ -1,7 +1,8 @@
 import Avatar from "../../components/Icons/Avatar";
 import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { employeeArray } from "../Dashboard/dashboardConstant";
-import { IallTypeDataListing } from "../../interfaces/IcommonInterface";
+import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
+import { useLocation } from "react-router";
 
 const ViewDetails = () => {
   const location = useLocation();

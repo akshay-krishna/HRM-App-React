@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { IskillInterface } from "../../interfaces/IskillInterface";
 import FilterIcon from "../Icons/FilterIcon";
 import { SearchBySkill, SelectedSkills } from "./FIlterStyled";
 import FilterList from "./FilterList";
 import CloseIcon from "../Icons/CloseIcon";
 import CloseFilterIcon from "../Icons/CloseFilterIcon";
+import { Iskill } from "../../interfaces/CommonInterfaces/Iskill";
 
-const Filter = ({ dataSkills = [] }: { dataSkills: IskillInterface[] }) => {
+const Filter = ({ dataSkills = [] }: { dataSkills: Iskill[] }) => {
   const [showSkills, setShowSkills] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<IskillInterface[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<Iskill[]>([]);
 
-  const handleSelectSkill = (skill: IskillInterface) => {
+  const handleSelectSkill = (skill: Iskill) => {
     if (!selectedSkills.includes(skill)) {
-      setSelectedSkills((prev) => [...prev, skill] as IskillInterface[]);
+      setSelectedSkills((prev) => [...prev, skill] as Iskill[]);
     }
   };
 

@@ -1,17 +1,15 @@
-import { IskillInterface } from "../../interfaces/IskillInterface";
+import { Iskill } from "../../interfaces/CommonInterfaces/Iskill";
 import { SkillListStyle } from "./FIlterStyled";
 
 const FilterList = ({
   dataSkills,
   clickSkill,
 }: {
-  dataSkills: IskillInterface;
+  dataSkills: Iskill;
   clickSkill: () => void;
 }) => {
   return (
-    <SkillListStyle onClick={clickSkill}>
-      {dataSkills.name}
-    </SkillListStyle>
+    <SkillListStyle onClick={clickSkill}>{dataSkills.name}</SkillListStyle>
   );
 };
 
