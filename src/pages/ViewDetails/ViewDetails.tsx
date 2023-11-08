@@ -12,8 +12,8 @@ const ViewDetails = () => {
 
   const renderSkills = () => {
     return skill.map((sk, index) => {
-      if (index === skill.length - 1) return <span>{sk}</span>;
-      else return <span>{sk}, </span>;
+      if (index === skill.length - 1) return <span key={sk}>{sk}</span>;
+      else return <span key={sk}>{sk}, </span>;
     });
   };
 
