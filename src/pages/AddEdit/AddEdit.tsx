@@ -1,7 +1,7 @@
 import { AddEditSection } from "./AddEditStyled";
-import addProfilePhoto from "../../assets/images/add-profile-photo.svg";
 import Button from "../../components/Button/Button";
 import { useNavigate } from "react-router-dom";
+import AddPhotoIcon from "../../components/Icons/AddPhotoIcon";
 
 const AddEdit = () => {
   const navigate = useNavigate();
@@ -17,11 +17,7 @@ const AddEdit = () => {
       >
         <div className="add-edit-employee-head flex-column">
           <label htmlFor="photo-id">
-            <img
-              className="add-edit-profile-photo"
-              src={addProfilePhoto}
-              alt="Add Profile Photo Icon"
-            />
+            <AddPhotoIcon className="add-edit-profile-photo" />
           </label>
           <input className="close" type="file" id="photo-id" accept="image/*" />
           <h2 className="add-edit-heading">Add Employee</h2>

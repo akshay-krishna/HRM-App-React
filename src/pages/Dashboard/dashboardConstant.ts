@@ -1,6 +1,6 @@
-import { IallTypeDataListing } from "../../interfaces/IcommonInterface";
-import { IskillInterface } from "../../interfaces/IskillInterface";
-import { ItableHeader } from "../../interfaces/ItableInterface";
+import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
+import { Iskill } from "../../interfaces/CommonInterfaces/Iskill";
+import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 
 export const employeeArray: IallTypeDataListing[] = [
   {
@@ -53,7 +53,7 @@ export const employeeHeaderArray: ItableHeader[] = [
   },
 ];
 
-export const skills: IskillInterface[] = [
+export const skills: Iskill[] = [
   {
     id: "html-css",
     name: "HTML-CSS",

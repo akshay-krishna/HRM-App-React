@@ -1,4 +1,4 @@
-import avatar from "../../assets/images/avatar.svg";
+import Avatar from "../../components/Icons/Avatar";
 import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { viewEmployee } from "./viewConstant";
 
@@ -7,7 +7,7 @@ const ViewDetails = () => {
     <ViewDetailsSection className="view-employee-modal flex-row ">
       <div className="flex-column left-bar">
         <span className="profile-photo-circle">
-          <img className="profile-photo-view" src={avatar} />
+          <Avatar className="profile-photo-view" />
         </span>
 
         <p className="emp-id-display">{viewEmployee.id}</p>

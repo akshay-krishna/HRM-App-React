@@ -5,7 +5,7 @@ import AddEdit from "../pages/AddEdit/AddEdit";
 
 const Routing = createBrowserRouter([
   { path: "/", element: <Dashboard /> },
-  { path: "/view_page", element: <ViewDetails /> },
+  { path: "/employee-detail/", element: <ViewDetails /> },
   { path: "/add_edit_page", element: <AddEdit /> },
 ]);
 export default Routing;

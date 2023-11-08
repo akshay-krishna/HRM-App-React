@@ -1,4 +1,4 @@
-export interface IrowInterface {
+export interface ItableRow {
   id?: string;
   fName?: string;
   lName?: string;
