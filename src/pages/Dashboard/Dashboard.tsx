@@ -12,15 +12,12 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const handleNaviagtion=()=>{
-    navigate("/add_edit_page")
-  }
   return (
     <MainWrapper>
       <SectionWrapper className="flex-row">
         <Button
           className="primary flex-row"
-          onClick={handleNaviagtion}
+          onClick={() => navigate("/add-page")}
         >
           <AddEmployeeIcon /> Add Employee
         </Button>

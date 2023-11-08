@@ -1,9 +1,9 @@
 import { CdataInvalid } from "../../utils/constant";
+import editIcon from "../../assets/images/edit-icon.svg";
+import deleteIcon from "../../assets/images/delete-icon.svg";
 import { ActionIconWrapper } from "./ActionIconStyled";
 import { useNavigate } from "react-router-dom";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import EditIcon from "../Icons/EditIcon";
-import DeleteIcon from "../Icons/DeleteIcon";
 
 type tableListingProps = {
   columnIds: string[];
@@ -11,25 +11,34 @@ type tableListingProps = {
 };
 const TableList = (props: tableListingProps) => {
   const navigate = useNavigate();
-  const handleNaviagtion = () => {
-    navigate("/employee-detail");
-  };
   const { columnIds = [], data } = props;
+
   return (
     <tr>
       {columnIds.map((ele) => {
         if (ele === "action") {
           return (
-            <td>
+            <td key={ele}>
               <ActionIconWrapper className="flex-row">
-                <EditIcon />
-                <DeleteIcon />
+                <img
+                  onClick={() => navigate(`/edit-page/${data.id}`)}
+                  src={editIcon}
+                  alt="edit-icon"
+                />
+                <img src={deleteIcon} alt="delete-icon" />
               </ActionIconWrapper>
             </td>
           );
         } else {
           const value = data[ele] ? data[ele] : CdataInvalid;
-          return <td onClick={handleNaviagtion}>{value}</td>;
+          return (
+            <td
+              key={ele}
+              onClick={() => navigate(`/employee-details/${data.id}`)}
+            >
+              {value}
+            </td>
+          );
         }
       })}
     </tr>

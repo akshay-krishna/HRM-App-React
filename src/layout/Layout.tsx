@@ -1,13 +1,11 @@
-import { ReactNode } from "react";
 import Header from "../components/Header/Header";
+import { Outlet } from "react-router";
 
-
-const Layout = ({children}:{children:ReactNode}) => {
- 
+const Layout = () => {
   return (
     <>
       <Header />
-      <main>{children}</main>
+      <main>{<Outlet />}</main>
     </>
   );
 };
