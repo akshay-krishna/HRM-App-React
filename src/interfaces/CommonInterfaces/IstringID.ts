@@ -1,4 +1,4 @@
-export interface Iskill {
+export interface IstringID {
     id: string;
     name: string;
   }

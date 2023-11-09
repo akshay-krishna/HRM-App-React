@@ -46,4 +46,10 @@ export const AddEditSection = styled.section`
   .label-input {
     gap: 20px;
   }
+
+  .department-parent,
+  .role-parent,
+  .location-parent {
+    position: relative;
+  }
 `;

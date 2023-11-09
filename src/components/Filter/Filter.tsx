@@ -1,18 +1,18 @@
 import { useState } from "react";
 import FilterIcon from "../Icons/FilterIcon";
 import { SearchBySkill, SelectedSkills } from "./FIlterStyled";
-import FilterList from "./FilterList";
 import CloseIcon from "../Icons/CloseIcon";
 import CloseFilterIcon from "../Icons/CloseFilterIcon";
-import { Iskill } from "../../interfaces/CommonInterfaces/Iskill";
+import List from "../List/List";
+import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
 
-const Filter = ({ dataSkills = [] }: { dataSkills: Iskill[] }) => {
+const Filter = ({ dataSkills = [] }: { dataSkills: IstringID[] }) => {
   const [showSkills, setShowSkills] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<Iskill[]>([]);
+  const [selectedSkills, setSelectedSkills] = useState<IstringID[]>([]);
 
-  const handleSelectSkill = (skill: Iskill) => {
+  const handleSelectSkill = (skill: IstringID) => {
     if (!selectedSkills.includes(skill)) {
-      setSelectedSkills((prev) => [...prev, skill] as Iskill[]);
+      setSelectedSkills((prev) => [...prev, skill] as IstringID[]);
     }
   };
 
@@ -45,27 +45,24 @@ const Filter = ({ dataSkills = [] }: { dataSkills: Iskill[] }) => {
         <CloseFilterIcon clickCloseFilter={() => handleRemoveAllSkill()} />
       )}
       {showSkills && (
-        <ul className="skill-list">
-          {dataSkills.map((data) => (
-            <FilterList
-              clickSkill={() => handleSelectSkill(data)}
-              key={data.id}
-              dataSkills={data}
-            />
-          ))}
-        </ul>
+        <List position="top" dataArray={dataSkills} handleFunction={handleSelectSkill} />
       )}
       <SelectedSkills className="flex-row">
-        {selectedSkills.map((individualSkills) => (
-          <span className="individual-skills flex-row">
-            <p>{individualSkills.name}</p>
-            <CloseIcon
-              removeSelectedSkills={() =>
-                handleRemoveSelectedSkill(individualSkills.name)
-              }
-            />
-          </span>
-        ))}
+        {selectedSkills.map((individualSkills) => {
+          return (
+            <span
+              key={individualSkills.id}
+              className="individual-skills flex-row"
+            >
+              <p>{individualSkills.name}</p>
+              <CloseIcon
+                removeSelectedSkills={() =>
+                  handleRemoveSelectedSkill(individualSkills.name)
+                }
+              />
+            </span>
+          );
+        })}
       </SelectedSkills>
     </SearchBySkill>
   );

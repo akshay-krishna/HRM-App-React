@@ -1,5 +1,5 @@
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import { Iskill } from "../../interfaces/CommonInterfaces/Iskill";
+import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 
 export const employeeArray: IallTypeDataListing[] = [
@@ -74,7 +74,7 @@ export const employeeHeaderArray: ItableHeader[] = [
   },
 ];
 
-export const skills: Iskill[] = [
+export const skills: IstringID[] = [
   {
     id: "html-css",
     name: "HTML-CSS",

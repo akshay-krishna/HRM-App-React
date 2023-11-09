@@ -5,7 +5,7 @@ const LazyDashboard = React.lazy(() => import("../pages/Dashboard/Dashboard"));
 const LazyViewDetails = React.lazy(
   () => import("../pages/ViewDetails/ViewDetails")
 );
-const LazyAddEdit = React.lazy(() => import("../pages/AddEdit/AddEdit"));
+const LazyAddEdit = React.lazy(() => import("../pages/AddEdit/FormikAddEdit"));
 
 const Routing = createBrowserRouter([
   {
