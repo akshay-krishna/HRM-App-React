@@ -1,9 +1,9 @@
 import { CdataInvalid } from "../../utils/constant";
-import editIcon from "../../assets/images/edit-icon.svg";
-import deleteIcon from "../../assets/images/delete-icon.svg";
 import { ActionIconWrapper } from "./ActionIconStyled";
 import { useNavigate } from "react-router-dom";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
+import DeleteIcon from "../Icons/DeleteIcon";
+import EditIcon from "../Icons/EditIcon";
 
 type tableListingProps = {
   columnIds: string[];
@@ -20,12 +20,8 @@ const TableList = (props: tableListingProps) => {
           return (
             <td key={ele}>
               <ActionIconWrapper className="flex-row">
-                <img
-                  onClick={() => navigate(`/edit-page/${data.id}`)}
-                  src={editIcon}
-                  alt="edit-icon"
-                />
-                <img src={deleteIcon} alt="delete-icon" />
+                <EditIcon onClick={() => navigate(`/edit-page/${data.id}`)} />
+                <DeleteIcon />
               </ActionIconWrapper>
             </td>
           );

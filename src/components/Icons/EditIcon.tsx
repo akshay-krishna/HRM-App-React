@@ -1,8 +1,17 @@
-function EditIcon({ width = "20px", height = "22px" }) {
+function EditIcon({
+  width = "20px",
+  height = "22px",
+  onClick,
+}: {
+  width?: string;
+  height?: string;
+  onClick: any;
+}) {
   return (
     <svg
       width={width}
       height={height}
+      onClick={onClick}
       viewBox="0 0 20 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

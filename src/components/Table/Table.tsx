@@ -15,7 +15,6 @@ const Table = ({
     prevState.push(currentIteration.id);
     return prevState;
   }, [] as string[]);
-  // console.log(columnIds);
   return (
     <TableWrapper>
       <TableHeader column={column} />
