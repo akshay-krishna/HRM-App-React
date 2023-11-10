@@ -9,7 +9,7 @@ export const SectionWrapper = styled.section`
 `;
 
 export const FilterWrapper = styled.div`
-  max-width: 265px;
+  max-width: 230px;
   max-height: 60px;
   input {
     border-radius: 7px;

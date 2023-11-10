@@ -4,18 +4,24 @@ import List from "../List/List";
 
 const DropDown = (props: any) => {
   const [toggleDropdown, setToggleDropdown] = useState("");
-  const [input,setInput] = useState("")
+  const [input, setInput] = useState(props.initialvalue || "");
 
   return (
     <div className={`flex-column label-input ${props.name}-parent`}>
       <TextInput
         {...props}
         value={input}
+        Value={input}
         readOnly
         onFocus={() => setToggleDropdown(props.name)}
         onBlur={() => setTimeout(() => setToggleDropdown(""), 100)}
       />
-      {toggleDropdown === props.name && <List dataArray={props.renderArray} handleFunction={(data) => setInput(data.name) }/>}
+      {toggleDropdown === props.name && (
+        <List
+          dataArray={props.renderarray}
+          handleFunction={(data) => setInput(data.name)}
+        />
+      )}
     </div>
   );
 };

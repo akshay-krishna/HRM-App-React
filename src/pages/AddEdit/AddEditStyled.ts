@@ -52,4 +52,9 @@ export const AddEditSection = styled.section`
   .location-parent {
     position: relative;
   }
+
+  .skill-input {
+    max-width: 300px;
+    max-height: 50px;
+  }
 `;

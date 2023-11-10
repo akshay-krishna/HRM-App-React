@@ -14,8 +14,12 @@ export const ListStyledUl = styled.ul`
   overflow: auto;
   max-height: 300px;
 
-  &.topPosition {
+  &.skill-dashboard {
     top: 43px;
+  }
+
+  &.skill-input-list {
+    top: 33px;
   }
 `;
 

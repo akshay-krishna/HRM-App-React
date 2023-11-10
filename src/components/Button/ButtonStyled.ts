@@ -27,4 +27,7 @@ export const ButtonWrapper = styled.button`
       }
     }
   }
+  &.add-edit-btn {
+    margin-top: 30px;
+  }
 `;

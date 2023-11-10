@@ -58,10 +58,21 @@ p {
 .filter-icon,
 .close-filter-icon {
   position: absolute;
-  right: 22px;
-  top: 17px;
+  right: 4%;
+  top: 28%;
   color: var(--primary);
   font-size: 30px;
   padding: 0;
   cursor: pointer;
+}
+
+.label-input {
+  position: relative;
+}
+
+.error {
+  color: red;
+  position: absolute;
+  top: 95px;
+  font-size: 12px;
 }

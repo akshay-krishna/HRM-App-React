@@ -3,7 +3,12 @@ function CloseFilterIcon({
   width = "24px",
   height = "24px",
   clickCloseFilter,
-}: any) {
+}: {
+  className?: string;
+  width?: string;
+  height?: string;
+  clickCloseFilter: any;
+}) {
   return (
     <svg
       className={className}

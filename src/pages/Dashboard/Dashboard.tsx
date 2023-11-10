@@ -22,7 +22,7 @@ const Dashboard = () => {
           <AddEmployeeIcon /> Add Employee
         </Button>
         <FilterWrapper>
-          <Filter dataSkills={skills} />
+          <Filter className="filter-search" dataSkills={skills} />
         </FilterWrapper>
       </SectionWrapper>
       <Table column={employeeHeaderArray} data={employeeArray} />
