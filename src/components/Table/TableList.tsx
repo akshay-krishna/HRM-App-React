@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import DeleteIcon from "../Icons/DeleteIcon";
 import EditIcon from "../Icons/EditIcon";
+import DeleteModal from "../DeleteModal/DeleteModal";
 
 type tableListingProps = {
   columnIds: string[];
@@ -21,7 +22,11 @@ const TableList = (props: tableListingProps) => {
             <td key={ele}>
               <ActionIconWrapper className="flex-row">
                 <EditIcon onClick={() => navigate(`/edit-page/${data.id}`)} />
-                <DeleteIcon />
+                <DeleteIcon
+                  onClick={() => {
+                    navigate(`/delete-page/:id`);
+                  }}
+                />
               </ActionIconWrapper>
             </td>
           );

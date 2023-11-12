@@ -7,9 +7,11 @@ import List from "../List/List";
 import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
 
 const Filter = ({
+  selectedValue,
   className,
   dataSkills = [],
 }: {
+  selectedValue?: string;
   className: string;
   dataSkills: IstringID[];
 }) => {
@@ -43,7 +45,7 @@ const Filter = ({
         className={className}
         type="text"
         placeholder="Filter By Skills"
-        name={className}
+        name="skills"
         formNoValidate
         autoComplete="off"
         onFocus={() => setShowSkills(true)}

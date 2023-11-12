@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const ButtonWrapper = styled.button`
   border: none;
-  background-color: var(--primary);
   font-size: 16px;
   font-weight: 700;
   color: var(--light);
@@ -16,6 +15,7 @@ export const ButtonWrapper = styled.button`
     width: 195px;
     height: 60px;
     gap: 10px;
+    background-color: var(--primary);
     padding: 1px 10px;
     cursor: pointer;
     &:hover {
@@ -29,5 +29,21 @@ export const ButtonWrapper = styled.button`
   }
   &.add-edit-btn {
     margin-top: 30px;
+  }
+  &.secondary {
+    width: 195px;
+    height: 60px;
+    gap: 10px;
+    background-color: var(--red);
+    padding: 1px 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--light);
+      color: var(--primary);
+      border: 1px solid var(--red);
+      svg {
+        fill: var(--primary);
+      }
+    }
   }
 `;

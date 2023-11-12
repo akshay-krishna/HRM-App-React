@@ -1,5 +1,5 @@
 export interface IallTypeDataListing {
-  [id: string]: string | JSX.Element | string[];
+  [id: string]: string | JSX.Element | string[] | any;
 }
 
 export interface IviewEmployee {

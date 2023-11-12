@@ -1,8 +1,17 @@
-function DeleteIcon({ width = "16px", height = "18px" }) {
+function DeleteIcon({
+  width = "16px",
+  height = "18px",
+  onClick,
+}: {
+  width?: string;
+  height?: string;
+  onClick: any;
+}) {
   return (
     <svg
       width={width}
       height={height}
+      onClick={onClick}
       viewBox="0 0 16 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

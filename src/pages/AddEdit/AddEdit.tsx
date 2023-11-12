@@ -28,6 +28,7 @@ function FormikAddEdit() {
     dob: "",
     phoneNumber: "",
     address: "",
+    skills: "",
   };
 
   const location = useLocation();
@@ -46,8 +47,10 @@ function FormikAddEdit() {
       dob: `${employeeDetails.dob}`,
       phoneNumber: `${employeeDetails.phnNo}`,
       address: `${employeeDetails.address}`,
+      skills: `${employeeDetails.skill}`,
     };
-    console.log(formData);
+    console.log("emp", employeeDetails.skill);
+    console.log(formData.skills);
   }
 
   return (
@@ -166,7 +169,11 @@ function FormikAddEdit() {
 
               <div className="flex-column label-input skill-input">
                 <label>Skills</label>
-                <Filter className="skill-input-form" dataSkills={skills} />
+                <Filter
+                  selectedValue={formData.skills}
+                  className="skill-input-form"
+                  dataSkills={skills}
+                />
               </div>
             </div>
           </div>
