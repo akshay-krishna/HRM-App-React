@@ -3,18 +3,20 @@ import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { employeeArray } from "../Dashboard/dashboardConstant";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import { useLocation } from "react-router";
+import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
 
 const ViewDetails = () => {
   const location = useLocation();
   const viewEmployee: IallTypeDataListing | undefined = employeeArray.find(
     (emp) => emp.id === location.pathname.split("/")[2]
   );
-  const skill: string[] = viewEmployee?.skill as string[];
-
+  const skill: IstringID[] = viewEmployee?.skill as IstringID[];
+  console.log(skill);
   const renderSkills = () => {
     return skill.map((sk, index) => {
-      if (index === skill.length - 1) return <span key={sk}>{sk}</span>;
-      else return <span key={sk}>{sk}, </span>;
+      console.log(sk, "sk");
+      if (index === skill.length - 1) return <span key={sk.id}>{sk.name}</span>;
+      else return <span key={sk.id}>{sk.name}, </span>;
     });
   };
 

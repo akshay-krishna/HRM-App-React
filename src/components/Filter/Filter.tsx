@@ -5,27 +5,30 @@ import CloseIcon from "../Icons/CloseIcon";
 import CloseFilterIcon from "../Icons/CloseFilterIcon";
 import List from "../List/List";
 import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+import { useEmployeeContext } from "../../context/EmployeeContext";
 
 const Filter = ({
-  selectedValue,
+  selectedValue = [],
   className,
   dataSkills = [],
 }: {
-  selectedValue?: string;
+  selectedValue?: IstringID[];
   className: string;
   dataSkills: IstringID[];
 }) => {
   const [showSkills, setShowSkills] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<IstringID[]>([]);
+  const [skillList, setSkillList] = useState(dataSkills);
+  const [selectedSkills, setSelectedSkills] =
+    useState<IstringID[]>(selectedValue);
+  const { updateFilters, removeFilter } = useEmployeeContext();
+  const [inputValue, setInputValue] = useState("");
 
-  console.log("skills selectted", selectedSkills);
   const handleSelectSkill = (skill: IstringID) => {
-    console.log("before pushing clicked selected skills", skill);
-    if (!selectedSkills.includes(skill)) {
-      console.log("selected skill is ", skill);
-      setSelectedSkills((prev) => [...prev, skill] as IstringID[]);
+    const isExist = selectedSkills.some((sk) => sk.id === skill.id);
+    if (!isExist) {
+      setSelectedSkills((prev) => [...prev, skill]);
+      updateFilters(skill);
     }
-    console.log("after pushing clicked selected skills", skill);
   };
 
   const handleRemoveSelectedSkill = (skillName: string) => {
@@ -33,12 +36,24 @@ const Filter = ({
       (selected) => selected.name !== skillName
     );
     setSelectedSkills(updatedList);
+    console.log("removed", updatedList);
+    removeFilter(updatedList);
   };
 
   const handleRemoveAllSkill = () => {
     setSelectedSkills([]);
+    removeFilter([]);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+
+    setSkillList(
+      dataSkills.filter((indSkill) =>
+        indSkill.name.toLowerCase().includes(e.target.value.toLowerCase())
+      )
+    );
+  };
   return (
     <SearchBySkill>
       <input
@@ -46,10 +61,18 @@ const Filter = ({
         type="text"
         placeholder="Filter By Skills"
         name="skills"
+        value={inputValue}
         formNoValidate
         autoComplete="off"
         onFocus={() => setShowSkills(true)}
-        onBlur={() => setTimeout(() => setShowSkills(false), 100)}
+        onBlur={() => {
+          setTimeout(() => {
+            setShowSkills(false);
+            setSkillList(dataSkills);
+          }, 100);
+          setInputValue("");
+        }}
+        onChange={handleChange}
       />
       {!selectedSkills.length ? (
         <FilterIcon />
@@ -59,7 +82,7 @@ const Filter = ({
       {showSkills && (
         <List
           position={`${className}-position`}
-          dataArray={dataSkills}
+          dataArray={skillList}
           handleFunction={handleSelectSkill}
         />
       )}

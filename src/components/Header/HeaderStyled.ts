@@ -14,6 +14,7 @@ export const HeaderWrapper = styled.header`
 
   h1 {
     padding: 10px 0;
+    cursor: pointer;
   }
 
   .search-parent {

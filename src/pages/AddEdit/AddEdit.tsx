@@ -12,6 +12,7 @@ import { employeeArray, skills } from "../Dashboard/dashboardConstant";
 import * as Yup from "yup";
 import { useLocation } from "react-router";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
+import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
 
 function FormikAddEdit() {
   // const navigate = useNavigate();
@@ -28,7 +29,7 @@ function FormikAddEdit() {
     dob: "",
     phoneNumber: "",
     address: "",
-    skills: "",
+    skills: [] as IstringID[],
   };
 
   const location = useLocation();
@@ -47,10 +48,8 @@ function FormikAddEdit() {
       dob: `${employeeDetails.dob}`,
       phoneNumber: `${employeeDetails.phnNo}`,
       address: `${employeeDetails.address}`,
-      skills: `${employeeDetails.skill}`,
+      skills: employeeDetails.skill as IstringID[],
     };
-    console.log("emp", employeeDetails.skill);
-    console.log(formData.skills);
   }
 
   return (

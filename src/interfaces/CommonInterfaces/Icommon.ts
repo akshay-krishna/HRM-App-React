@@ -1,5 +1,7 @@
+import { IstringID } from "./IstringID";
+
 export interface IallTypeDataListing {
-  [id: string]: string | JSX.Element | string[] | any;
+  [id: string]: string | JSX.Element | string[] | IstringID[] | any;
 }
 
 export interface IviewEmployee {
@@ -14,5 +16,5 @@ export interface IviewEmployee {
   phnNo?: string;
   emailId?: string;
   address?: string;
-  skill?: string[];
+  skill?: IstringID[];
 }

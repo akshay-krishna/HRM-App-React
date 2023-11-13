@@ -15,7 +15,9 @@ const TableList = (props: tableListingProps) => {
   const { columnIds = [], data } = props;
 
   return (
+    
     <tr>
+      
       {columnIds.map((ele) => {
         if (ele === "action") {
           return (
@@ -24,7 +26,7 @@ const TableList = (props: tableListingProps) => {
                 <EditIcon onClick={() => navigate(`/edit-page/${data.id}`)} />
                 <DeleteIcon
                   onClick={() => {
-                    navigate(`/delete-page/:id`);
+                    // navigate(`/delete-page/${data.id}`);
                   }}
                 />
               </ActionIconWrapper>

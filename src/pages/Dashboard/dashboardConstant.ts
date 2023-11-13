@@ -15,7 +15,16 @@ export const employeeArray: IallTypeDataListing[] = [
     phnNo: "9985685739",
     emailID: "ashwin.nair@xyz.com",
     address: "Kulathoor, Trivandrum",
-    skill: ["HTML-CSS", "JavaScript"],
+    skill: [
+      {
+        id: "html-css",
+        name: "HTML-CSS",
+      },
+      {
+        id: "js",
+        name: "Javascript",
+      },
+    ],
   },
   {
     id: "1002",
@@ -29,7 +38,24 @@ export const employeeArray: IallTypeDataListing[] = [
     phnNo: "9985685739",
     emailID: "nijin.nazar@xyz.com",
     address: "Anchal, Kollam",
-    skill: ["HTML-CSS", "JavaScript", "React"],
+    skill: [
+      {
+        id: "html-css",
+        name: "HTML-CSS",
+      },
+      {
+        id: "js",
+        name: "Javascript",
+      },
+      {
+        id: "react",
+        name: "React.js",
+      },
+      {
+        id: "ts",
+        name: "TypeScript",
+      },
+    ],
   },
   {
     id: "1003",
@@ -43,7 +69,24 @@ export const employeeArray: IallTypeDataListing[] = [
     phnNo: "9987654321",
     emailID: "issac.varghese@xyz.com",
     address: "Adoor, Pathanamthitta",
-    skill: ["GIT", "MySQL"],
+    skill: [
+      {
+        id: "git",
+        name: "GIT",
+      },
+      {
+        id: "mysql",
+        name: "MySQL",
+      },
+      {
+        id: "docker",
+        name: "Docker",
+      },
+      {
+        id: "aws",
+        name: "AWS",
+      },
+    ],
   },
 ];
 
@@ -102,5 +145,21 @@ export const skills: IstringID[] = [
   {
     id: "vue",
     name: "Vue.js",
+  },
+  {
+    id: "git",
+    name: "GIT",
+  },
+  {
+    id: "mysql",
+    name: "MySQL",
+  },
+  {
+    id: "docker",
+    name: "Docker",
+  },
+  {
+    id: "aws",
+    name: "AWS",
   },
 ];
