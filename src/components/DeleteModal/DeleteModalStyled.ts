@@ -10,16 +10,27 @@ export const DeleteModalWrapper = styled.section`
   border: 5px solid var(--red);
   justify-content: space-around;
   padding: 0 10px;
-  /* z-index: 10;
+  z-index: 10;
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); */
-  background-color: var(--white);
+  transform: translate(-50%, -50%);
+  background-color: var(--light);
   /* min-height: 600px; */
   overflow: auto;
   border-radius: 7px;
   .confirm-modal-btns {
     gap: 80px;
   }
+`;
+
+export const Overlay = styled.div`
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.432);
+  z-index: 2;
 `;

@@ -3,24 +3,22 @@ import styled from "styled-components";
 export const HeaderWrapper = styled.header`
   background-color: var(--primary);
   padding: 0rem 2rem;
+`;
 
-  .header {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
+export const HeaderStyle = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   h1 {
     padding: 10px 0;
     cursor: pointer;
   }
+`;
 
-  .search-parent {
-    position: relative;
-  }
-
+export const SearchStyle = styled.div`
+  position: relative;
   #search {
     width: 280px;
     height: 60px;

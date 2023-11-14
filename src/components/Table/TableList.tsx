@@ -4,31 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import DeleteIcon from "../Icons/DeleteIcon";
 import EditIcon from "../Icons/EditIcon";
-import DeleteModal from "../DeleteModal/DeleteModal";
 
 type tableListingProps = {
   columnIds: string[];
   data: IallTypeDataListing;
+  handleModalOpen: () => void;
 };
 const TableList = (props: tableListingProps) => {
   const navigate = useNavigate();
   const { columnIds = [], data } = props;
 
   return (
-    
     <tr>
-      
       {columnIds.map((ele) => {
         if (ele === "action") {
           return (
             <td key={ele}>
               <ActionIconWrapper className="flex-row">
                 <EditIcon onClick={() => navigate(`/edit-page/${data.id}`)} />
-                <DeleteIcon
-                  onClick={() => {
-                    // navigate(`/delete-page/${data.id}`);
-                  }}
-                />
+                <DeleteIcon onClick={props.handleModalOpen} />
               </ActionIconWrapper>
             </td>
           );

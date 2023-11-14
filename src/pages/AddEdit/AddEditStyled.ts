@@ -15,8 +15,10 @@ export const AddEditSection = styled.section`
   .add-edit-profile-photo {
     width: 150px;
     height: 150px;
+    border-radius: 50%;
     cursor: pointer;
     padding: 10px;
+    overflow: inherit;
   }
 
   .details {

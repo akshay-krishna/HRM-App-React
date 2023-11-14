@@ -11,10 +11,10 @@ const ViewDetails = () => {
     (emp) => emp.id === location.pathname.split("/")[2]
   );
   const skill: IstringID[] = viewEmployee?.skill as IstringID[];
-  console.log(skill);
+  // console.log(skill);
   const renderSkills = () => {
     return skill.map((sk, index) => {
-      console.log(sk, "sk");
+      // console.log(sk, "sk");
       if (index === skill.length - 1) return <span key={sk.id}>{sk.name}</span>;
       else return <span key={sk.id}>{sk.name}, </span>;
     });

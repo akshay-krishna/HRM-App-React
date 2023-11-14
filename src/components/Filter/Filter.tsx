@@ -36,7 +36,7 @@ const Filter = ({
       (selected) => selected.name !== skillName
     );
     setSelectedSkills(updatedList);
-    console.log("removed", updatedList);
+    // console.log("removed", updatedList);
     removeFilter(updatedList);
   };
 

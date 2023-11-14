@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { useLocation } from "react-router";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+import { useState } from "react";
 
 function FormikAddEdit() {
   // const navigate = useNavigate();
@@ -31,7 +32,8 @@ function FormikAddEdit() {
     address: "",
     skills: [] as IstringID[],
   };
-
+  let heading;
+  let buttonText;
   const location = useLocation();
   if (location.pathname.split("/")[1] == "edit-page") {
     const employeeDetails: IallTypeDataListing = employeeArray.find(
@@ -50,7 +52,24 @@ function FormikAddEdit() {
       address: `${employeeDetails.address}`,
       skills: employeeDetails.skill as IstringID[],
     };
+    heading = "Edit Employee";
+    buttonText = "Update Employee Profile";
+  } else {
+    heading = "Add Employee";
+    buttonText = "Add Employee Profile";
   }
+
+  const [profilePicture, setProfilePicture] = useState<any>("placeholder");
+
+  const profilePictureInputHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.files) {
+      const imgFile = e.target.files[0];
+      console.log(URL.createObjectURL(imgFile));
+      setProfilePicture(URL.createObjectURL(imgFile));
+    }
+  };
 
   return (
     <Formik
@@ -90,14 +109,24 @@ function FormikAddEdit() {
         >
           <div className="add-edit-employee-head flex-column">
             <TextInput
-              label={<AddPhotoIcon className="add-edit-profile-photo" />}
+              label={
+                profilePicture === "placeholder" ? (
+                  <AddPhotoIcon className="add-edit-profile-photo" />
+                ) : (
+                  <img
+                    className="add-edit-profile-photo"
+                    src={profilePicture}
+                  />
+                )
+              }
               className="close"
               id="photo-id"
               name="photoId"
               type="file"
               accept="image/*"
+              onChange={profilePictureInputHandler}
             />
-            <h2 className="add-edit-heading">Add Employee</h2>
+            <h2 className="add-edit-heading">{heading}</h2>
           </div>
           <div className="flex-row details">
             <div className="flex-column field-space">
@@ -182,7 +211,7 @@ function FormikAddEdit() {
             type="submit"
             // onClick={() => navigate("/")}
           >
-            <span className="add-update-text">Add Employee Profile</span>
+            <span>{buttonText}</span>
           </Button>
         </Form>
       </AddEditSection>

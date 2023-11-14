@@ -9,7 +9,6 @@ export const ButtonWrapper = styled.button`
   align-items: center;
   align-self: center;
   border-radius: 7px;
-  border: 1px solid var(--primary);
   transition: 0.6s;
   &.primary {
     width: 195px;
@@ -17,6 +16,7 @@ export const ButtonWrapper = styled.button`
     gap: 10px;
     background-color: var(--primary);
     padding: 1px 10px;
+    border: 1px solid var(--primary);
     cursor: pointer;
     &:hover {
       background-color: var(--light);
@@ -29,11 +29,13 @@ export const ButtonWrapper = styled.button`
   }
   &.add-edit-btn {
     margin-top: 30px;
+    width: 215px;
   }
   &.secondary {
     width: 195px;
     height: 60px;
     gap: 10px;
+    border: 1px solid var(--red);
     background-color: var(--red);
     padding: 1px 10px;
     cursor: pointer;
@@ -45,5 +47,9 @@ export const ButtonWrapper = styled.button`
         fill: var(--primary);
       }
     }
+  }
+  &.delete-btns {
+    width: 110px;
+    height: 45px;
   }
 `;

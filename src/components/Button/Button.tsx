@@ -4,7 +4,7 @@ export const Button = (
   props: React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
-  >
+  >,
 ) => {
   return <ButtonWrapper {...props}>{props.children}</ButtonWrapper>;
 };

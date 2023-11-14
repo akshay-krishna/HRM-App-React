@@ -3,9 +3,10 @@ import { IemployeeContext } from "../interfaces/CommonInterfaces/IemployeeContex
 import { IstringID } from "../interfaces/CommonInterfaces/IstringID";
 
 const initialContextValues: IemployeeContext = {
+  // search: "",
   filters: [],
   updateFilters: () => {},
-  removeFilter: () => {}
+  removeFilter: () => {},
 };
 
 const EmployeeContext = createContext(initialContextValues);
@@ -15,18 +16,17 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     initialContextValues.filters
   );
   const updateFilters = (filter: IstringID) => {
-    setFilters(prev => [...prev,filter] as IstringID[])
+    setFilters((prev) => [...prev, filter] as IstringID[]);
   };
 
-
   const removeFilter = (updatedFilter: IstringID[]) => {
-    setFilters(updatedFilter)
-  }
-  
+    setFilters(updatedFilter);
+  };
+
   const value: IemployeeContext = {
     filters,
     updateFilters,
-    removeFilter
+    removeFilter,
   };
   return (
     <EmployeeContext.Provider value={value}>

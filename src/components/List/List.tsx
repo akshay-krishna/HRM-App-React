@@ -9,7 +9,7 @@ function List({
   dataArray: { id: string; name: string }[];
   handleFunction: (arg: any) => void;
 }) {
-  console.log("data array in list", dataArray);
+  // console.log("data array in list", dataArray);
   return (
     <ListStyledUl
       className={

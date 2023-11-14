@@ -2,7 +2,6 @@ import { IallTypeDataListing } from "../interfaces/CommonInterfaces/Icommon";
 
 export const filterArray = (array: IallTypeDataListing[], filterBy: any) => {
   let data = [...array];
-  console.log("data", data);
   if (filterBy.skills.length === 0) {
     return data;
   } else {
