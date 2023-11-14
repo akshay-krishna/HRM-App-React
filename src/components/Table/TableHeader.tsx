@@ -1,6 +1,6 @@
-import { useContext } from "react";
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 import { useEmployeeContext } from "../../context/EmployeeContext";
+import Arrow from "../Icons/Arrow";
 
 type TableHeaderProps = {
   column: ItableHeader[];
@@ -8,14 +8,26 @@ type TableHeaderProps = {
 
 const TableHeader = (props: TableHeaderProps) => {
   const { column = [] } = props;
-  const { updateSortConfig } = useEmployeeContext();
-  const handleHeadClick = (element: any) => {};
+  const { sortConfig, updateSortConfig } = useEmployeeContext();
+  // const handleHeadClick = (element: any) => {};
   return (
     <thead>
       <tr>
         {column.map((element) => (
           <th key={element.id} onClick={() => updateSortConfig(element.id)}>
-            <div className="flex-row arrow-direction">{element.name}</div>
+            <div className="flex-row arrow-direction">
+              {element.name}
+              {element.id === sortConfig.sortColumn &&
+              element.id != "action" ? (
+                sortConfig.sortOrder === "asc" ? (
+                  <Arrow className="ascDirection" />
+                ) : (
+                  <Arrow className="descDirection" />
+                )
+              ) : (
+                <Arrow className="hidden" />
+              )}
+            </div>
           </th>
         ))}
       </tr>

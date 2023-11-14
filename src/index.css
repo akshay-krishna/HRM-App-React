@@ -76,3 +76,16 @@ p {
   top: 95px;
   font-size: 12px;
 }
+
+/* arrow styles */
+.ascDirection {
+  transform: rotateX(0deg);
+}
+
+.descDirection {
+  transform: rotateX(180deg);
+}
+
+.hidden {
+  visibility: hidden;
+}

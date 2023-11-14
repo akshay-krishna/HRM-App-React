@@ -1,8 +1,8 @@
 import { IstringID } from "./IstringID";
 
 export interface IemployeeContext {
-  sortConfig?: { sortColumn: string; sortOrder: string };
-  updateSortConfig?: (newConfig:{sortColumn: string, sortOrder: string}) => void;
+  sortConfig: { sortColumn: string; sortOrder: string };
+  updateSortConfig: (sortColumn: string) => void;
   searchValue?: string;
   filters: IstringID[];
   updateSearch?: (currentSearch: string) => void;
