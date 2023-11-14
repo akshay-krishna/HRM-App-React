@@ -2,10 +2,16 @@ import { HeaderStyle, HeaderWrapper, SearchStyle } from "./HeaderStyled";
 import SearchIcon from "../Icons/SearchIcon";
 import Logo from "../Icons/Logo";
 import { useLocation, useNavigate } from "react-router";
+import { useEmployeeContext } from "../../context/EmployeeContext";
+import { ChangeEvent } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  let { searchValue, updateSearch } = useEmployeeContext();
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    updateSearch(e.target.value);
+  };
   return (
     <HeaderWrapper>
       <HeaderStyle>
@@ -23,6 +29,7 @@ const Header = () => {
               id="search"
               formNoValidate
               autoComplete="off"
+              onChange={handleSearch}
             />
             <SearchIcon className="search-icon" />
           </SearchStyle>

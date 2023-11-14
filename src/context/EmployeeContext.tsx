@@ -3,7 +3,10 @@ import { IemployeeContext } from "../interfaces/CommonInterfaces/IemployeeContex
 import { IstringID } from "../interfaces/CommonInterfaces/IstringID";
 
 const initialContextValues: IemployeeContext = {
-  // search: "",
+  sortConfig: { sortColumn: "id", sortOrder: "asc" },
+  updateSortConfig: () => {},
+  searchValue: "",
+  updateSearch: () => {},
   filters: [],
   updateFilters: () => {},
   removeFilter: () => {},
@@ -12,6 +15,21 @@ const initialContextValues: IemployeeContext = {
 const EmployeeContext = createContext(initialContextValues);
 
 const EmployeeProvider = ({ children }: { children: ReactNode }) => {
+  const [sortConfig, setSortConfig] = useState(initialContextValues.sortConfig);
+
+  const updateSortConfig = (sortColumn: string) => {
+    setSortConfig((prev) => {
+      sortColumn, sortOrder:;
+    });
+  };
+  const [searchValue, setSearchValue] = useState(
+    initialContextValues.searchValue
+  );
+
+  const updateSearch = (currentSearch: string) => {
+    setSearchValue(currentSearch);
+  };
+
   const [filters, setFilters] = useState<IstringID[]>(
     initialContextValues.filters
   );
@@ -24,6 +42,10 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const value: IemployeeContext = {
+    sortConfig,
+    updateSortConfig,
+    searchValue,
+    updateSearch,
     filters,
     updateFilters,
     removeFilter,

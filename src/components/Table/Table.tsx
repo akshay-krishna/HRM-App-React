@@ -8,6 +8,7 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import TableHeader from "./TableHeader";
 import TableList from "./TableList";
 import { TableWrapper } from "./TableStyled";
+import { searchFunction } from "../../utils/search";
 
 const Table = ({
   // data = [],
@@ -19,7 +20,9 @@ const Table = ({
   const { filters } = useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
 
-  const filteredEmployees = filterArray(employeeArray, { skills: filters }); //sent this filterArray return to search
+  const filteredEmployees = searchFunction(
+    filterArray(employeeArray, { skills: filters })
+  ); //sent this filterArray return to search
 
   const columnIds = column.reduce((prevState, currentIteration) => {
     prevState.push(currentIteration.id);
