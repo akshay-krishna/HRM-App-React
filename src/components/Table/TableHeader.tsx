@@ -10,7 +10,7 @@ const TableHeader = (props: TableHeaderProps) => {
     <thead>
       <tr>
         {column.map((element) => (
-          <th>
+          <th key={element.id}>
             <div className="flex-row arrow-direction">{element.name}</div>
           </th>
         ))}

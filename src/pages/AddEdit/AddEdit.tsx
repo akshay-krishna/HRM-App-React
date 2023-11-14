@@ -1,191 +1,222 @@
-import { AddEditSection } from "./AddEditStyled";
+// import { useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
-import { useNavigate } from "react-router-dom";
 import AddPhotoIcon from "../../components/Icons/AddPhotoIcon";
+import { Form, Formik } from "formik";
+import TextInput from "../../components/FormComponents/TextInput";
+import TextAreaInput from "../../components/FormComponents/TextAreaInput";
+import { AddEditSection } from "./AddEditStyled";
+import DropDown from "../../components/FormComponents/DropDown";
+import { deptArray, locationArray, roleArray } from "./AddEditConstants";
+import Filter from "../../components/Filter/Filter";
+import { employeeArray, skills } from "../Dashboard/dashboardConstant";
+import * as Yup from "yup";
+import { useLocation } from "react-router";
+import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
+import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+import { useState } from "react";
 
-const AddEdit = () => {
-  const navigate = useNavigate();
-  const handleNaviagtion = () => {
-    navigate("/");
+function FormikAddEdit() {
+  // const navigate = useNavigate();
+  const onSubmit = () => {};
+
+  let formData = {
+    photoId: "",
+    fName: "",
+    lName: "",
+    role: "",
+    department: "",
+    location: "",
+    email: "",
+    dob: "",
+    phoneNumber: "",
+    address: "",
+    skills: [] as IstringID[],
   };
+  let heading;
+  let buttonText;
+  const location = useLocation();
+  if (location.pathname.split("/")[1] == "edit-page") {
+    const employeeDetails: IallTypeDataListing = employeeArray.find(
+      (emp) => emp.id === location.pathname.split("/")[2]
+    )!;
+    formData = {
+      photoId: "",
+      fName: `${employeeDetails.fName}`,
+      lName: `${employeeDetails.lName}`,
+      role: `${employeeDetails.role}`,
+      department: `${employeeDetails.dept}`,
+      location: `${employeeDetails.loc}`,
+      email: `${employeeDetails.emailID}`,
+      dob: `${employeeDetails.dob}`,
+      phoneNumber: `${employeeDetails.phnNo}`,
+      address: `${employeeDetails.address}`,
+      skills: employeeDetails.skill as IstringID[],
+    };
+    heading = "Edit Employee";
+    buttonText = "Update Employee Profile";
+  } else {
+    heading = "Add Employee";
+    buttonText = "Add Employee Profile";
+  }
+
+  const [profilePicture, setProfilePicture] = useState<any>("placeholder");
+
+  const profilePictureInputHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (e.target.files) {
+      const imgFile = e.target.files[0];
+      console.log(URL.createObjectURL(imgFile));
+      setProfilePicture(URL.createObjectURL(imgFile));
+    }
+  };
+
   return (
-    <AddEditSection className="flex-column">
-      <form
-        className="add-edit-employee-form flex-column"
-        noValidate
-        autoComplete="off"
-      >
-        <div className="add-edit-employee-head flex-column">
-          <label htmlFor="photo-id">
-            <AddPhotoIcon className="add-edit-profile-photo" />
-          </label>
-          <input className="close" type="file" id="photo-id" accept="image/*" />
-          <h2 className="add-edit-heading">Add Employee</h2>
-        </div>
-        <div className="flex-row details">
-          <div className="flex-column field-space">
-            <div className="flex-column label-input">
-              <label htmlFor="fname">First Name</label>
-              <div>
-                <input
-                  type="text"
-                  id="fname"
-                  name="fname"
-                  placeholder="Enter your First Name"
-                />
-                <p id="fname-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
+    <Formik
+      initialValues={formData}
+      validationSchema={Yup.object({
+        fName: Yup.string()
+          .matches(/^[A-Za-z]+$/, "Only letters are allowed")
+          .max(15, "Must be 15 characters or less")
+          .required("Required"),
 
-            <div className="flex-column label-input">
-              <label htmlFor="lname">Last Name</label>
-              <div>
-                <input
-                  type="text"
-                  id="lname"
-                  name="lname"
-                  placeholder="Enter your Last Name"
-                />
-                <p id="lname-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
+        lName: Yup.string()
+          .matches(/^[A-Za-z]+$/, "Only letters are allowed")
+          .max(15, "Must be 15 characters or less")
+          .required("Required"),
 
-            <div className="flex-column label-input role-parent">
-              <label htmlFor="role">Role</label>
-              <div>
-                <input
-                  type="text"
-                  id="role"
-                  name="role"
-                  placeholder="Select your Role"
-                  readOnly
-                />
-                <ul className="list-style add-role-list close"></ul>
-                <p id="role-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
+        role: Yup.string().required("Required"),
 
-            <div className="flex-column label-input department-parent">
-              <label htmlFor="department">Department</label>
-              <div>
-                <input
-                  type="text"
-                  id="department"
-                  name="department"
-                  placeholder="Enter your Department"
-                  readOnly
-                />
-                <ul className="list-style add-department-list close"></ul>
-                <p id="dept-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
+        department: Yup.string().required("Required"),
 
-            <div className="flex-column label-input work-location-parent">
-              <label htmlFor="location">Working Location</label>
-              <div>
-                <input
-                  type="text"
-                  id="location"
-                  name="location"
-                  placeholder="Enter your Working Location"
-                  readOnly
-                />
-                <ul className="list-style add-location-list close"></ul>
-                <p id="location-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
-          </div>
+        location: Yup.string().required("Required"),
 
-          <div className="flex-column field-space">
-            <div className="flex-column label-input">
-              <label htmlFor="email">Email</label>
-              <div>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Enter your Email ID"
-                />
-                <p id="email-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
+        email: Yup.string().email("Invalid email address").required("Required"),
 
-            <div className="flex-column label-input">
-              <label htmlFor="dob">Date Of Birth</label>
-              <div>
-                <input type="date" id="dob" name="dob" />
-                <p id="date-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
+        phoneNumber: Yup.string()
+          .matches(/^[0-9]{10}$/, "Phone number should have 10-digits")
+          .required("Required"),
 
-            <div className="flex-column label-input">
-              <label htmlFor="phone-number">Phone Number</label>
-              <div>
-                <input
-                  type="tel"
-                  id="phone-number"
-                  name="phone-number"
-                  placeholder="Enter your Phone Number"
-                />
-                <p id="phone-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
-
-            <div className="flex-column label-input">
-              <label htmlFor="address">Address</label>
-              <div>
-                <textarea
-                  name="address"
-                  placeholder="Enter your Permanent Address"
-                  id="address"
-                ></textarea>
-                <p id="address-error" className="err close">
-                  Error Placeholder
-                </p>
-              </div>
-            </div>
-
-            <div className="flex-column label-input skill-parent">
-              <label htmlFor="skill-add-search">Skills</label>
-              <div>
-                <input
-                  placeholder="Search By Skills"
-                  name="skill-add-search"
-                  id="skill-add-search"
-                />
-                <ul className="list-style add-skill-list close"></ul>
-                <div className="add-selected-skills flex-row close"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <Button
-          id="submit"
-          className="primary"
-          type="submit"
-          onClick={handleNaviagtion}
+        address: Yup.string().required("Required"),
+      })}
+      onSubmit={onSubmit}
+    >
+      <AddEditSection className="flex-column">
+        <Form
+          className="add-edit-employee-form flex-column"
+          noValidate
+          autoComplete="off"
         >
-          <span className="add-update-text">Add Employee Profile</span>
-        </Button>
-      </form>
-    </AddEditSection>
-  );
-};
+          <div className="add-edit-employee-head flex-column">
+            <TextInput
+              label={
+                profilePicture === "placeholder" ? (
+                  <AddPhotoIcon className="add-edit-profile-photo" />
+                ) : (
+                  <img
+                    className="add-edit-profile-photo"
+                    src={profilePicture}
+                  />
+                )
+              }
+              className="close"
+              id="photo-id"
+              name="photoId"
+              type="file"
+              accept="image/*"
+              onChange={profilePictureInputHandler}
+            />
+            <h2 className="add-edit-heading">{heading}</h2>
+          </div>
+          <div className="flex-row details">
+            <div className="flex-column field-space">
+              <TextInput
+                label="First Name"
+                name="fName"
+                type="text"
+                placeholder="Enter First Name"
+              />
 
-export default AddEdit;
+              <TextInput
+                label="Last Name"
+                name="lName"
+                type="text"
+                placeholder="Enter Last Name"
+              />
+
+              <DropDown
+                label="Role"
+                name="role"
+                type="text"
+                placeholder="Select your Role"
+                renderarray={roleArray}
+                initialvalue={formData.role}
+              />
+
+              <DropDown
+                label="Department"
+                name="department"
+                type="text"
+                placeholder="Select your Department"
+                renderarray={deptArray}
+                initialvalue={formData.department}
+              />
+
+              <DropDown
+                label="Working Location"
+                name="location"
+                type="text"
+                placeholder="Select your Role"
+                renderarray={locationArray}
+                initialvalue={formData.location}
+              />
+            </div>
+
+            <div className="flex-column field-space">
+              <TextInput
+                label="Email"
+                name="email"
+                type="text"
+                placeholder="Enter your Email"
+              />
+
+              <TextInput label="Date Of Birth" name="dob" type="date" />
+
+              <TextInput
+                label="Phone Number"
+                name="phoneNumber"
+                type="tel"
+                placeholder="Enter your Phone Number"
+              />
+
+              <TextAreaInput
+                label="Address"
+                name="address"
+                placeholder="Enter your Permanent Address"
+              />
+
+              <div className="flex-column label-input skill-input">
+                <label>Skills</label>
+                <Filter
+                  selectedValue={formData.skills}
+                  className="skill-input-form"
+                  dataSkills={skills}
+                />
+              </div>
+            </div>
+          </div>
+          <Button
+            id="submit"
+            className="primary add-edit-btn"
+            type="submit"
+            // onClick={() => navigate("/")}
+          >
+            <span>{buttonText}</span>
+          </Button>
+        </Form>
+      </AddEditSection>
+    </Formik>
+  );
+}
+
+export default FormikAddEdit;

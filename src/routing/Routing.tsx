@@ -6,6 +6,9 @@ const LazyViewDetails = React.lazy(
   () => import("../pages/ViewDetails/ViewDetails")
 );
 const LazyAddEdit = React.lazy(() => import("../pages/AddEdit/AddEdit"));
+const LazyDelete = React.lazy(
+  () => import("../components/DeleteModal/DeleteModal")
+);
 
 const Routing = createBrowserRouter([
   {
@@ -41,6 +44,14 @@ const Routing = createBrowserRouter([
         element: (
           <React.Suspense>
             <LazyAddEdit />
+          </React.Suspense>
+        ),
+      },
+      {
+        path: "/delete-page/:id",
+        element: (
+          <React.Suspense>
+            <LazyDelete />
           </React.Suspense>
         ),
       },
