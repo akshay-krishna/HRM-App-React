@@ -1,5 +1,5 @@
 import Button from "../../components/Button/Button";
-import Filter from "../../components/Filter/Filter";
+import Filter, { selected } from "../../components/Filter/Filter";
 import AddEmployeeIcon from "../../components/Icons/AddEmployeeIcon";
 import Table from "../../components/Table/Table";
 import { FilterWrapper, MainWrapper, SectionWrapper } from "./DashboardStyled";
@@ -22,7 +22,11 @@ const Dashboard = () => {
           <AddEmployeeIcon /> Add Employee
         </Button>
         <FilterWrapper>
-          <Filter className="filter-search" dataSkills={skills} />
+          <Filter
+            className="filter-search"
+            dataSkills={skills}
+            selectedValue={selected}
+          />
         </FilterWrapper>
       </SectionWrapper>
       <Table column={employeeHeaderArray} /*data={employeeArray} */ />

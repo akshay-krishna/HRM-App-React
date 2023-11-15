@@ -29,6 +29,7 @@ const Header = () => {
               id="search"
               formNoValidate
               autoComplete="off"
+              value={searchValue}
               onChange={handleSearch}
             />
             <SearchIcon className="search-icon" />

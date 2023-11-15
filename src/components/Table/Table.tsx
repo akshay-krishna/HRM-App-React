@@ -9,20 +9,16 @@ import TableHeader from "./TableHeader";
 import TableList from "./TableList";
 import { TableWrapper } from "./TableStyled";
 import { searchFunction } from "../../utils/search";
+import { sortFunction } from "../../utils/sortFunction";
 
-const Table = ({
-  // data = [],
-  column = [],
-}: {
-  // data: IallTypeDataListing[];
-  column: ItableHeader[];
-}) => {
-  const { filters } = useEmployeeContext();
+const Table = ({ column = [] }: { column: ItableHeader[] }) => {
+  const { sortConfig, filters } = useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
 
-  const filteredEmployees = searchFunction(
-    filterArray(employeeArray, { skills: filters })
-  ); //sent this filterArray return to search
+  const filteredEmployees = sortFunction(
+    sortConfig,
+    searchFunction(filterArray(employeeArray, { skills: filters }))
+  );
 
   const columnIds = column.reduce((prevState, currentIteration) => {
     prevState.push(currentIteration.id);

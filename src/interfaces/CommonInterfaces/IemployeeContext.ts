@@ -5,7 +5,7 @@ export interface IemployeeContext {
   updateSortConfig: (sortColumn: string) => void;
   searchValue?: string;
   filters: IstringID[];
-  updateSearch?: (currentSearch: string) => void;
+  updateSearch: (currentSearch: string) => void;
   updateFilters: ([]: IstringID) => void;
   removeFilter: ([]: IstringID[]) => void;
 }

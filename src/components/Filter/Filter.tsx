@@ -6,6 +6,7 @@ import CloseFilterIcon from "../Icons/CloseFilterIcon";
 import List from "../List/List";
 import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEmployeeContext } from "../../context/EmployeeContext";
+export let selected: IstringID[];
 
 const Filter = ({
   selectedValue = [],
@@ -22,7 +23,9 @@ const Filter = ({
     useState<IstringID[]>(selectedValue);
   const { updateFilters, removeFilter } = useEmployeeContext();
   const [inputValue, setInputValue] = useState("");
+  selected = selectedSkills;
 
+  console.log("selected skiils:", selectedSkills);
   const handleSelectSkill = (skill: IstringID) => {
     const isExist = selectedSkills.some((sk) => sk.id === skill.id);
     if (!isExist) {
@@ -47,7 +50,6 @@ const Filter = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-
     setSkillList(
       dataSkills.filter((indSkill) =>
         indSkill.name.toLowerCase().includes(e.target.value.toLowerCase())

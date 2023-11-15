@@ -18,7 +18,6 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   const [sortConfig, setSortConfig] = useState(initialContextValues.sortConfig);
 
   const updateSortConfig = (sortColumn: string) => {
-    console.log(sortColumn);
     setSortConfig((prevConfig) => ({
       sortColumn,
       sortOrder:
@@ -28,7 +27,6 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
             : "desc"
           : "asc",
     }));
-    console.log(sortConfig.sortOrder);
   };
   const [searchValue, setSearchValue] = useState(
     initialContextValues.searchValue
