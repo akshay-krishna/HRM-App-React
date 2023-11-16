@@ -13,7 +13,7 @@ type tableListingProps = {
 const TableList = (props: tableListingProps) => {
   const navigate = useNavigate();
   const { columnIds = [], data } = props;
-
+  console.log(data);
   return (
     <tr>
       {columnIds.map((ele) => {

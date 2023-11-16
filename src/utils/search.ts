@@ -6,7 +6,7 @@ export const searchFunction = (data: IallTypeDataListing[]) => {
   // console.log(searchValue, "inside searchFunction");
   const filteredEmployees = data.filter((employee) => {
     // console.log(employee.fName);
-    return employee.fName.toLowerCase().includes(searchValue?.toLowerCase());
+    return employee.firstName.toLowerCase().includes(searchValue?.toLowerCase());
   });
   return filteredEmployees;
 };

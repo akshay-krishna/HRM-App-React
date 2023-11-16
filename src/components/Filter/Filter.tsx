@@ -6,6 +6,7 @@ import CloseFilterIcon from "../Icons/CloseFilterIcon";
 import List from "../List/List";
 import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEmployeeContext } from "../../context/EmployeeContext";
+import { useLocation } from "react-router";
 export let selected: IstringID[];
 
 const Filter = ({
@@ -23,9 +24,13 @@ const Filter = ({
     useState<IstringID[]>(selectedValue);
   const { updateFilters, removeFilter } = useEmployeeContext();
   const [inputValue, setInputValue] = useState("");
-  selected = selectedSkills;
-
-  console.log("selected skiils:", selectedSkills);
+  const location = useLocation();
+  if (location.pathname.split("/")[1] == "edit-page") {
+    selected = selected;
+  } else {
+    selected = selectedSkills;
+  }
+  // console.log("selected skiils:", selectedSkills);
   const handleSelectSkill = (skill: IstringID) => {
     const isExist = selectedSkills.some((sk) => sk.id === skill.id);
     if (!isExist) {

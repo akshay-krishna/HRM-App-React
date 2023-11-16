@@ -29,7 +29,7 @@ const Dashboard = () => {
           />
         </FilterWrapper>
       </SectionWrapper>
-      <Table column={employeeHeaderArray} /*data={employeeArray} */ />
+      <Table column={employeeHeaderArray} />
     </MainWrapper>
   );
 };

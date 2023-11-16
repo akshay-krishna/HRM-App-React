@@ -5,7 +5,7 @@ import List from "../List/List";
 const DropDown = (props: any) => {
   const [toggleDropdown, setToggleDropdown] = useState("");
   const [input, setInput] = useState(props.initialvalue || "");
-
+  console.log(props.renderarray);
   return (
     <div className={`flex-column label-input ${props.name}-parent`}>
       <TextInput

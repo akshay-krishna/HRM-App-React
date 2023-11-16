@@ -96,19 +96,19 @@ export const employeeHeaderArray: ItableHeader[] = [
     name: "Employee Id",
   },
   {
-    id: "fName",
+    id: "firstName",
     name: "First Name",
   },
   {
-    id: "lName",
+    id: "lastName",
     name: "Last Name",
   },
   {
-    id: "role",
-    name: "Role",
+    id: "designation",
+    name: "Designation",
   },
   {
-    id: "dept",
+    id: "department",
     name: "Department",
   },
   {

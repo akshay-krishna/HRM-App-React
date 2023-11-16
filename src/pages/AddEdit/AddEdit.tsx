@@ -13,53 +13,76 @@ import * as Yup from "yup";
 import { useLocation } from "react-router";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useEmployeeContext } from "../../context/EmployeeContext";
+import { getData } from "../../core/api";
 
 function FormikAddEdit() {
   // const navigate = useNavigate();
-  const onSubmit = () => {};
-
-  let formData = {
+  const { employeeData } = useEmployeeContext();
+  const [formData, setFormData] = useState({
     photoId: "",
-    fName: "",
-    lName: "",
-    role: "",
+    firstName: "",
+    lastName: "",
+    designation: "",
     department: "",
     location: "",
     email: "",
     dob: "",
-    phoneNumber: "",
+    phone: "",
     address: "",
     skills: [] as IstringID[],
-  };
+  });
+  const location = useLocation();
+  const [profilePicture, setProfilePicture] = useState<any>("placeholder");
+
+  // console.log(employeeData, "data");
+
+  const onSubmit = () => {};
+
   let heading;
   let buttonText;
-  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname.split("/")[1] == "edit-page") {
+      let locID = location.pathname.split("/")[2];
+      const fetchData = async () => {
+        try {
+          const response = await getData(`/employee/${locID}`);
+          // console.log(response, "response");
+          // console.log(response.data.data, "hohoho");
+          const result = response.data.data;
+          // console.log(result);
+          setFormData(result);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchData();
+      // const updatedDetails = {
+      //   photoId: "",
+      //   fName: `${formData?.fName}`,
+      //   lName: `${formData?.lName}`,
+      //   role: `${formData?.role}`,
+      //   department: `${formData?.department}`,
+      //   location: `${formData?.location}`,
+      //   email: `${formData?.email}`,
+      //   dob: `${formData?.dob}`,
+      //   phoneNumber: `${formData?.phoneNumber}`,
+      //   address: `${formData?.address}`,
+      //   skills: formData?.skills as IstringID[],
+      // };
+      // setFormData(updatedDetails);
+    }
+  }, [employeeData]);
+
   if (location.pathname.split("/")[1] == "edit-page") {
-    const employeeDetails: IallTypeDataListing = employeeArray.find(
-      (emp) => emp.id === location.pathname.split("/")[2]
-    )!;
-    formData = {
-      photoId: "",
-      fName: `${employeeDetails.fName}`,
-      lName: `${employeeDetails.lName}`,
-      role: `${employeeDetails.role}`,
-      department: `${employeeDetails.dept}`,
-      location: `${employeeDetails.loc}`,
-      email: `${employeeDetails.emailID}`,
-      dob: `${employeeDetails.dob}`,
-      phoneNumber: `${employeeDetails.phnNo}`,
-      address: `${employeeDetails.address}`,
-      skills: employeeDetails.skill as IstringID[],
-    };
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
   } else {
     heading = "Add Employee";
     buttonText = "Add Employee Profile";
   }
-
-  const [profilePicture, setProfilePicture] = useState<any>("placeholder");
 
   const profilePictureInputHandler = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -71,8 +94,10 @@ function FormikAddEdit() {
     }
   };
 
+  console.log(formData, "formdata");
   return (
     <Formik
+      enableReinitialize
       initialValues={formData}
       validationSchema={Yup.object({
         fName: Yup.string()
@@ -132,25 +157,25 @@ function FormikAddEdit() {
             <div className="flex-column field-space">
               <TextInput
                 label="First Name"
-                name="fName"
+                name="firstName"
                 type="text"
                 placeholder="Enter First Name"
               />
 
               <TextInput
                 label="Last Name"
-                name="lName"
+                name="lastName"
                 type="text"
                 placeholder="Enter Last Name"
               />
 
               <DropDown
                 label="Role"
-                name="role"
+                name="designation"
                 type="text"
                 placeholder="Select your Role"
                 renderarray={roleArray}
-                initialvalue={formData.role}
+                initialvalue={formData.designation}
               />
 
               <DropDown
@@ -184,7 +209,7 @@ function FormikAddEdit() {
 
               <TextInput
                 label="Phone Number"
-                name="phoneNumber"
+                name="phone"
                 type="tel"
                 placeholder="Enter your Phone Number"
               />
