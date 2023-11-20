@@ -15,9 +15,9 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
   const { sortConfig, filters, employeeData } = useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
 
-  const filteredEmployees = sortFunction(
-    sortConfig,
-    searchFunction(filterArray(employeeData, { skills: filters }))
+  // console.log(employeeData, ":in table");
+  const filteredEmployees = searchFunction(
+    filterArray(employeeData, { skills: filters })
   );
   // console.log(filteredEmployees, ":filtered employees");
   const columnIds = column.reduce((prevState, currentIteration) => {
@@ -39,7 +39,11 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
               handleModalOpen={() => setDeleteToggle(true)}
               columnIds={columnIds}
               key={emp.id as string}
-              data={emp}
+              data={{
+                ...emp,
+                role: emp.role ? emp.role.role : "",
+                department: emp.department ? emp.department.department : "",
+              }}
             />
           ))}
         </tbody>

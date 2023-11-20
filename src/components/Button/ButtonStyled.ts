@@ -41,7 +41,7 @@ export const ButtonWrapper = styled.button`
     cursor: pointer;
     &:hover {
       background-color: var(--light);
-      color: var(--primary);
+      color: var(--red);
       border: 1px solid var(--red);
       svg {
         fill: var(--primary);

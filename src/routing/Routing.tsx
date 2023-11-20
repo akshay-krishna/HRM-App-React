@@ -51,7 +51,11 @@ const Routing = createBrowserRouter([
         path: "/delete-page/:id",
         element: (
           <React.Suspense>
-            <LazyDelete />
+            <LazyDelete
+              handleModalClose={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
           </React.Suspense>
         ),
       },

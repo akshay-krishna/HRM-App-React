@@ -4,25 +4,34 @@ import { SearchBySkill, SelectedSkills } from "./FIlterStyled";
 import CloseIcon from "../Icons/CloseIcon";
 import CloseFilterIcon from "../Icons/CloseFilterIcon";
 import List from "../List/List";
-import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+import {
+  IskillID,
+  // IstringID,
+} from "../../interfaces/CommonInterfaces/IstringID";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import { useLocation } from "react-router";
-export let selected: IstringID[];
+export let selected: IskillID[];
 
 const Filter = ({
   selectedValue = [],
   className,
-  dataSkills = [],
-}: {
-  selectedValue?: IstringID[];
+}: // dataSkills = [],
+{
+  selectedValue?: IskillID[];
   className: string;
-  dataSkills: IstringID[];
+  // dataSkills: IstringID[];
 }) => {
   const [showSkills, setShowSkills] = useState(false);
-  const [skillList, setSkillList] = useState(dataSkills);
+  // const [skillList, setSkillList] = useState(dataSkills);
   const [selectedSkills, setSelectedSkills] =
-    useState<IstringID[]>(selectedValue);
-  const { updateFilters, removeFilter } = useEmployeeContext();
+    useState<IskillID[]>(selectedValue);
+  const { updateFilters, removeFilter, skillList /*setSkillList*/ } =
+    useEmployeeContext();
+
+  // if (skillList.length == 0) {
+  //   return <div>Loading...</div>;
+  // }
+  const [filterSkills, setFilterSkills] = useState(skillList);
   const [inputValue, setInputValue] = useState("");
   const location = useLocation();
   if (location.pathname.split("/")[1] == "edit-page") {
@@ -31,8 +40,8 @@ const Filter = ({
     selected = selectedSkills;
   }
   // console.log("selected skiils:", selectedSkills);
-  const handleSelectSkill = (skill: IstringID) => {
-    const isExist = selectedSkills.some((sk) => sk.id === skill.id);
+  const handleSelectSkill = (skill: IskillID) => {
+    const isExist = selectedSkills.some((sk) => sk.skill === skill.skill);
     if (!isExist) {
       setSelectedSkills((prev) => [...prev, skill]);
       updateFilters(skill);
@@ -41,7 +50,7 @@ const Filter = ({
 
   const handleRemoveSelectedSkill = (skillName: string) => {
     const updatedList = selectedSkills.filter(
-      (selected) => selected.name !== skillName
+      (selected) => selected.skill !== skillName
     );
     setSelectedSkills(updatedList);
     // console.log("removed", updatedList);
@@ -55,12 +64,15 @@ const Filter = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    setSkillList(
-      dataSkills.filter((indSkill) =>
-        indSkill.name.toLowerCase().includes(e.target.value.toLowerCase())
+    // console.log(e.target.value);
+    setFilterSkills(
+      filterSkills.filter((indSkill) =>
+        indSkill.skill.toLowerCase().includes(e.target.value.toLowerCase())
       )
     );
   };
+  // console.log(skillList);
+  // console.log(filterSkills);
   return (
     <SearchBySkill>
       <input
@@ -75,7 +87,7 @@ const Filter = ({
         onBlur={() => {
           setTimeout(() => {
             setShowSkills(false);
-            setSkillList(dataSkills);
+            setFilterSkills(filterSkills);
           }, 100);
           setInputValue("");
         }}
@@ -100,10 +112,10 @@ const Filter = ({
               key={individualSkills.id}
               className="individual-skills flex-row"
             >
-              <p>{individualSkills.name}</p>
+              <p>{individualSkills.skill}</p>
               <CloseIcon
                 removeSelectedSkills={() =>
-                  handleRemoveSelectedSkill(individualSkills.name)
+                  handleRemoveSelectedSkill(individualSkills.skill)
                 }
               />
             </span>

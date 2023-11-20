@@ -1,5 +1,8 @@
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+import {
+  IskillID,
+  IstringID,
+} from "../../interfaces/CommonInterfaces/IstringID";
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 
 export const employeeArray: IallTypeDataListing[] = [
@@ -104,8 +107,8 @@ export const employeeHeaderArray: ItableHeader[] = [
     name: "Last Name",
   },
   {
-    id: "designation",
-    name: "Designation",
+    id: "role",
+    name: "Role",
   },
   {
     id: "department",
@@ -117,49 +120,49 @@ export const employeeHeaderArray: ItableHeader[] = [
   },
 ];
 
-export const skills: IstringID[] = [
+export const skills: IskillID[] = [
   {
     id: "html-css",
-    name: "HTML-CSS",
+    skill: "HTML-CSS",
   },
   {
     id: "js",
-    name: "Javascript",
+    skill: "Javascript",
   },
   {
     id: "react",
-    name: "React.js",
+    skill: "React.js",
   },
   {
     id: "ts",
-    name: "TypeScript",
+    skill: "TypeScript",
   },
   {
     id: "ang",
-    name: "AngularJS",
+    skill: "AngularJS",
   },
   {
     id: "node",
-    name: "Node.js",
+    skill: "Node.js",
   },
   {
     id: "vue",
-    name: "Vue.js",
+    skill: "Vue.js",
   },
   {
     id: "git",
-    name: "GIT",
+    skill: "GIT",
   },
   {
     id: "mysql",
-    name: "MySQL",
+    skill: "MySQL",
   },
   {
     id: "docker",
-    name: "Docker",
+    skill: "Docker",
   },
   {
     id: "aws",
-    name: "AWS",
+    skill: "AWS",
   },
 ];

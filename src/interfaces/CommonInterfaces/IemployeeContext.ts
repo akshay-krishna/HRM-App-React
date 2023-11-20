@@ -1,13 +1,17 @@
 import { IallTypeDataListing } from "./Icommon";
-import { IstringID } from "./IstringID";
+import { IskillID } from "./IstringID";
 
 export interface IemployeeContext {
   employeeData: IallTypeDataListing[];
+  roleList: IallTypeDataListing[];
+  deptList: IallTypeDataListing[];
+  skillList: IskillID[];
+  setSkillList: (value: React.SetStateAction<IskillID[]>) => void;
   sortConfig: { sortColumn: string; sortOrder: string };
   updateSortConfig: (sortColumn: string) => void;
   searchValue?: string;
-  filters: IstringID[];
+  filters: IskillID[];
   updateSearch: (currentSearch: string) => void;
-  updateFilters: ([]: IstringID) => void;
-  removeFilter: ([]: IstringID[]) => void;
+  updateFilters: ([]: IskillID) => void;
+  removeFilter: ([]: IskillID[]) => void;
 }

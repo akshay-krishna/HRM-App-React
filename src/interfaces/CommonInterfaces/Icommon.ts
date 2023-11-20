@@ -1,6 +1,7 @@
 import { IstringID } from "./IstringID";
 
 export interface IallTypeDataListing {
+  id: string | number;
   [id: string]: string | JSX.Element | string[] | IstringID[] | any;
 }
 

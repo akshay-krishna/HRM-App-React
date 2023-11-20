@@ -1,22 +1,30 @@
 import Avatar from "../../components/Icons/Avatar";
 import { ViewDetailsSection } from "./ViewDetailsStyled";
-import { employeeArray } from "../Dashboard/dashboardConstant";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import { useLocation } from "react-router";
-import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
+import { useEmployeeContext } from "../../context/EmployeeContext";
 
 const ViewDetails = () => {
+  const { employeeData } = useEmployeeContext();
+
   const location = useLocation();
-  const viewEmployee: IallTypeDataListing | undefined = employeeArray.find(
-    (emp) => emp.id === location.pathname.split("/")[2]
+  if (employeeData.length == 0) {
+    return <div>Loading...</div>;
+  }
+  employeeData.map((emp) => {
+    console.log(typeof emp.id, "empid type");
+  });
+  const id = Number(location.pathname.split("/")[2]);
+  console.log(typeof id, "loc type");
+  const viewEmployee: IallTypeDataListing | undefined = employeeData.find(
+    (emp) => emp.id === id
   );
-  const skill: IstringID[] = viewEmployee?.skill as IstringID[];
-  // console.log(skill);
   const renderSkills = () => {
-    return skill.map((sk, index) => {
-      // console.log(sk, "sk");
-      if (index === skill.length - 1) return <span key={sk.id}>{sk.name}</span>;
-      else return <span key={sk.id}>{sk.name}, </span>;
+    return viewEmployee?.skills.map((sk: IskillID, index: number) => {
+      if (index === viewEmployee?.skills.length - 1)
+        return <span key={sk.id}>{sk.skill}</span>;
+      else return <span key={sk.id}>{sk.skill}, </span>;
     });
   };
 
@@ -28,23 +36,33 @@ const ViewDetails = () => {
         </span>
 
         <p className="emp-id-display">{viewEmployee?.id}</p>
-        <p className="dept-display">{viewEmployee?.dept}</p>
-        <p className="working-location-display">{viewEmployee?.loc}</p>
+        <p className="dept-display">
+          {viewEmployee?.department
+            ? viewEmployee?.department.department
+            : "Department: N/A"}
+        </p>
+        <p className="working-location-display">
+          {viewEmployee?.loc ? viewEmployee?.loc : "Location: N/A"}
+        </p>
       </div>
       <div className="flex-row right-bar">
         <div className="flex-column personal-details">
           <div>
             <p className="name-display">
-              {viewEmployee?.fName + " " + viewEmployee?.lName}
+              {viewEmployee?.firstName + " " + viewEmployee?.lastName}
             </p>
-            <p className="role-display">{viewEmployee?.role}</p>
+            <p className="role-display">
+              {viewEmployee?.role ? viewEmployee?.role.role : "Role: N/A"}
+            </p>
           </div>
-          <p className="doj-display">Date of Joining: {viewEmployee?.doj}</p>
+          <p className="doj-display">
+            Date of Joining: {viewEmployee?.dateOfJoining}
+          </p>
           <p className="dob-display">Date of Birth: {viewEmployee?.dob}</p>
           <p className="phone-no-display">
-            Phone Number: {viewEmployee?.phnNo}
+            Phone Number: {viewEmployee?.phone}
           </p>
-          <p className="emailID-display">Email ID: {viewEmployee?.emailID}</p>
+          <p className="emailID-display">Email ID: {viewEmployee?.email}</p>
           <div className="address-display-container flex-row">
             <label htmlFor="address-display">Address:&nbsp;</label>
             <div className="address-display">{viewEmployee?.address}</div>

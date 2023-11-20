@@ -6,11 +6,15 @@ import {
   useState,
 } from "react";
 import { IemployeeContext } from "../interfaces/CommonInterfaces/IemployeeContext";
-import { IstringID } from "../interfaces/CommonInterfaces/IstringID";
+import { IskillID, IstringID } from "../interfaces/CommonInterfaces/IstringID";
 import { getData } from "../core/api";
 
 const initialContextValues: IemployeeContext = {
   employeeData: [],
+  roleList: [],
+  deptList: [],
+  skillList: [],
+  setSkillList: () => {},
   sortConfig: { sortColumn: "id", sortOrder: "asc" },
   updateSortConfig: () => {},
   searchValue: "",
@@ -26,26 +30,72 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   const [employeeData, setEmployeeData] = useState(
     initialContextValues.employeeData
   );
+  const [roleList, setRoleList] = useState(initialContextValues.roleList);
+  const [deptList, setDeptList] = useState(initialContextValues.deptList);
+  const [skillList, setSkillList] = useState(initialContextValues.skillList);
+
   const [sortConfig, setSortConfig] = useState(initialContextValues.sortConfig);
   const [searchValue, setSearchValue] = useState(
     initialContextValues.searchValue
   );
-  const [filters, setFilters] = useState<IstringID[]>(
+  const [filters, setFilters] = useState<IskillID[]>(
     initialContextValues.filters
   );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getData("/employee");
+        const response = await getData(
+          `/employee?sortBy=${sortConfig.sortColumn}&sortDir=${sortConfig.sortOrder}`
+        );
+        // console.log(response);
         const result = response.data.data.employees;
+        console.log(result);
         setEmployeeData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []);
+
+    const fetchRole = async () => {
+      try {
+        const response = await getData("/roles");
+        // console.log(response.data, ":rolelist");
+        // console.log(roleArray, ":role array");
+        const result = response.data;
+        setRoleList(result);
+        // console.log(result, "resuilt");
+        // return result;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchRole();
+
+    const fetchDept = async () => {
+      try {
+        const response = await getData("/departments");
+        const result = response.data;
+        setDeptList(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchDept();
+
+    const fetchSkills = async () => {
+      try {
+        const response = await getData("/skills");
+        const result = response.data.data;
+        setSkillList(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchSkills();
+  }, [sortConfig.sortColumn, sortConfig.sortOrder]);
+
   // console.log(employeeData);
 
   const updateSortConfig = (sortColumn: string) => {
@@ -64,16 +114,20 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     setSearchValue(currentSearch);
   };
 
-  const updateFilters = (filter: IstringID) => {
-    setFilters((prev) => [...prev, filter] as IstringID[]);
+  const updateFilters = (filter: IskillID) => {
+    setFilters((prev) => [...prev, filter] as IskillID[]);
   };
 
-  const removeFilter = (updatedFilter: IstringID[]) => {
+  const removeFilter = (updatedFilter: IskillID[]) => {
     setFilters(updatedFilter);
   };
 
   const value: IemployeeContext = {
     employeeData,
+    roleList,
+    deptList,
+    skillList,
+    setSkillList,
     sortConfig,
     updateSortConfig,
     searchValue,

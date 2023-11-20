@@ -7,6 +7,7 @@ export const sortFunction = (
   let column = config.sortColumn;
   let flag = config.sortOrder === "asc" ? 1 : -1;
   data.sort((a, b) => {
+    // console.log(a[column], b[column]);
     if (column == "id") {
       return (a.id - b.id) * flag;
     }

@@ -6,38 +6,45 @@ import TextInput from "../../components/FormComponents/TextInput";
 import TextAreaInput from "../../components/FormComponents/TextAreaInput";
 import { AddEditSection } from "./AddEditStyled";
 import DropDown from "../../components/FormComponents/DropDown";
-import { deptArray, locationArray, roleArray } from "./AddEditConstants";
+import { locationArray } from "./AddEditConstants";
 import Filter from "../../components/Filter/Filter";
-import { employeeArray, skills } from "../Dashboard/dashboardConstant";
+import { skills } from "../Dashboard/dashboardConstant";
 import * as Yup from "yup";
 import { useLocation } from "react-router";
-import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+// import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
+import {
+  IskillID,
+  IstringID,
+} from "../../interfaces/CommonInterfaces/IstringID";
 import { useEffect, useState } from "react";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import { getData } from "../../core/api";
 
 function FormikAddEdit() {
   // const navigate = useNavigate();
-  const { employeeData } = useEmployeeContext();
+  const { employeeData, roleList, deptList, skillList } = useEmployeeContext();
   const [formData, setFormData] = useState({
     photoId: "",
     firstName: "",
     lastName: "",
-    designation: "",
-    department: "",
-    location: "",
+    role: { id: "", role: "" },
+    department: { id: "", department: "" },
+    location: { id: "", location: "" },
     email: "",
     dob: "",
     phone: "",
     address: "",
-    skills: [] as IstringID[],
+    skills: [] as IskillID[],
   });
   const location = useLocation();
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
-
   // console.log(employeeData, "data");
-
+  // const getRoleList = async () => {
+  //   const data = await roleList();
+  //   console.log(data, "darta");
+  //   // return data;
+  //   setRenderArray(data);
+  // };
   const onSubmit = () => {};
 
   let heading;
@@ -79,6 +86,9 @@ function FormikAddEdit() {
   if (location.pathname.split("/")[1] == "edit-page") {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
+    if (!formData.firstName) {
+      return <div>Loading...</div>;
+    }
   } else {
     heading = "Add Employee";
     buttonText = "Add Employee Profile";
@@ -89,12 +99,18 @@ function FormikAddEdit() {
   ) => {
     if (e.target.files) {
       const imgFile = e.target.files[0];
-      console.log(URL.createObjectURL(imgFile));
+      // console.log(URL.createObjectURL(imgFile));
       setProfilePicture(URL.createObjectURL(imgFile));
     }
   };
 
-  console.log(formData, "formdata");
+  // console.log(
+  //   [formData.role].map((indRole) => indRole.role),
+  //   "formdata.role"
+  // );
+
+  console.log(formData.skills, "skilllllll");
+
   return (
     <Formik
       enableReinitialize
@@ -171,11 +187,11 @@ function FormikAddEdit() {
 
               <DropDown
                 label="Role"
-                name="designation"
+                name="role"
                 type="text"
                 placeholder="Select your Role"
-                renderarray={roleArray}
-                initialvalue={formData.designation}
+                renderarray={roleList}
+                initialvalue={formData.role ? formData.role.role : ""}
               />
 
               <DropDown
@@ -183,17 +199,19 @@ function FormikAddEdit() {
                 name="department"
                 type="text"
                 placeholder="Select your Department"
-                renderarray={deptArray}
-                initialvalue={formData.department}
+                renderarray={deptList}
+                initialvalue={
+                  formData.department ? formData.department.department : ""
+                }
               />
 
               <DropDown
                 label="Working Location"
                 name="location"
                 type="text"
-                placeholder="Select your Role"
+                placeholder="Select your Location"
                 renderarray={locationArray}
-                initialvalue={formData.location}
+                // initialvalue={formData.location.location}
               />
             </div>
 
@@ -225,7 +243,7 @@ function FormikAddEdit() {
                 <Filter
                   selectedValue={formData.skills}
                   className="skill-input-form"
-                  dataSkills={skills}
+                  // dataSkills={skills}
                 />
               </div>
             </div>
