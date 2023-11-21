@@ -9,12 +9,12 @@ import TableHeader from "./TableHeader";
 import TableList from "./TableList";
 import { TableWrapper } from "./TableStyled";
 import { searchFunction } from "../../utils/search";
-import { sortFunction } from "../../utils/sortFunction";
+import { deleteData } from "../../core/api";
 
 const Table = ({ column = [] }: { column: ItableHeader[] }) => {
-  const { sortConfig, filters, employeeData } = useEmployeeContext();
+  const { filters, employeeData, setDeleteChange } = useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
-
+  const [deleteID, setDeleteID] = useState();
   // console.log(employeeData, ":in table");
   const filteredEmployees = searchFunction(
     filterArray(employeeData, { skills: filters })
@@ -25,18 +25,42 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
     return prevState;
   }, [] as string[]);
 
-  // console.log(employeeArray, ":employeeArrayu");
   return (
     <>
       {deleteToggle && (
-        <DeleteModal handleModalClose={() => setDeleteToggle(false)} />
+        <DeleteModal
+          handleModalClose={() => {
+            console.log("cancel");
+            setDeleteToggle(false);
+          }}
+          deleteUser={() => {
+            console.log("delete");
+            console.log(deleteID);
+            const deleteUser = async () => {
+              try {
+                const response = await deleteData(`employee/${deleteID}`);
+                const result = response.data;
+                console.log(result, "result");
+                setDeleteToggle(false);
+                setDeleteChange(true);
+              } catch (error) {
+                console.error("Error fetching data:", error);
+              }
+            };
+            deleteUser();
+          }}
+        />
       )}
       <TableWrapper>
         <TableHeader column={column} />
         <tbody>
           {filteredEmployees.map((emp: any) => (
             <TableList
-              handleModalOpen={() => setDeleteToggle(true)}
+              handleModalOpen={() => {
+                setDeleteID(emp.id);
+                setDeleteToggle(true);
+                setDeleteChange(false);
+              }}
               columnIds={columnIds}
               key={emp.id as string}
               data={{

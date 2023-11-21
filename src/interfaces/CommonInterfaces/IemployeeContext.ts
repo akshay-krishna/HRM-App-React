@@ -11,7 +11,9 @@ export interface IemployeeContext {
   updateSortConfig: (sortColumn: string) => void;
   searchValue?: string;
   filters: IskillID[];
+  setFilters: ([]: IskillID[]) => void;
   updateSearch: (currentSearch: string) => void;
   updateFilters: ([]: IskillID) => void;
   removeFilter: ([]: IskillID[]) => void;
+  setDeleteChange: (cond: boolean) => void;
 }

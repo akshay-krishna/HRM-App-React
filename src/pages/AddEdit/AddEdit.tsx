@@ -8,23 +8,18 @@ import { AddEditSection } from "./AddEditStyled";
 import DropDown from "../../components/FormComponents/DropDown";
 import { locationArray } from "./AddEditConstants";
 import Filter from "../../components/Filter/Filter";
-import { skills } from "../Dashboard/dashboardConstant";
 import * as Yup from "yup";
 import { useLocation } from "react-router";
-// import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import {
-  IskillID,
-  IstringID,
-} from "../../interfaces/CommonInterfaces/IstringID";
+import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEffect, useState } from "react";
 import { useEmployeeContext } from "../../context/EmployeeContext";
-import { getData } from "../../core/api";
+import { getData, postData, updateData } from "../../core/api";
 
-function FormikAddEdit() {
+function AddEdit() {
   // const navigate = useNavigate();
-  const { employeeData, roleList, deptList, skillList } = useEmployeeContext();
+  const { employeeData, roleList, deptList } = useEmployeeContext();
   const [formData, setFormData] = useState({
-    photoId: "",
+    isActive: true,
     firstName: "",
     lastName: "",
     role: { id: "", role: "" },
@@ -32,57 +27,36 @@ function FormikAddEdit() {
     location: { id: "", location: "" },
     email: "",
     dob: "",
+    dateOfJoining: "",
     phone: "",
     address: "",
     skills: [] as IskillID[],
+    designation: "",
+    moreDetails: "",
   });
   const location = useLocation();
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
-  // console.log(employeeData, "data");
-  // const getRoleList = async () => {
-  //   const data = await roleList();
-  //   console.log(data, "darta");
-  //   // return data;
-  //   setRenderArray(data);
-  // };
-  const onSubmit = () => {};
 
   let heading;
   let buttonText;
-
+  let locID: string;
   useEffect(() => {
     if (location.pathname.split("/")[1] == "edit-page") {
-      let locID = location.pathname.split("/")[2];
+      locID = location.pathname.split("/")[2];
       const fetchData = async () => {
         try {
           const response = await getData(`/employee/${locID}`);
-          // console.log(response, "response");
-          // console.log(response.data.data, "hohoho");
           const result = response.data.data;
-          // console.log(result);
           setFormData(result);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       };
       fetchData();
-      // const updatedDetails = {
-      //   photoId: "",
-      //   fName: `${formData?.fName}`,
-      //   lName: `${formData?.lName}`,
-      //   role: `${formData?.role}`,
-      //   department: `${formData?.department}`,
-      //   location: `${formData?.location}`,
-      //   email: `${formData?.email}`,
-      //   dob: `${formData?.dob}`,
-      //   phoneNumber: `${formData?.phoneNumber}`,
-      //   address: `${formData?.address}`,
-      //   skills: formData?.skills as IstringID[],
-      // };
-      // setFormData(updatedDetails);
     }
   }, [employeeData]);
 
+  // console.log(formData);
   if (location.pathname.split("/")[1] == "edit-page") {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
@@ -99,48 +73,77 @@ function FormikAddEdit() {
   ) => {
     if (e.target.files) {
       const imgFile = e.target.files[0];
-      // console.log(URL.createObjectURL(imgFile));
       setProfilePicture(URL.createObjectURL(imgFile));
     }
   };
 
-  // console.log(
-  //   [formData.role].map((indRole) => indRole.role),
-  //   "formdata.role"
-  // );
-
-  console.log(formData.skills, "skilllllll");
-
+  // const onSubmit = () => {
+  //   console.log("submit function");
+  //   if (location.pathname.split("/")[1] == "edit-page") {
+  //     locID = location.pathname.split("/")[2];
+  //     console.log("submit clicked");
+  //     console.log(locID);
+  //     console.log(formData);
+  //     const updateEmployee = async () => {
+  //       try {
+  //         const response = await updateData(`employee/${locID}`, formData);
+  //         const result = response.data;
+  //         console.log(result);
+  //       } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //       }
+  //     };
+  //     updateEmployee();
+  //   } else {
+  //     const addEmployee = async () => {
+  //       try {
+  //         const response = await postData(`employee`, formData);
+  //         const result = response.data;
+  //         console.log(result);
+  //       } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //       }
+  //     };
+  //     addEmployee();
+  //   }
+  // };
+  const handleFormSubmit = (values: any) => {
+    console.log("suibmit");
+    console.log(values);
+  };
+  console.log("formData.skills", formData.skills);
   return (
     <Formik
       enableReinitialize
       initialValues={formData}
       validationSchema={Yup.object({
-        fName: Yup.string()
+        firstName: Yup.string()
           .matches(/^[A-Za-z]+$/, "Only letters are allowed")
           .max(15, "Must be 15 characters or less")
           .required("Required"),
 
-        lName: Yup.string()
+        lastName: Yup.string()
           .matches(/^[A-Za-z]+$/, "Only letters are allowed")
           .max(15, "Must be 15 characters or less")
           .required("Required"),
 
-        role: Yup.string().required("Required"),
+        // role: Yup.string().required("Required"),
 
-        department: Yup.string().required("Required"),
+        // department: Yup.string().required("Required"),
 
-        location: Yup.string().required("Required"),
+        // location: Yup.string().required("Required"),
 
         email: Yup.string().email("Invalid email address").required("Required"),
 
-        phoneNumber: Yup.string()
+        phone: Yup.string()
           .matches(/^[0-9]{10}$/, "Phone number should have 10-digits")
           .required("Required"),
 
         address: Yup.string().required("Required"),
       })}
-      onSubmit={onSubmit}
+      onSubmit={(values) => {
+        handleFormSubmit(values);
+      }}
     >
       <AddEditSection className="flex-column">
         <Form
@@ -243,17 +246,11 @@ function FormikAddEdit() {
                 <Filter
                   selectedValue={formData.skills}
                   className="skill-input-form"
-                  // dataSkills={skills}
                 />
               </div>
             </div>
           </div>
-          <Button
-            id="submit"
-            className="primary add-edit-btn"
-            type="submit"
-            // onClick={() => navigate("/")}
-          >
+          <Button id="submit" className="primary add-edit-btn" type="submit">
             <span>{buttonText}</span>
           </Button>
         </Form>
@@ -262,4 +259,4 @@ function FormikAddEdit() {
   );
 }
 
-export default FormikAddEdit;
+export default AddEdit;

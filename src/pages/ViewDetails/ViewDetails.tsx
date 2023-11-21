@@ -7,14 +7,11 @@ import { useEmployeeContext } from "../../context/EmployeeContext";
 
 const ViewDetails = () => {
   const { employeeData } = useEmployeeContext();
-
+  window.scrollTo({ top: 0 });
   const location = useLocation();
   if (employeeData.length == 0) {
     return <div>Loading...</div>;
   }
-  employeeData.map((emp) => {
-    console.log(typeof emp.id, "empid type");
-  });
   const id = Number(location.pathname.split("/")[2]);
   console.log(typeof id, "loc type");
   const viewEmployee: IallTypeDataListing | undefined = employeeData.find(

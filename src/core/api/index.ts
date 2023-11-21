@@ -43,7 +43,7 @@ export const updateData = (
   payload: object,
   config?: AxiosRequestConfig
 ) => {
-  return API.put(url, payload, config);
+  return API.patch(url, payload, config);
 };
 
 export const deleteData = (url: string, config?: AxiosRequestConfig) => {

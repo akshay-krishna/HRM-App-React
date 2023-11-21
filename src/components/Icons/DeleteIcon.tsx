@@ -1,12 +1,15 @@
 function DeleteIcon({
   width = "16px",
   height = "18px",
+  // dataId,
   onClick,
 }: {
   width?: string;
   height?: string;
+  // dataId: string | number;
   onClick: any;
 }) {
+  // console.log(id);
   return (
     <svg
       width={width}

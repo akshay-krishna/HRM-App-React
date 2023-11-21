@@ -1,14 +1,13 @@
 import { HeaderStyle, HeaderWrapper, SearchStyle } from "./HeaderStyled";
 import SearchIcon from "../Icons/SearchIcon";
 import Logo from "../Icons/Logo";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import { ChangeEvent } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  let { searchValue, updateSearch } = useEmployeeContext();
+  let { searchValue, updateSearch, setFilters } = useEmployeeContext();
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     updateSearch(e.target.value);
   };
@@ -16,7 +15,14 @@ const Header = () => {
     <HeaderWrapper>
       <HeaderStyle>
         <h1>
-          <a onClick={() => navigate("/")}>
+          <a
+            onClick={() => {
+              console.log("setting to none");
+              setFilters([]);
+              // console.log(setFilters([]));
+              navigate("/");
+            }}
+          >
             <Logo />
           </a>
         </h1>

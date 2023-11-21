@@ -15,19 +15,17 @@ export let selected: IskillID[];
 const Filter = ({
   selectedValue = [],
   className,
-}: // dataSkills = [],
-{
+}: {
   selectedValue?: IskillID[];
   className: string;
-  // dataSkills: IstringID[];
 }) => {
+  const { updateFilters, removeFilter, skillList } = useEmployeeContext();
   const [showSkills, setShowSkills] = useState(false);
-  // const [skillList, setSkillList] = useState(dataSkills);
   const [selectedSkills, setSelectedSkills] =
     useState<IskillID[]>(selectedValue);
-  const { updateFilters, removeFilter, skillList /*setSkillList*/ } =
-    useEmployeeContext();
-
+  console.log(selectedValue, ":selected value");
+  console.log(selectedSkills, "selectedsklills");
+  // selectedValue = [];
   // if (skillList.length == 0) {
   //   return <div>Loading...</div>;
   // }
@@ -37,7 +35,7 @@ const Filter = ({
   if (location.pathname.split("/")[1] == "edit-page") {
     selected = selected;
   } else {
-    selected = selectedSkills;
+    selected = [];
   }
   // console.log("selected skiils:", selectedSkills);
   const handleSelectSkill = (skill: IskillID) => {
