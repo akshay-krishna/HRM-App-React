@@ -23,8 +23,8 @@ const Filter = ({
   const [showSkills, setShowSkills] = useState(false);
   const [selectedSkills, setSelectedSkills] =
     useState<IskillID[]>(selectedValue);
-  console.log(selectedValue, ":selected value");
-  console.log(selectedSkills, "selectedsklills");
+  // console.log(selectedValue, ":selected value");
+  // console.log(selectedSkills, "selectedsklills");
   // selectedValue = [];
   // if (skillList.length == 0) {
   //   return <div>Loading...</div>;

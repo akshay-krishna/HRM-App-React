@@ -19,7 +19,7 @@ function List({
 }) {
   // console.log("data array in list", dataArray);
   // console.log(listName);
-
+// console.log(dataArray,"dataArarr");
   return (
     <ListStyledUl
       className={

@@ -44,7 +44,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   );
   const [deleteChange, setDeleteChange] = useState(false);
   // const [selectedValue, setSelectedValue] = useState([]);
-  console.log(filters, "setfilter inside context");
+  // console.log(filters, "setfilter inside context");
   useEffect(() => {
     const fetchData = async () => {
       try {

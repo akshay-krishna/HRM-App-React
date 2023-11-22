@@ -18,13 +18,14 @@ import { getData, postData, updateData } from "../../core/api";
 function AddEdit() {
   // const navigate = useNavigate();
   const { employeeData, roleList, deptList } = useEmployeeContext();
+
   const [formData, setFormData] = useState({
     isActive: true,
     firstName: "",
     lastName: "",
-    role: { id: "", role: "" },
-    department: { id: "", department: "" },
-    location: { id: "", location: "" },
+    role: "",
+    department: "",
+    // location: { id: "", location: "" },
     email: "",
     dob: "",
     dateOfJoining: "",
@@ -34,8 +35,10 @@ function AddEdit() {
     designation: "",
     moreDetails: "",
   });
+
   const location = useLocation();
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
+  const date = new Date();
 
   let heading;
   let buttonText;
@@ -47,7 +50,11 @@ function AddEdit() {
         try {
           const response = await getData(`/employee/${locID}`);
           const result = response.data.data;
-          setFormData(result);
+          setFormData({
+            ...result,
+            role: result.role.role,
+            department: result.department.department,
+          });
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -56,7 +63,11 @@ function AddEdit() {
     }
   }, [employeeData]);
 
-  // console.log(formData);
+  // console.log(formData, ":formdata", ":role", formData.role);
+  // if (formData.role) {
+  //   // console.log(formData.role.role, "inside if");
+  //   setRole(formData.role.role);
+  // }
   if (location.pathname.split("/")[1] == "edit-page") {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
@@ -77,41 +88,62 @@ function AddEdit() {
     }
   };
 
-  // const onSubmit = () => {
-  //   console.log("submit function");
-  //   if (location.pathname.split("/")[1] == "edit-page") {
-  //     locID = location.pathname.split("/")[2];
-  //     console.log("submit clicked");
-  //     console.log(locID);
-  //     console.log(formData);
-  //     const updateEmployee = async () => {
-  //       try {
-  //         const response = await updateData(`employee/${locID}`, formData);
-  //         const result = response.data;
-  //         console.log(result);
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     };
-  //     updateEmployee();
-  //   } else {
-  //     const addEmployee = async () => {
-  //       try {
-  //         const response = await postData(`employee`, formData);
-  //         const result = response.data;
-  //         console.log(result);
-  //       } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //       }
-  //     };
-  //     addEmployee();
-  //   }
-  // };
   const handleFormSubmit = (values: any) => {
-    console.log("suibmit");
-    console.log(values);
+    // console.log("submit function");
+    // console.log(values);
+    // console.log(values.firstName);
+    // console.log(values.lastName);
+    // console.log(values.role);
+    // console.log(values.department);
+    // console.log(values.role);
+    console.log(values.role, "vavava");
+    console.log(formData.dateOfJoining);
+    let payload = {
+      ...values,
+      role: roleList.filter((r) => {
+        return r.role == values.role;
+      })[0].id,
+      department: deptList.filter((d) => {
+        return d.department == values.department;
+      })[0].id,
+      dateOfJoining: location.pathname.split("/")[1] == "edit-page"
+        ? formData.dateOfJoining
+        : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
+    };
+
+    console.log(payload, "payload");
+    // console.log(values.role, "values.role");
+    if (location.pathname.split("/")[1] == "edit-page") {
+      locID = location.pathname.split("/")[2];
+      // console.log("submit clicked");
+      // console.log(locID);
+      // console.log(formData);
+      const updateEmployee = async () => {
+        try {
+          const response = await updateData(`employee/${locID}`, payload);
+          const result = response.data;
+          console.log(result);
+        } catch (error) {
+          console.error("Error patching data:", error);
+        }
+      };
+      updateEmployee();
+    } else {
+      const addEmployee = async () => {
+        try {
+          const response = await postData(`employee`, payload);
+          const result = response.data;
+          console.log(result);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      addEmployee();
+    }
   };
-  console.log("formData.skills", formData.skills);
+
+  // console.log("formData.skills", formData.skills);
+  // console.log(formData.role);
   return (
     <Formik
       enableReinitialize
@@ -194,7 +226,8 @@ function AddEdit() {
                 type="text"
                 placeholder="Select your Role"
                 renderarray={roleList}
-                initialvalue={formData.role ? formData.role.role : ""}
+                // initialvalue={formData.role ? formData.role : ""}
+                // initialvalueID={formData.role ? formData.role.id : ""}
               />
 
               <DropDown
@@ -203,9 +236,12 @@ function AddEdit() {
                 type="text"
                 placeholder="Select your Department"
                 renderarray={deptList}
-                initialvalue={
-                  formData.department ? formData.department.department : ""
-                }
+                // initialvalue={
+                //   formData.department ? formData.department.department : ""
+                // }
+                // initialvalueID={
+                //   formData.department ? formData.department.id : ""
+                // }
               />
 
               <DropDown
