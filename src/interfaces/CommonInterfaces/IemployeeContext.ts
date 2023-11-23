@@ -16,4 +16,5 @@ export interface IemployeeContext {
   updateFilters: ([]: IskillID) => void;
   removeFilter: ([]: IskillID[]) => void;
   setDeleteChange: (cond: boolean) => void;
+  setFormChange: (cond: boolean) => void;
 }

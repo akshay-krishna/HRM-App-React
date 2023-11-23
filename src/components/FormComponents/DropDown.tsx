@@ -1,17 +1,24 @@
 import { useState } from "react";
 import List from "../List/List";
 import { useField } from "formik";
-// import { setFieldValue } from "formik";
 
 const DropDown = ({ label, ...props }: any) => {
   const [field, meta, helpers] = useField(props);
-
   const [toggleDropdown, setToggleDropdown] = useState("");
-  // const [input, setInput] = useState(props.initialvalue || "");
-  // console.log(props.renderarray, ":inside dropdown");
   let name = props.name as string;
-  // console.log(field, "field");
-  // console.log(props.renderarray);
+
+  const handleValue = (data: any) => {
+    switch (name) {
+      case "role":
+        return data.role;
+      case "department":
+        return data.department;
+      case "location":
+        return data.location;
+      default:
+        return "";
+    }
+  };
   return (
     <div className={`flex-column label-input ${props.name}-parent`}>
       <label htmlFor={props.id || props.name}>{label}</label>
@@ -30,13 +37,7 @@ const DropDown = ({ label, ...props }: any) => {
           dataArray={props.renderarray}
           listName={props.name}
           handleFunction={(data) => {
-            helpers.setValue(
-              name === "role"
-                ? data.role
-                : name === "department"
-                ? data.department
-                : data.location
-            );
+            helpers.setValue(handleValue(data));
           }}
         />
       )}

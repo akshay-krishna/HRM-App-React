@@ -4,9 +4,7 @@ import AddEmployeeIcon from "../../components/Icons/AddEmployeeIcon";
 import Table from "../../components/Table/Table";
 import { FilterWrapper, MainWrapper, SectionWrapper } from "./DashboardStyled";
 import {
-  // employeeArray,
   employeeHeaderArray,
-  // skills,
 } from "./dashboardConstant";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +22,6 @@ const Dashboard = () => {
         <FilterWrapper>
           <Filter
             className="filter-search"
-            // dataSkills={skills}
             selectedValue={selected}
           />
         </FilterWrapper>

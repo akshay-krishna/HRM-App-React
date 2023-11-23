@@ -13,17 +13,9 @@ const ViewDetails = () => {
     return <div>Loading...</div>;
   }
   const id = Number(location.pathname.split("/")[2]);
-  console.log(typeof id, "loc type");
   const viewEmployee: IallTypeDataListing | undefined = employeeData.find(
     (emp) => emp.id === id
   );
-  const renderSkills = () => {
-    return viewEmployee?.skills.map((sk: IskillID, index: number) => {
-      if (index === viewEmployee?.skills.length - 1)
-        return <span key={sk.id}>{sk.skill}</span>;
-      else return <span key={sk.id}>{sk.skill}, </span>;
-    });
-  };
 
   return (
     <ViewDetailsSection className="view-employee-modal flex-row ">
@@ -68,7 +60,9 @@ const ViewDetails = () => {
         <div className="flex-column skill-details">
           <p>Skills</p>
           <div className="show-skills">
-            <p className="show-skills-p">{renderSkills()}</p>
+            <p className="show-skills-p">
+              {viewEmployee?.skills.map((sk: IskillID) => sk.skill).join(", ")}
+            </p>
           </div>
         </div>
       </div>

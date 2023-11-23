@@ -24,6 +24,7 @@ const initialContextValues: IemployeeContext = {
   updateFilters: () => {},
   removeFilter: () => {},
   setDeleteChange: () => {},
+  setFormChange: () => {},
 };
 
 const EmployeeContext = createContext(initialContextValues);
@@ -43,8 +44,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     initialContextValues.filters
   );
   const [deleteChange, setDeleteChange] = useState(false);
-  // const [selectedValue, setSelectedValue] = useState([]);
-  // console.log(filters, "setfilter inside context");
+  const [formChange, setFormChange] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,7 +52,6 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
           `/employee?sortBy=${sortConfig.sortColumn}&sortDir=${sortConfig.sortOrder}`
         );
         const result = response.data.data.employees;
-        // console.log(result);
         setEmployeeData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -92,9 +91,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       }
     };
     fetchSkills();
-  }, [sortConfig.sortColumn, sortConfig.sortOrder, deleteChange]);
-
-  // console.log(employeeData);
+  }, [sortConfig.sortColumn, sortConfig.sortOrder, deleteChange, formChange]);
 
   const updateSortConfig = (sortColumn: string) => {
     setSortConfig((prevConfig) => ({
@@ -135,6 +132,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     updateFilters,
     removeFilter,
     setDeleteChange,
+    setFormChange,
   };
   return (
     <EmployeeContext.Provider value={value}>

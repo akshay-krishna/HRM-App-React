@@ -16,7 +16,6 @@ export const DeleteModalWrapper = styled.section`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--light);
-  /* min-height: 600px; */
   overflow: auto;
   border-radius: 7px;
   .confirm-modal-btns {

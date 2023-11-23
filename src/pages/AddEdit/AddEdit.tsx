@@ -1,4 +1,3 @@
-// import { useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
 import AddPhotoIcon from "../../components/Icons/AddPhotoIcon";
 import { Form, Formik } from "formik";
@@ -9,15 +8,16 @@ import DropDown from "../../components/FormComponents/DropDown";
 import { locationArray } from "./AddEditConstants";
 import Filter from "../../components/Filter/Filter";
 import * as Yup from "yup";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEffect, useState } from "react";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import { getData, postData, updateData } from "../../core/api";
 
 function AddEdit() {
-  // const navigate = useNavigate();
-  const { employeeData, roleList, deptList } = useEmployeeContext();
+  const navigate = useNavigate();
+  const { employeeData, roleList, deptList, setFormChange, setFilters } =
+    useEmployeeContext();
 
   const [formData, setFormData] = useState({
     isActive: true,
@@ -39,7 +39,8 @@ function AddEdit() {
   const location = useLocation();
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
   const date = new Date();
-
+  const [selSkills, setselSkills] = useState(formData.skills);
+  // console.log(selSkills);
   let heading;
   let buttonText;
   let locID: string;
@@ -63,11 +64,6 @@ function AddEdit() {
     }
   }, [employeeData]);
 
-  // console.log(formData, ":formdata", ":role", formData.role);
-  // if (formData.role) {
-  //   // console.log(formData.role.role, "inside if");
-  //   setRole(formData.role.role);
-  // }
   if (location.pathname.split("/")[1] == "edit-page") {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
@@ -88,16 +84,8 @@ function AddEdit() {
     }
   };
 
+  setFormChange(false);
   const handleFormSubmit = (values: any) => {
-    // console.log("submit function");
-    // console.log(values);
-    // console.log(values.firstName);
-    // console.log(values.lastName);
-    // console.log(values.role);
-    // console.log(values.department);
-    // console.log(values.role);
-    console.log(values.role, "vavava");
-    console.log(formData.dateOfJoining);
     let payload = {
       ...values,
       role: roleList.filter((r) => {
@@ -106,23 +94,23 @@ function AddEdit() {
       department: deptList.filter((d) => {
         return d.department == values.department;
       })[0].id,
-      dateOfJoining: location.pathname.split("/")[1] == "edit-page"
-        ? formData.dateOfJoining
-        : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
+      dateOfJoining:
+        location.pathname.split("/")[1] == "edit-page"
+          ? formData.dateOfJoining
+          : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
+      skills: selSkills,
     };
 
-    console.log(payload, "payload");
-    // console.log(values.role, "values.role");
     if (location.pathname.split("/")[1] == "edit-page") {
       locID = location.pathname.split("/")[2];
-      // console.log("submit clicked");
-      // console.log(locID);
-      // console.log(formData);
       const updateEmployee = async () => {
         try {
           const response = await updateData(`employee/${locID}`, payload);
           const result = response.data;
           console.log(result);
+          setFormChange(true);
+          setFilters([]);
+          navigate("/");
         } catch (error) {
           console.error("Error patching data:", error);
         }
@@ -134,6 +122,9 @@ function AddEdit() {
           const response = await postData(`employee`, payload);
           const result = response.data;
           console.log(result);
+          setFormChange(true);
+          setFilters([]);
+          navigate("/");
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -142,8 +133,6 @@ function AddEdit() {
     }
   };
 
-  // console.log("formData.skills", formData.skills);
-  // console.log(formData.role);
   return (
     <Formik
       enableReinitialize
@@ -158,12 +147,6 @@ function AddEdit() {
           .matches(/^[A-Za-z]+$/, "Only letters are allowed")
           .max(15, "Must be 15 characters or less")
           .required("Required"),
-
-        // role: Yup.string().required("Required"),
-
-        // department: Yup.string().required("Required"),
-
-        // location: Yup.string().required("Required"),
 
         email: Yup.string().email("Invalid email address").required("Required"),
 
@@ -226,8 +209,6 @@ function AddEdit() {
                 type="text"
                 placeholder="Select your Role"
                 renderarray={roleList}
-                // initialvalue={formData.role ? formData.role : ""}
-                // initialvalueID={formData.role ? formData.role.id : ""}
               />
 
               <DropDown
@@ -236,12 +217,6 @@ function AddEdit() {
                 type="text"
                 placeholder="Select your Department"
                 renderarray={deptList}
-                // initialvalue={
-                //   formData.department ? formData.department.department : ""
-                // }
-                // initialvalueID={
-                //   formData.department ? formData.department.id : ""
-                // }
               />
 
               <DropDown
@@ -280,6 +255,8 @@ function AddEdit() {
               <div className="flex-column label-input skill-input">
                 <label>Skills</label>
                 <Filter
+                  name="skills"
+                  setselSkills={setselSkills}
                   selectedValue={formData.skills}
                   className="skill-input-form"
                 />

@@ -1,7 +1,6 @@
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import {
   IskillID,
-  IstringID,
 } from "../../interfaces/CommonInterfaces/IstringID";
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 

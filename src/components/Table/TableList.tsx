@@ -8,18 +8,16 @@ import EditIcon from "../Icons/EditIcon";
 type tableListingProps = {
   columnIds: string[];
   data: IallTypeDataListing;
-  handleModalOpen: (/*id:number|string*/) => void;
+  handleModalOpen: () => void;
 };
 const TableList = (props: tableListingProps) => {
   const navigate = useNavigate();
   const { columnIds = [], data } = props;
-  // console.log(data);
 
   return (
     <tr>
       {columnIds.map((ele) => {
         if (ele === "action") {
-          // console.log(data.id);
           return (
             <td key={ele}>
               <ActionIconWrapper className="flex-row">

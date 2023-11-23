@@ -9,10 +9,29 @@ type TableHeaderProps = {
 const TableHeader = (props: TableHeaderProps) => {
   const { column = [] } = props;
   const { sortConfig, updateSortConfig } = useEmployeeContext();
-  // const handleHeadClick = (element: any) => {};
-  // console.log(column);
   let className = "";
-
+  const handleValue = (element: ItableHeader) => {
+    switch (element.id) {
+      case "id":
+      case "firstName":
+      case "lastName":
+        updateSortConfig(element.id);
+        break;
+      default:
+        "";
+        break;
+    }
+  };
+  const handleClassName = (element: ItableHeader) => {
+    switch (element.id) {
+      case "id":
+      case "firstName":
+      case "lastName":
+        return (className = "arrow-direction");
+      default:
+        return (className = "no-direction");
+    }
+  };
   return (
     <thead>
       <tr>
@@ -20,22 +39,10 @@ const TableHeader = (props: TableHeaderProps) => {
           <th
             key={element.id}
             onClick={() => {
-              element.id == "id" ||
-              element.id == "firstName" ||
-              element.id == "lastName"
-                ? updateSortConfig(element.id)
-                : "";
+              handleValue(element);
             }}
           >
-            <div
-              className={`flex-row ${
-                element.id == "id" ||
-                element.id == "firstName" ||
-                element.id == "lastName"
-                  ? (className = "arrow-direction")
-                  : (className = "no-direction")
-              }`}
-            >
+            <div className={`flex-row ${handleClassName(element)}`}>
               {element.name}
               {element.id === sortConfig.sortColumn ? (
                 sortConfig.sortOrder === "asc" ? (

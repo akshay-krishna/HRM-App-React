@@ -17,9 +17,21 @@ function List({
   }[];
   handleFunction: (arg: any) => void;
 }) {
-  // console.log("data array in list", dataArray);
-  // console.log(listName);
-// console.log(dataArray,"dataArarr");
+  const handleValue = (data: any): string => {
+    switch (listName) {
+      case "role":
+        console.log(data.role, "data.role");
+        return data.role;
+      case "department":
+        return data.department;
+      case "location":
+        return data.location;
+      case "skills":
+        return data.skill;
+      default:
+        return "";
+    }
+  };
   return (
     <ListStyledUl
       className={
@@ -32,13 +44,9 @@ function List({
     >
       {dataArray.map((data) => (
         <ListStyleLi onClick={() => handleFunction(data)} key={data.id}>
-          {listName == "role"
-            ? data.role
-            : listName == "department"
-            ? data.department
-            : listName == "location"
-            ? data.location
-            : data.skill}
+          {
+            handleValue(data)
+          }
         </ListStyleLi>
       ))}
     </ListStyledUl>

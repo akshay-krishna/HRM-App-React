@@ -17,9 +17,7 @@ const Header = () => {
         <h1>
           <a
             onClick={() => {
-              console.log("setting to none");
               setFilters([]);
-              // console.log(setFilters([]));
               navigate("/");
             }}
           >
