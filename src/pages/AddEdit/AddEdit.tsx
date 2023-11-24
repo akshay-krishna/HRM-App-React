@@ -8,7 +8,7 @@ import DropDown from "../../components/FormComponents/DropDown";
 import { locationArray } from "./AddEditConstants";
 import Filter from "../../components/Filter/Filter";
 import * as Yup from "yup";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEffect, useState } from "react";
 import { useEmployeeContext } from "../../context/EmployeeContext";
@@ -35,26 +35,22 @@ function AddEdit() {
     designation: "",
     moreDetails: "",
   });
-
-  const location = useLocation();
+  const { id } = useParams();
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
   const date = new Date();
   const [selSkills, setselSkills] = useState(formData.skills);
-  // console.log(selSkills);
   let heading;
   let buttonText;
-  let locID: string;
   useEffect(() => {
-    if (location.pathname.split("/")[1] == "edit-page") {
-      locID = location.pathname.split("/")[2];
+    if (id) {
       const fetchData = async () => {
         try {
-          const response = await getData(`/employee/${locID}`);
+          const response = await getData(`/employee/${id}`);
           const result = response.data.data;
           setFormData({
             ...result,
-            role: result.role.role,
-            department: result.department.department,
+            role: result.role?.role,
+            department: result.department?.department,
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -64,7 +60,7 @@ function AddEdit() {
     }
   }, [employeeData]);
 
-  if (location.pathname.split("/")[1] == "edit-page") {
+  if (id) {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
     if (!formData.firstName) {
@@ -86,26 +82,30 @@ function AddEdit() {
 
   setFormChange(false);
   const handleFormSubmit = (values: any) => {
+    console.log(values);
     let payload = {
       ...values,
-      role: roleList.filter((r) => {
-        return r.role == values.role;
-      })[0].id,
-      department: deptList.filter((d) => {
-        return d.department == values.department;
-      })[0].id,
-      dateOfJoining:
-        location.pathname.split("/")[1] == "edit-page"
-          ? formData.dateOfJoining
-          : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
+      role: values.role
+        ? roleList.filter((r) => {
+            return r.role == values.role;
+          })[0].id
+        : null,
+      department: values.department
+        ? deptList.filter((d) => {
+            return d.department == values.department;
+          })[0].id
+        : null,
+      dateOfJoining: id
+        ? formData.dateOfJoining
+        : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
       skills: selSkills,
+      moreDetails: `location{${values.location}}`,
     };
 
-    if (location.pathname.split("/")[1] == "edit-page") {
-      locID = location.pathname.split("/")[2];
+    if (id) {
       const updateEmployee = async () => {
         try {
-          const response = await updateData(`employee/${locID}`, payload);
+          const response = await updateData(`employee/${id}`, payload);
           const result = response.data;
           console.log(result);
           setFormChange(true);

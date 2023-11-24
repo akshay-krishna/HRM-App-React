@@ -1,11 +1,10 @@
 import Button from "../../components/Button/Button";
 import Filter, { selected } from "../../components/Filter/Filter";
 import AddEmployeeIcon from "../../components/Icons/AddEmployeeIcon";
+import Pagination from "../../components/Pagination/Pagination";
 import Table from "../../components/Table/Table";
 import { FilterWrapper, MainWrapper, SectionWrapper } from "./DashboardStyled";
-import {
-  employeeHeaderArray,
-} from "./dashboardConstant";
+import { employeeHeaderArray } from "./dashboardConstant";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -20,13 +19,11 @@ const Dashboard = () => {
           <AddEmployeeIcon /> Add Employee
         </Button>
         <FilterWrapper>
-          <Filter
-            className="filter-search"
-            selectedValue={selected}
-          />
+          <Filter className="filter-search" selectedValue={selected} />
         </FilterWrapper>
       </SectionWrapper>
       <Table column={employeeHeaderArray} />
+      <Pagination />
     </MainWrapper>
   );
 };

@@ -8,6 +8,7 @@ import {
 import { IemployeeContext } from "../interfaces/CommonInterfaces/IemployeeContext";
 import { IskillID } from "../interfaces/CommonInterfaces/IstringID";
 import { getData } from "../core/api";
+import { rowsPerPage } from "../utils/constant";
 
 const initialContextValues: IemployeeContext = {
   employeeData: [],
@@ -25,6 +26,9 @@ const initialContextValues: IemployeeContext = {
   removeFilter: () => {},
   setDeleteChange: () => {},
   setFormChange: () => {},
+  totalPages: "1",
+  pageNumber: "1",
+  setPageNumber: () => {},
 };
 
 const EmployeeContext = createContext(initialContextValues);
@@ -33,10 +37,10 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   const [employeeData, setEmployeeData] = useState(
     initialContextValues.employeeData
   );
-  const [roleList, setRoleList] = useState(initialContextValues.roleList);
-  const [deptList, setDeptList] = useState(initialContextValues.deptList);
-  const [skillList, setSkillList] = useState(initialContextValues.skillList);
-  const [sortConfig, setSortConfig] = useState(initialContextValues.sortConfig);
+  const [roleList, setRoleList] = useState(initialContextValues.roleList); //the list of roles fetched from api
+  const [deptList, setDeptList] = useState(initialContextValues.deptList); //the list of departments fetched from api
+  const [skillList, setSkillList] = useState(initialContextValues.skillList); //the list of skills fetched from api
+  const [sortConfig, setSortConfig] = useState(initialContextValues.sortConfig); //config of sorting
   const [searchValue, setSearchValue] = useState(
     initialContextValues.searchValue
   );
@@ -45,14 +49,22 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   );
   const [deleteChange, setDeleteChange] = useState(false);
   const [formChange, setFormChange] = useState(false);
+  const [totalPages, setTotalPages] = useState(initialContextValues.totalPages);
+  const [pageNumber, setPageNumber] = useState(initialContextValues.pageNumber);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getData(
-          `/employee?sortBy=${sortConfig.sortColumn}&sortDir=${sortConfig.sortOrder}`
+          `/employee?limit=${rowsPerPage}&offset=${
+            (Number(pageNumber) - 1) * rowsPerPage
+          }&sortBy=${sortConfig.sortColumn}&sortDir=${sortConfig.sortOrder}`
         );
         const result = response.data.data.employees;
         setEmployeeData(result);
+        setTotalPages(
+          String(Math.ceil(response.data.data.count / rowsPerPage))
+        );
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -91,7 +103,13 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       }
     };
     fetchSkills();
-  }, [sortConfig.sortColumn, sortConfig.sortOrder, deleteChange, formChange]);
+  }, [
+    sortConfig.sortColumn,
+    sortConfig.sortOrder,
+    deleteChange,
+    formChange,
+    pageNumber,
+  ]);
 
   const updateSortConfig = (sortColumn: string) => {
     setSortConfig((prevConfig) => ({
@@ -133,6 +151,9 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     removeFilter,
     setDeleteChange,
     setFormChange,
+    totalPages,
+    pageNumber,
+    setPageNumber,
   };
   return (
     <EmployeeContext.Provider value={value}>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterIcon from "../Icons/FilterIcon";
 import { SearchBySkill, SelectedSkills } from "./FIlterStyled";
 import CloseIcon from "../Icons/CloseIcon";
@@ -66,6 +66,7 @@ const Filter = ({
     );
   };
   setselSkills?.(selectedSkills);
+
   return (
     <SearchBySkill>
       <input

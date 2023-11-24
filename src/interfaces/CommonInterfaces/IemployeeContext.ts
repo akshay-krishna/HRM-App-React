@@ -17,4 +17,7 @@ export interface IemployeeContext {
   removeFilter: ([]: IskillID[]) => void;
   setDeleteChange: (cond: boolean) => void;
   setFormChange: (cond: boolean) => void;
+  totalPages: string;
+  pageNumber: string;
+  setPageNumber: React.Dispatch<React.SetStateAction<string>>;
 }

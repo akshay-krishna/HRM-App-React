@@ -54,9 +54,11 @@ const Routing = createBrowserRouter([
             <LazyDelete
               handleModalClose={function (): void {
                 throw new Error("Function not implemented.");
-              } } deleteUser={function (): void {
+              }}
+              deleteUser={function (): void {
                 throw new Error("Function not implemented.");
-              } }            />
+              }}
+            />
           </React.Suspense>
         ),
       },

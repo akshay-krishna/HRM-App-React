@@ -52,4 +52,9 @@ export const ButtonWrapper = styled.button`
     width: 110px;
     height: 45px;
   }
+  &.pagination-btn {
+    border: 1px solid var(--primary);
+    padding: 4px;
+    cursor: pointer;
+  }
 `;

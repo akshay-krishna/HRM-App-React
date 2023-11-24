@@ -1,20 +1,19 @@
 import Avatar from "../../components/Icons/Avatar";
 import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import { useLocation } from "react-router";
+import { useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 
 const ViewDetails = () => {
   const { employeeData } = useEmployeeContext();
   window.scrollTo({ top: 0 });
-  const location = useLocation();
+  const { id } = useParams();
   if (employeeData.length == 0) {
     return <div>Loading...</div>;
   }
-  const id = Number(location.pathname.split("/")[2]);
   const viewEmployee: IallTypeDataListing | undefined = employeeData.find(
-    (emp) => emp.id === id
+    (emp) => emp.id === Number(id)
   );
 
   return (
