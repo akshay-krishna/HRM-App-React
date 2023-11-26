@@ -59,11 +59,13 @@ const Filter = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    console.log(e.target.value);
     setFilterSkills(
       filterSkills.filter((indSkill) =>
         indSkill.skill.toLowerCase().includes(e.target.value.toLowerCase())
       )
     );
+    console.log(filterSkills);
   };
   setselSkills?.(selectedSkills);
 

@@ -29,6 +29,7 @@ const initialContextValues: IemployeeContext = {
   totalPages: "1",
   pageNumber: "1",
   setPageNumber: () => {},
+  loading: true,
 };
 
 const EmployeeContext = createContext(initialContextValues);
@@ -51,10 +52,12 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   const [formChange, setFormChange] = useState(false);
   const [totalPages, setTotalPages] = useState(initialContextValues.totalPages);
   const [pageNumber, setPageNumber] = useState(initialContextValues.pageNumber);
+  const [loading, setLoading] = useState(initialContextValues.loading);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await getData(
           `/employee?limit=${rowsPerPage}&offset=${
             (Number(pageNumber) - 1) * rowsPerPage
@@ -65,6 +68,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
         setTotalPages(
           String(Math.ceil(response.data.data.count / rowsPerPage))
         );
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -154,6 +158,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     totalPages,
     pageNumber,
     setPageNumber,
+    loading,
   };
   return (
     <EmployeeContext.Provider value={value}>

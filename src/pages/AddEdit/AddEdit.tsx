@@ -13,6 +13,8 @@ import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEffect, useState } from "react";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import { getData, postData, updateData } from "../../core/api";
+import displayToast from "../../utils/displayToast";
+import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
 
 function AddEdit() {
   const navigate = useNavigate();
@@ -64,7 +66,7 @@ function AddEdit() {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
     if (!formData.firstName) {
-      return <div>Loading...</div>;
+      return <LoaderComponent />;
     }
   } else {
     heading = "Add Employee";
@@ -99,7 +101,7 @@ function AddEdit() {
         ? formData.dateOfJoining
         : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
       skills: selSkills,
-      moreDetails: `location{${values.location}}`,
+      // moreDetails: { location: values.location }.stringfy,
     };
 
     if (id) {
@@ -111,7 +113,9 @@ function AddEdit() {
           setFormChange(true);
           setFilters([]);
           navigate("/");
+          displayToast("Employee updated successfully", "success");
         } catch (error) {
+          displayToast("Error updating data", "error");
           console.error("Error patching data:", error);
         }
       };
@@ -125,8 +129,10 @@ function AddEdit() {
           setFormChange(true);
           setFilters([]);
           navigate("/");
+          displayToast("Employee added successfully", "success");
         } catch (error) {
-          console.error("Error fetching data:", error);
+          console.log(error);
+          displayToast("Error adding data", "error");
         }
       };
       addEmployee();

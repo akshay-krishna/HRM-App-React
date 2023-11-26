@@ -20,4 +20,5 @@ export interface IemployeeContext {
   totalPages: string;
   pageNumber: string;
   setPageNumber: React.Dispatch<React.SetStateAction<string>>;
+  loading: boolean;
 }

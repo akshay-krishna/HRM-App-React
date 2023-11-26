@@ -8,9 +8,12 @@ import TableList from "./TableList";
 import { TableWrapper } from "./TableStyled";
 import { searchFunction } from "../../utils/search";
 import { deleteData } from "../../core/api";
+import displayToast from "../../utils/displayToast";
+import LoaderComponent from "../LoaderComponent/LoaderComponent";
 
 const Table = ({ column = [] }: { column: ItableHeader[] }) => {
-  const { filters, employeeData, setDeleteChange } = useEmployeeContext();
+  const { filters, employeeData, setDeleteChange, loading } =
+    useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [deleteID, setDeleteID] = useState();
   const filteredEmployees = searchFunction(
@@ -20,7 +23,7 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
     prevState.push(currentIteration.id);
     return prevState;
   }, [] as string[]);
-
+  console.log(filteredEmployees);
   return (
     <>
       {deleteToggle && (
@@ -34,9 +37,11 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
                 const response = await deleteData(`employee/${deleteID}`);
                 const result = response.data;
                 console.log(result, "result");
+                displayToast("Record deleted successfully", "success");
                 setDeleteToggle(false);
                 setDeleteChange(true);
               } catch (error) {
+                displayToast("Couldn't delete the user", "error");
                 console.error("Error fetching data:", error);
               }
             };
@@ -47,6 +52,7 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
       <TableWrapper>
         <TableHeader column={column} />
         <tbody>
+          {loading && <LoaderComponent style="overlay" />}
           {filteredEmployees.map((emp: any) => (
             <TableList
               handleModalOpen={() => {
