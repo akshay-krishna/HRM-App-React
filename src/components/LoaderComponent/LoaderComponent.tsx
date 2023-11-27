@@ -2,7 +2,6 @@ import { RingLoader } from "react-spinners";
 import { LoaderComponentWrapper } from "./LoaderComponentStyled";
 
 function LoaderComponent({ style }: { style?: string }) {
-  console.log(style);
   return (
     <LoaderComponentWrapper className={`flex-row ${style}`}>
       <RingLoader

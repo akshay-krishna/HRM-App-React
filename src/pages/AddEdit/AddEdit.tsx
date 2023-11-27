@@ -15,6 +15,8 @@ import { useEmployeeContext } from "../../context/EmployeeContext";
 import { getData, postData, updateData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
+import { CdataInvalid } from "../../utils/constant";
+import { uploadImage } from "../../utils/firebase";
 
 function AddEdit() {
   const navigate = useNavigate();
@@ -43,16 +45,24 @@ function AddEdit() {
   const [selSkills, setselSkills] = useState(formData.skills);
   let heading;
   let buttonText;
+  let photoUrl: any;
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
         try {
           const response = await getData(`/employee/${id}`);
           const result = response.data.data;
+          let locationVar;
+          try {
+            locationVar = JSON.parse(result.moreDetails).location;
+          } catch {
+            locationVar = CdataInvalid;
+          }
           setFormData({
             ...result,
             role: result.role?.role,
             department: result.department?.department,
+            location: locationVar,
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -61,7 +71,6 @@ function AddEdit() {
       fetchData();
     }
   }, [employeeData]);
-
   if (id) {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
@@ -79,12 +88,12 @@ function AddEdit() {
     if (e.target.files) {
       const imgFile = e.target.files[0];
       setProfilePicture(URL.createObjectURL(imgFile));
+      photoUrl = uploadImage(imgFile);
     }
   };
-
+  console.log(formData);
   setFormChange(false);
   const handleFormSubmit = (values: any) => {
-    console.log(values);
     let payload = {
       ...values,
       role: values.role
@@ -101,9 +110,13 @@ function AddEdit() {
         ? formData.dateOfJoining
         : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
       skills: selSkills,
-      // moreDetails: { location: values.location }.stringfy,
-    };
 
+      moreDetails: JSON.stringify({
+        location: values.location,
+        photoId: photoUrl,
+      }),
+    };
+    delete payload.location;
     if (id) {
       const updateEmployee = async () => {
         try {
@@ -123,9 +136,7 @@ function AddEdit() {
     } else {
       const addEmployee = async () => {
         try {
-          const response = await postData(`employee`, payload);
-          const result = response.data;
-          console.log(result);
+          await postData(`employee`, payload);
           setFormChange(true);
           setFilters([]);
           navigate("/");
@@ -155,6 +166,10 @@ function AddEdit() {
           .required("Required"),
 
         email: Yup.string().email("Invalid email address").required("Required"),
+
+        dob: Yup.date()
+          .max(new Date(), "Date of Birth cannot be in the future")
+          .required("Required"),
 
         phone: Yup.string()
           .matches(/^[0-9]{10}$/, "Phone number should have 10-digits")

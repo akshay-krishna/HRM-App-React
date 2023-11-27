@@ -21,4 +21,6 @@ export interface IemployeeContext {
   pageNumber: string;
   setPageNumber: React.Dispatch<React.SetStateAction<string>>;
   loading: boolean;
+  selectedFilter: IskillID[];
+  setSelectedFilter: React.Dispatch<React.SetStateAction<IskillID[]>>;
 }

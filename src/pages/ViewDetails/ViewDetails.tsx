@@ -4,6 +4,7 @@ import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import { useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEmployeeContext } from "../../context/EmployeeContext";
+import { CdataInvalid } from "../../utils/constant";
 
 const ViewDetails = () => {
   const { employeeData } = useEmployeeContext();
@@ -15,7 +16,12 @@ const ViewDetails = () => {
   const viewEmployee: IallTypeDataListing | undefined = employeeData.find(
     (emp) => emp.id === Number(id)
   );
-
+  let locationVar;
+  try {
+    locationVar = JSON.parse(viewEmployee?.moreDetails).location;
+  } catch {
+    locationVar = `Location: ${CdataInvalid}`;
+  }
   return (
     <ViewDetailsSection className="view-employee-modal flex-row ">
       <div className="flex-column left-bar">
@@ -29,9 +35,7 @@ const ViewDetails = () => {
             ? viewEmployee?.department.department
             : "Department: N/A"}
         </p>
-        <p className="working-location-display">
-          {viewEmployee?.loc ? viewEmployee?.loc : "Location: N/A"}
-        </p>
+        <p className="working-location-display">{locationVar}</p>
       </div>
       <div className="flex-row right-bar">
         <div className="flex-column personal-details">

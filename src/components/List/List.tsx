@@ -20,7 +20,6 @@ function List({
   const handleValue = (data: any): string => {
     switch (listName) {
       case "role":
-        console.log(data.role, "data.role");
         return data.role;
       case "department":
         return data.department;

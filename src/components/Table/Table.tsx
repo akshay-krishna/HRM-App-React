@@ -6,24 +6,23 @@ import DeleteModal from "../DeleteModal/DeleteModal";
 import TableHeader from "./TableHeader";
 import TableList from "./TableList";
 import { TableWrapper } from "./TableStyled";
-import { searchFunction } from "../../utils/search";
 import { deleteData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../LoaderComponent/LoaderComponent";
 
 const Table = ({ column = [] }: { column: ItableHeader[] }) => {
-  const { filters, employeeData, setDeleteChange, loading } =
+  const { employeeData, setDeleteChange, loading, selectedFilter } =
     useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [deleteID, setDeleteID] = useState();
-  const filteredEmployees = searchFunction(
-    filterArray(employeeData, { skills: filters })
-  );
+  const filteredEmployees = filterArray(employeeData, {
+    skills: selectedFilter,
+  });
+
   const columnIds = column.reduce((prevState, currentIteration) => {
     prevState.push(currentIteration.id);
     return prevState;
   }, [] as string[]);
-  console.log(filteredEmployees);
   return (
     <>
       {deleteToggle && (
@@ -34,9 +33,7 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
           deleteUser={() => {
             const deleteUser = async () => {
               try {
-                const response = await deleteData(`employee/${deleteID}`);
-                const result = response.data;
-                console.log(result, "result");
+                await deleteData(`employee/${deleteID}`);
                 displayToast("Record deleted successfully", "success");
                 setDeleteToggle(false);
                 setDeleteChange(true);
@@ -49,10 +46,10 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
           }}
         />
       )}
+      {loading && <LoaderComponent style="overlay" />}
       <TableWrapper>
         <TableHeader column={column} />
         <tbody>
-          {loading && <LoaderComponent style="overlay" />}
           {filteredEmployees.map((emp: any) => (
             <TableList
               handleModalOpen={() => {

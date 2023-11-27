@@ -30,6 +30,8 @@ const initialContextValues: IemployeeContext = {
   pageNumber: "1",
   setPageNumber: () => {},
   loading: true,
+  selectedFilter: [],
+  setSelectedFilter: () => {},
 };
 
 const EmployeeContext = createContext(initialContextValues);
@@ -53,7 +55,9 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   const [totalPages, setTotalPages] = useState(initialContextValues.totalPages);
   const [pageNumber, setPageNumber] = useState(initialContextValues.pageNumber);
   const [loading, setLoading] = useState(initialContextValues.loading);
-
+  const [selectedFilter, setSelectedFilter] = useState(
+    initialContextValues.selectedFilter
+  );
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -159,6 +163,8 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     pageNumber,
     setPageNumber,
     loading,
+    selectedFilter,
+    setSelectedFilter,
   };
   return (
     <EmployeeContext.Provider value={value}>
