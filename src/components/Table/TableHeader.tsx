@@ -9,7 +9,6 @@ type TableHeaderProps = {
 const TableHeader = (props: TableHeaderProps) => {
   const { column = [] } = props;
   const { sortConfig, updateSortConfig } = useEmployeeContext();
-  let classType: string;
   const handleValue = (element: ItableHeader) => {
     switch (element.id) {
       case "id":
@@ -27,9 +26,9 @@ const TableHeader = (props: TableHeaderProps) => {
       case "id":
       case "firstName":
       case "lastName":
-        return (classType = "arrow-direction");
+        return "arrow-direction";
       default:
-        return (classType = "no-direction");
+        return "no-direction";
     }
   };
   return (
