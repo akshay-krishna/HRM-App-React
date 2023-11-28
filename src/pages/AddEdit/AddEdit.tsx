@@ -29,7 +29,6 @@ function AddEdit() {
     lastName: "",
     role: "",
     department: "",
-    // location: { id: "", location: "" },
     email: "",
     dob: "",
     dateOfJoining: "",
@@ -43,9 +42,9 @@ function AddEdit() {
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
   const date = new Date();
   const [selSkills, setselSkills] = useState(formData.skills);
+  const [photoUrl, setPhotoUrl] = useState("");
   let heading;
   let buttonText;
-  let photoUrl: any;
   useEffect(() => {
     if (id) {
       const fetchData = async () => {
@@ -53,16 +52,22 @@ function AddEdit() {
           const response = await getData(`/employee/${id}`);
           const result = response.data.data;
           let locationVar;
+          let photoVar;
+          console.log(result);
           try {
             locationVar = JSON.parse(result.moreDetails).location;
           } catch {
             locationVar = CdataInvalid;
           }
+          try {
+            setProfilePicture(JSON.parse(result.moreDetails).photoId);
+          } catch {}
           setFormData({
             ...result,
             role: result.role?.role,
             department: result.department?.department,
             location: locationVar,
+            photoId: photoVar,
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -82,16 +87,26 @@ function AddEdit() {
     buttonText = "Add Employee Profile";
   }
 
-  const profilePictureInputHandler = (
+  const profilePictureInputHandler = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (e.target.files) {
       const imgFile = e.target.files[0];
       setProfilePicture(URL.createObjectURL(imgFile));
-      photoUrl = uploadImage(imgFile);
+      try {
+        const url = await uploadImage(imgFile);
+        setPhotoUrl(url);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
-  console.log(formData);
+
+  if (photoUrl == "") {
+    setPhotoUrl(
+      "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56"
+    );
+  }
   setFormChange(false);
   const handleFormSubmit = (values: any) => {
     let payload = {
@@ -120,9 +135,7 @@ function AddEdit() {
     if (id) {
       const updateEmployee = async () => {
         try {
-          const response = await updateData(`employee/${id}`, payload);
-          const result = response.data;
-          console.log(result);
+          await updateData(`employee/${id}`, payload);
           setFormChange(true);
           setFilters([]);
           navigate("/");
@@ -142,7 +155,7 @@ function AddEdit() {
           navigate("/");
           displayToast("Employee added successfully", "success");
         } catch (error) {
-          console.log(error);
+          console.error(error);
           displayToast("Error adding data", "error");
         }
       };
@@ -200,7 +213,7 @@ function AddEdit() {
                 )
               }
               className="close"
-              id="photo-id"
+              id="photoId"
               name="photoId"
               type="file"
               accept="image/*"
@@ -246,7 +259,6 @@ function AddEdit() {
                 type="text"
                 placeholder="Select your Location"
                 renderarray={locationArray}
-                // initialvalue={formData.location.location}
               />
             </div>
 

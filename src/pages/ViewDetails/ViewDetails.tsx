@@ -1,32 +1,45 @@
-import Avatar from "../../components/Icons/Avatar";
 import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import { useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import { CdataInvalid } from "../../utils/constant";
-
+import initialLoader from "../../assets/LoaderGif/loader.gif";
+import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
 const ViewDetails = () => {
   const { employeeData } = useEmployeeContext();
   window.scrollTo({ top: 0 });
   const { id } = useParams();
   if (employeeData.length == 0) {
-    return <div>Loading...</div>;
+    return <LoaderComponent />;
   }
   const viewEmployee: IallTypeDataListing | undefined = employeeData.find(
     (emp) => emp.id === Number(id)
   );
   let locationVar;
+  let photoVar = initialLoader;
   try {
     locationVar = JSON.parse(viewEmployee?.moreDetails).location;
   } catch {
     locationVar = `Location: ${CdataInvalid}`;
   }
+
+  try {
+    photoVar = JSON.parse(viewEmployee?.moreDetails).photoId;
+  } catch {
+    photoVar =
+      "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56";
+  }
+
   return (
     <ViewDetailsSection className="view-employee-modal flex-row ">
       <div className="flex-column left-bar">
         <span className="profile-photo-circle">
-          <Avatar className="profile-photo-view" />
+          <img
+            className="profile-photo-view"
+            src={photoVar}
+            alt="profile-photo"
+          />
         </span>
 
         <p className="emp-id-display">{viewEmployee?.id}</p>

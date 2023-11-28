@@ -17,11 +17,10 @@ const firebaseConfig = {
   appId: "1:157752077809:web:e504341bfa878ea0a4e850",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
 
-export const uploadImage = (file: any) => {
+export const uploadImage = async (file: any): Promise<string> => {
   try {
     if (!file) {
       return Promise.resolve(
@@ -29,10 +28,10 @@ export const uploadImage = (file: any) => {
       );
     }
     const storageRef = strRef(storage, crypto.randomUUID());
-    return uploadBytes(storageRef, file).then((snapshot) => {
-      return getDownloadURL(snapshot.ref);
-    });
+    const snapshot = await uploadBytes(storageRef, file);
+    return await getDownloadURL(snapshot.ref);
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    throw new Error("Image upload failed");
   }
 };

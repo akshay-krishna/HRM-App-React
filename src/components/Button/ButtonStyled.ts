@@ -57,4 +57,8 @@ export const ButtonWrapper = styled.button`
     padding: 4px;
     cursor: pointer;
   }
+  &.back-home {
+    align-self: flex-start;
+    width: 175px;
+  }
 `;
