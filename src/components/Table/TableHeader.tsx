@@ -9,7 +9,7 @@ type TableHeaderProps = {
 const TableHeader = (props: TableHeaderProps) => {
   const { column = [] } = props;
   const { sortConfig, updateSortConfig } = useEmployeeContext();
-  let classType = "";
+  let classType: string;
   const handleValue = (element: ItableHeader) => {
     switch (element.id) {
       case "id":
