@@ -9,15 +9,18 @@ import { TableWrapper } from "./TableStyled";
 import { deleteData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../LoaderComponent/LoaderComponent";
+import { searchFunction } from "../../utils/search";
 
 const Table = ({ column = [] }: { column: ItableHeader[] }) => {
   const { employeeData, setDeleteChange, loading, selectedFilter } =
     useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [deleteID, setDeleteID] = useState();
-  const filteredEmployees = filterArray(employeeData, {
-    skills: selectedFilter,
-  });
+  const filteredEmployees = searchFunction(
+    filterArray(employeeData, {
+      skills: selectedFilter,
+    })
+  );
 
   const columnIds = column.reduce((prevState, currentIteration) => {
     prevState.push(currentIteration.id);
