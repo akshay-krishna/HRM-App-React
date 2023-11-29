@@ -6,6 +6,7 @@ import { useEmployeeContext } from "../../context/EmployeeContext";
 import { CdataInvalid } from "../../utils/constant";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
 import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
+import ProgressiveImage from "react-progressive-graceful-image";
 const ViewDetails = () => {
   const { employeeData } = useEmployeeContext();
   window.scrollTo({ top: 0 });
@@ -17,7 +18,7 @@ const ViewDetails = () => {
     (emp) => emp.id === Number(id)
   );
   let locationVar;
-  let photoVar = initialLoader;
+  let photoVar;
   try {
     locationVar = JSON.parse(viewEmployee?.moreDetails).location;
   } catch {
@@ -35,11 +36,17 @@ const ViewDetails = () => {
     <ViewDetailsSection className="view-employee-modal flex-row ">
       <div className="flex-column left-bar">
         <span className="profile-photo-circle">
-          <img
-            className="profile-photo-view"
-            src={photoVar}
-            alt="profile-photo"
-          />
+          <ProgressiveImage src={photoVar} placeholder={initialLoader}>
+            {(src, loading) => (
+              <img
+                className={`image${loading ? " loading" : " loaded"}`}
+                src={src}
+                alt="profile picture"
+                width="150"
+                height="150"
+              />
+            )}
+          </ProgressiveImage>
         </span>
 
         <p className="emp-id-display">{viewEmployee?.id}</p>

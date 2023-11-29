@@ -17,6 +17,8 @@ import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
 import { CdataInvalid } from "../../utils/constant";
 import { uploadImage } from "../../utils/firebase";
+import ProgressiveImage from "react-progressive-graceful-image";
+import initialLoader from "../../assets/LoaderGif/loader.gif";
 
 function AddEdit() {
   const navigate = useNavigate();
@@ -206,10 +208,20 @@ function AddEdit() {
                 profilePicture === "placeholder" ? (
                   <AddPhotoIcon className="add-edit-profile-photo" />
                 ) : (
-                  <img
-                    className="add-edit-profile-photo"
+                  <ProgressiveImage
                     src={profilePicture}
-                  />
+                    placeholder={initialLoader}
+                  >
+                    {(src, loading) => (
+                      <img
+                        className={`image${loading ? "loading" : "loaded"}`}
+                        src={src}
+                        alt="profile picture"
+                        width="150"
+                        height="150"
+                      />
+                    )}
+                  </ProgressiveImage>
                 )
               }
               className="close"
