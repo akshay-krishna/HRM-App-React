@@ -11,7 +11,6 @@ import HomeIcon from "../../components/Icons/HomeIcon";
 function ErrorPage() {
   const navigate = useNavigate();
   const error: any = useRouteError();
-  console.log(error.status);
 
   return (
     <ErrorPageStyled className="flex-row">

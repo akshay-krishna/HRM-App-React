@@ -20,7 +20,6 @@ const ViewDetails = () => {
       try {
         const response = await getData(`/employee/${id}`);
         const result = response.data.data;
-        console.log(result);
         setViewEmployee(result);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -30,19 +29,19 @@ const ViewDetails = () => {
   }, []);
 
   if (viewEmployee == null) {
-    console.log("vvvv");
     return <LoaderComponent />;
   }
 
-  console.log(viewEmployee);
   let locationVar;
   let photoVar;
   try {
     locationVar = JSON.parse(viewEmployee?.moreDetails).location;
+    if (locationVar == undefined) {
+      locationVar = `Location: ${CdataInvalid}`;
+    }
   } catch {
     locationVar = `Location: ${CdataInvalid}`;
   }
-
   try {
     photoVar = JSON.parse(viewEmployee?.moreDetails).photoId;
   } catch {
@@ -71,7 +70,7 @@ const ViewDetails = () => {
         <p className="dept-display">
           {viewEmployee?.department
             ? viewEmployee?.department.department
-            : "Department: N/A"}
+            : `Department:${CdataInvalid} `}
         </p>
         <p className="working-location-display">{locationVar}</p>
       </div>
@@ -79,23 +78,36 @@ const ViewDetails = () => {
         <div className="flex-column personal-details">
           <div>
             <p className="name-display">
-              {viewEmployee?.firstName + " " + viewEmployee?.lastName}
+              {viewEmployee?.firstName +
+                " " +
+                (viewEmployee?.lastName ? viewEmployee?.lastName : "")}
             </p>
             <p className="role-display">
-              {viewEmployee?.role ? viewEmployee?.role.role : "Role: N/A"}
+              {viewEmployee?.role
+                ? viewEmployee?.role.role
+                : `Role:${CdataInvalid} `}
             </p>
           </div>
           <p className="doj-display">
-            Date of Joining: {viewEmployee?.dateOfJoining}
+            Date of Joining:{" "}
+            {viewEmployee?.dateOfJoining
+              ? viewEmployee?.dateOfJoining
+              : CdataInvalid}
           </p>
-          <p className="dob-display">Date of Birth: {viewEmployee?.dob}</p>
+          <p className="dob-display">
+            Date of Birth:{" "}
+            {viewEmployee?.dob ? viewEmployee?.dob : CdataInvalid}
+          </p>
           <p className="phone-no-display">
-            Phone Number: {viewEmployee?.phone}
+            Phone Number:{" "}
+            {viewEmployee?.phone ? viewEmployee?.phone : CdataInvalid}
           </p>
           <p className="emailID-display">Email ID: {viewEmployee?.email}</p>
           <div className="address-display-container flex-row">
             <label htmlFor="address-display">Address:&nbsp;</label>
-            <div className="address-display">{viewEmployee?.address}</div>
+            <div className="address-display">
+              {viewEmployee?.address ? viewEmployee?.address : CdataInvalid}
+            </div>
           </div>
         </div>
         <div className="flex-column skill-details">
