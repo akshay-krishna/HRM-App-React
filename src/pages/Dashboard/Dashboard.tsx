@@ -9,12 +9,26 @@ import { FilterWrapper, MainWrapper, SectionWrapper } from "./DashboardStyled";
 import { employeeHeaderArray } from "./dashboardConstant";
 import { useNavigate } from "react-router-dom";
 
-const Dashboard = () => {
+const FilterDashboard = () => {
   const { selectedFilter, setSelectedFilter } = useEmployeeContext();
-  const navigate = useNavigate();
   const dispatchSelected = (f: IskillID[]) => {
     setSelectedFilter(f);
   };
+  return (
+    <FilterWrapper>
+      <Filter
+        className="filter-search"
+        selectedValue={selectedFilter}
+        dispatchSelected={dispatchSelected}
+      />
+    </FilterWrapper>
+  );
+};
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+
+  console.log("dashboard");
   return (
     <MainWrapper>
       <SectionWrapper className="flex-row">
@@ -24,13 +38,7 @@ const Dashboard = () => {
         >
           <AddEmployeeIcon /> Add Employee
         </Button>
-        <FilterWrapper>
-          <Filter
-            className="filter-search"
-            selectedValue={selectedFilter}
-            dispatchSelected={dispatchSelected}
-          />
-        </FilterWrapper>
+        <FilterDashboard />
       </SectionWrapper>
       <Table column={employeeHeaderArray} />
       <Pagination />

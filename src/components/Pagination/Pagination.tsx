@@ -6,7 +6,7 @@ import { PaginationWrapper } from "./PaginationStyled";
 
 function Pagination() {
   const { totalPages, pageNumber, setPageNumber } = useEmployeeContext();
-
+  console.log(totalPages, pageNumber);
   const handleFirst = () => {
     setPageNumber("1");
   };
@@ -31,7 +31,7 @@ function Pagination() {
   const handleLast = () => {
     setPageNumber(totalPages);
   };
-
+  console.log("pagination");
   return (
     <PaginationWrapper className="flex-row">
       <Button onClick={handleFirst} className="pagination-btn">
@@ -40,7 +40,10 @@ function Pagination() {
       <Button onClick={handlePrev} className="pagination-btn">
         <PreviousNextPageIcon className="mirror" />
       </Button>
-      <form className="flex-row pagination-input" onSubmit={(e) => e.preventDefault()}>
+      <form
+        className="flex-row pagination-input"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <input
           className="pagenumber"
           type="text"

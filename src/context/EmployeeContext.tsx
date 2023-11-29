@@ -168,6 +168,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     selectedFilter,
     setSelectedFilter,
   };
+  // console.log("provider");
   return (
     <EmployeeContext.Provider value={value}>
       {children}

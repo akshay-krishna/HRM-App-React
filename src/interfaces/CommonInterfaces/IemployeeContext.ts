@@ -7,7 +7,7 @@ export interface IemployeeContext {
   deptList: IallTypeDataListing[];
   skillList: IskillID[];
   setSkillList: (value: React.SetStateAction<IskillID[]>) => void;
-  sortConfig: { sortColumn: string; sortOrder: string };
+  sortConfig: { sortColumn: string; sortOrder: "asc" | "desc" };
   updateSortConfig: (sortColumn: string) => void;
   searchValue?: string;
   filters: IskillID[];
