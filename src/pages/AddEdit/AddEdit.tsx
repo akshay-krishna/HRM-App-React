@@ -49,6 +49,7 @@ function AddEdit() {
   let buttonText;
   useEffect(() => {
     if (id) {
+      console.log(id);
       const fetchData = async () => {
         try {
           const response = await getData(`/employee/${id}`);

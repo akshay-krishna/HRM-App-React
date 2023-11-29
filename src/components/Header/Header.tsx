@@ -24,21 +24,22 @@ const Header = () => {
             <Logo />
           </a>
         </h1>
-        {location.pathname.split("/")[1] == "" && (
-          <SearchStyle>
-            <input
-              type="text"
-              placeholder="Search By First Name"
-              name="search"
-              id="search"
-              formNoValidate
-              autoComplete="off"
-              value={searchValue}
-              onChange={handleSearch}
-            />
-            <SearchIcon className="search-icon" />
-          </SearchStyle>
-        )}
+        {location.pathname.split("/")[1] == "" ||
+          (location.pathname.split("/")[1] == "HRM-App-React" && (
+            <SearchStyle>
+              <input
+                type="text"
+                placeholder="Search By First Name"
+                name="search"
+                id="search"
+                formNoValidate
+                autoComplete="off"
+                value={searchValue}
+                onChange={handleSearch}
+              />
+              <SearchIcon className="search-icon" />
+            </SearchStyle>
+          ))}
       </HeaderStyle>
     </HeaderWrapper>
   );
