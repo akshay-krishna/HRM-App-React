@@ -7,16 +7,43 @@ import { CdataInvalid } from "../../utils/constant";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
 import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
 import ProgressiveImage from "react-progressive-graceful-image";
+import { getData } from "../../core/api";
+import { useEffect, useState } from "react";
 const ViewDetails = () => {
-  const { employeeData } = useEmployeeContext();
+  // const { loading, setLoading } = useEmployeeContext();
   window.scrollTo({ top: 0 });
   const { id } = useParams();
-  if (employeeData.length == 0) {
+  // if (employeeData.length == 0) {
+  //   return <LoaderComponent />;
+  // }
+
+  const [viewEmployee, setViewEmployee] = useState<IallTypeDataListing | null>(
+    null
+  );
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getData(`/employee/${id}`);
+        const result = response.data.data;
+        console.log(result);
+        setViewEmployee(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (viewEmployee == null) {
+    console.log("vvvv");
     return <LoaderComponent />;
   }
-  const viewEmployee: IallTypeDataListing | undefined = employeeData.find(
-    (emp) => emp.id === Number(id)
-  );
+
+
+
+  console.log(viewEmployee);
   let locationVar;
   let photoVar;
   try {

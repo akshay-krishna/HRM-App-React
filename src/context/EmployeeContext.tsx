@@ -30,6 +30,7 @@ const initialContextValues: IemployeeContext = {
   pageNumber: "1",
   setPageNumber: () => {},
   loading: true,
+  setLoading: () => {},
   selectedFilter: [],
   setSelectedFilter: () => {},
 };
@@ -163,6 +164,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     pageNumber,
     setPageNumber,
     loading,
+    setLoading,
     selectedFilter,
     setSelectedFilter,
   };
