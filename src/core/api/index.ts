@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 const API: AxiosInstance = axios.create({
-  baseURL: "https://vipinms.cloud/",
+  baseURL: "https://vipinms.cloud",
   timeout: 120000,
 });
 
