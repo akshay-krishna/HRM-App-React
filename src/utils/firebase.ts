@@ -22,11 +22,6 @@ const storage = getStorage(app);
 
 export const uploadImage = async (file: any): Promise<string> => {
   try {
-    if (!file) {
-      return Promise.resolve(
-        "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56"
-      );
-    }
     const storageRef = strRef(storage, crypto.randomUUID());
     const snapshot = await uploadBytes(storageRef, file);
     return await getDownloadURL(snapshot.ref);

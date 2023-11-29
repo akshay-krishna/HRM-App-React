@@ -31,7 +31,7 @@ const ViewDetails = () => {
   if (viewEmployee == null) {
     return <LoaderComponent />;
   }
-
+  console.log(viewEmployee);
   let locationVar;
   let photoVar;
   try {
@@ -44,6 +44,10 @@ const ViewDetails = () => {
   }
   try {
     photoVar = JSON.parse(viewEmployee?.moreDetails).photoId;
+    if (photoVar == "") {
+      photoVar =
+        "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56";
+    }
   } catch {
     photoVar =
       "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56";
