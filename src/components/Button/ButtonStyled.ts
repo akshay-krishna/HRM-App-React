@@ -41,7 +41,7 @@ export const ButtonWrapper = styled.button`
     cursor: pointer;
     &:hover {
       background-color: var(--light);
-      color: var(--primary);
+      color: var(--red);
       border: 1px solid var(--red);
       svg {
         fill: var(--primary);
@@ -51,5 +51,14 @@ export const ButtonWrapper = styled.button`
   &.delete-btns {
     width: 110px;
     height: 45px;
+  }
+  &.pagination-btn {
+    border: 1px solid var(--primary);
+    padding: 4px;
+    cursor: pointer;
+  }
+  &.back-home {
+    align-self: flex-start;
+    width: 175px;
   }
 `;

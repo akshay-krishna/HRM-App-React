@@ -21,6 +21,13 @@ export const AddEditSection = styled.section`
     overflow: inherit;
   }
 
+  .imageloaded {
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 10px;
+    overflow: inherit;
+  }
+
   .details {
     justify-content: space-around;
     margin: 40px 0;

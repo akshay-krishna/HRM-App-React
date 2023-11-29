@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const TableWrapper = styled.table`
   width: 100%;
-  margin: 80px 0;
+  margin: 80px 0 20px;
   border: 5px solid var(--primary);
   border-collapse: collapse;
 
@@ -48,5 +48,8 @@ export const TableWrapper = styled.table`
     gap: 5px;
     padding: 0 15px;
     cursor: pointer;
+  }
+  .no-direction {
+    padding: 0 15px;
   }
 `;

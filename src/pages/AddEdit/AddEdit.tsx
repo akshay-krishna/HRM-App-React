@@ -1,4 +1,3 @@
-// import { useNavigate } from "react-router";
 import Button from "../../components/Button/Button";
 import AddPhotoIcon from "../../components/Icons/AddPhotoIcon";
 import { Form, Formik } from "formik";
@@ -6,100 +5,196 @@ import TextInput from "../../components/FormComponents/TextInput";
 import TextAreaInput from "../../components/FormComponents/TextAreaInput";
 import { AddEditSection } from "./AddEditStyled";
 import DropDown from "../../components/FormComponents/DropDown";
-import { deptArray, locationArray, roleArray } from "./AddEditConstants";
+import { locationArray } from "./AddEditConstants";
 import Filter from "../../components/Filter/Filter";
-import { employeeArray, skills } from "../Dashboard/dashboardConstant";
 import * as Yup from "yup";
-import { useLocation } from "react-router";
-import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
+import { useEffect, useState } from "react";
+import { useEmployeeContext } from "../../context/EmployeeContext";
+import { getData, postData, updateData } from "../../core/api";
+import displayToast from "../../utils/displayToast";
+import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
+import { CdataInvalid } from "../../utils/constant";
+import { uploadImage } from "../../utils/firebase";
+import ProgressiveImage from "react-progressive-graceful-image";
+import initialLoader from "../../assets/LoaderGif/loader.gif";
 
-function FormikAddEdit() {
-  // const navigate = useNavigate();
-  const onSubmit = () => {};
+function AddEdit() {
+  const navigate = useNavigate();
+  const { employeeData, roleList, deptList, setFormChange, setFilters } =
+    useEmployeeContext();
 
-  let formData = {
-    photoId: "",
-    fName: "",
-    lName: "",
+  const [formData, setFormData] = useState({
+    isActive: true,
+    firstName: "",
+    lastName: "",
     role: "",
     department: "",
-    location: "",
     email: "",
     dob: "",
-    phoneNumber: "",
+    dateOfJoining: "",
+    phone: "",
     address: "",
-    skills: [] as IstringID[],
-  };
+    skills: [] as IskillID[],
+    designation: "",
+    moreDetails: "",
+  });
+  const { id } = useParams();
+  const [profilePicture, setProfilePicture] = useState<any>("placeholder");
+  const date = new Date();
+  const [selSkills, setselSkills] = useState(formData.skills);
+  const [photoUrl, setPhotoUrl] = useState("");
   let heading;
   let buttonText;
-  const location = useLocation();
-  if (location.pathname.split("/")[1] == "edit-page") {
-    const employeeDetails: IallTypeDataListing = employeeArray.find(
-      (emp) => emp.id === location.pathname.split("/")[2]
-    )!;
-    formData = {
-      photoId: "",
-      fName: `${employeeDetails.fName}`,
-      lName: `${employeeDetails.lName}`,
-      role: `${employeeDetails.role}`,
-      department: `${employeeDetails.dept}`,
-      location: `${employeeDetails.loc}`,
-      email: `${employeeDetails.emailID}`,
-      dob: `${employeeDetails.dob}`,
-      phoneNumber: `${employeeDetails.phnNo}`,
-      address: `${employeeDetails.address}`,
-      skills: employeeDetails.skill as IstringID[],
-    };
+  useEffect(() => {
+    if (id) {
+      const fetchData = async () => {
+        try {
+          const response = await getData(`/employee/${id}`);
+          const result = response.data.data;
+          let locationVar;
+          let photoVar;
+          try {
+            locationVar = JSON.parse(result.moreDetails).location;
+          } catch {
+            locationVar = CdataInvalid;
+          }
+          try {
+            setProfilePicture(JSON.parse(result.moreDetails).photoId);
+          } catch {}
+          setFormData({
+            ...result,
+            role: result.role?.role,
+            department: result.department?.department,
+            location: locationVar,
+            photoId: photoVar,
+          });
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [employeeData]);
+  if (id) {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
+    if (!formData.firstName) {
+      return <LoaderComponent />;
+    }
   } else {
     heading = "Add Employee";
     buttonText = "Add Employee Profile";
   }
 
-  const [profilePicture, setProfilePicture] = useState<any>("placeholder");
-
-  const profilePictureInputHandler = (
+  const profilePictureInputHandler = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (e.target.files) {
       const imgFile = e.target.files[0];
-      console.log(URL.createObjectURL(imgFile));
       setProfilePicture(URL.createObjectURL(imgFile));
+      try {
+        const url = await uploadImage(imgFile);
+        setPhotoUrl(url);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  if (photoUrl == "") {
+    setPhotoUrl(
+      "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56"
+    );
+  }
+
+  setFormChange(false);
+  const handleFormSubmit = (values: any) => {
+    let payload = {
+      ...values,
+      role: values.role
+        ? roleList.filter((r) => {
+            return r.role == values.role;
+          })[0].id
+        : null,
+      department: values.department
+        ? deptList.filter((d) => {
+            return d.department == values.department;
+          })[0].id
+        : null,
+      dateOfJoining: id
+        ? formData.dateOfJoining
+        : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
+      skills: selSkills,
+
+      moreDetails: JSON.stringify({
+        location: values.location,
+        photoId: photoUrl,
+      }),
+    };
+    delete payload.location;
+    if (id) {
+      const updateEmployee = async () => {
+        try {
+          await updateData(`employee/${id}`, payload);
+          setFormChange(true);
+          setFilters([]);
+          navigate("/");
+          displayToast("Employee updated successfully", "success");
+        } catch (error) {
+          displayToast("Error updating data", "error");
+          console.error("Error patching data:", error);
+        }
+      };
+      updateEmployee();
+    } else {
+      const addEmployee = async () => {
+        try {
+          await postData(`employee`, payload);
+          setFormChange(true);
+          setFilters([]);
+          navigate("/");
+          displayToast("Employee added successfully", "success");
+        } catch (error) {
+          console.error(error);
+          displayToast("Error adding data", "error");
+        }
+      };
+      addEmployee();
     }
   };
 
   return (
     <Formik
+      enableReinitialize
       initialValues={formData}
       validationSchema={Yup.object({
-        fName: Yup.string()
+        firstName: Yup.string()
           .matches(/^[A-Za-z]+$/, "Only letters are allowed")
           .max(15, "Must be 15 characters or less")
           .required("Required"),
 
-        lName: Yup.string()
+        lastName: Yup.string()
           .matches(/^[A-Za-z]+$/, "Only letters are allowed")
           .max(15, "Must be 15 characters or less")
           .required("Required"),
-
-        role: Yup.string().required("Required"),
-
-        department: Yup.string().required("Required"),
-
-        location: Yup.string().required("Required"),
 
         email: Yup.string().email("Invalid email address").required("Required"),
 
-        phoneNumber: Yup.string()
+        dob: Yup.date()
+          .max(new Date(), "Date of Birth cannot be in the future")
+          .required("Required"),
+
+        phone: Yup.string()
           .matches(/^[0-9]{10}$/, "Phone number should have 10-digits")
           .required("Required"),
 
         address: Yup.string().required("Required"),
       })}
-      onSubmit={onSubmit}
+      onSubmit={(values) => {
+        handleFormSubmit(values);
+      }}
     >
       <AddEditSection className="flex-column">
         <Form
@@ -113,14 +208,24 @@ function FormikAddEdit() {
                 profilePicture === "placeholder" ? (
                   <AddPhotoIcon className="add-edit-profile-photo" />
                 ) : (
-                  <img
-                    className="add-edit-profile-photo"
+                  <ProgressiveImage
                     src={profilePicture}
-                  />
+                    placeholder={initialLoader}
+                  >
+                    {(src, loading) => (
+                      <img
+                        className={`image${loading ? "loading" : "loaded"}`}
+                        src={src}
+                        alt="profile picture"
+                        width="150"
+                        height="150"
+                      />
+                    )}
+                  </ProgressiveImage>
                 )
               }
               className="close"
-              id="photo-id"
+              id="photoId"
               name="photoId"
               type="file"
               accept="image/*"
@@ -132,14 +237,14 @@ function FormikAddEdit() {
             <div className="flex-column field-space">
               <TextInput
                 label="First Name"
-                name="fName"
+                name="firstName"
                 type="text"
                 placeholder="Enter First Name"
               />
 
               <TextInput
                 label="Last Name"
-                name="lName"
+                name="lastName"
                 type="text"
                 placeholder="Enter Last Name"
               />
@@ -149,8 +254,7 @@ function FormikAddEdit() {
                 name="role"
                 type="text"
                 placeholder="Select your Role"
-                renderarray={roleArray}
-                initialvalue={formData.role}
+                renderarray={roleList}
               />
 
               <DropDown
@@ -158,17 +262,15 @@ function FormikAddEdit() {
                 name="department"
                 type="text"
                 placeholder="Select your Department"
-                renderarray={deptArray}
-                initialvalue={formData.department}
+                renderarray={deptList}
               />
 
               <DropDown
                 label="Working Location"
                 name="location"
                 type="text"
-                placeholder="Select your Role"
+                placeholder="Select your Location"
                 renderarray={locationArray}
-                initialvalue={formData.location}
               />
             </div>
 
@@ -184,7 +286,7 @@ function FormikAddEdit() {
 
               <TextInput
                 label="Phone Number"
-                name="phoneNumber"
+                name="phone"
                 type="tel"
                 placeholder="Enter your Phone Number"
               />
@@ -198,19 +300,15 @@ function FormikAddEdit() {
               <div className="flex-column label-input skill-input">
                 <label>Skills</label>
                 <Filter
+                  name="skills"
+                  setselSkills={setselSkills}
                   selectedValue={formData.skills}
                   className="skill-input-form"
-                  dataSkills={skills}
                 />
               </div>
             </div>
           </div>
-          <Button
-            id="submit"
-            className="primary add-edit-btn"
-            type="submit"
-            // onClick={() => navigate("/")}
-          >
+          <Button id="submit" className="primary add-edit-btn" type="submit">
             <span>{buttonText}</span>
           </Button>
         </Form>
@@ -219,4 +317,4 @@ function FormikAddEdit() {
   );
 }
 
-export default FormikAddEdit;
+export default AddEdit;

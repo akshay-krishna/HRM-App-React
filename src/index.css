@@ -76,3 +76,27 @@ p {
   top: 95px;
   font-size: 12px;
 }
+
+/* arrow styles */
+.ascDirection {
+  transform: rotateX(0deg);
+}
+
+.descDirection {
+  transform: rotateX(180deg);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.432);
+  z-index: 2;
+}

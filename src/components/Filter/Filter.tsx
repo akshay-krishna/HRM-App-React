@@ -1,66 +1,83 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FilterIcon from "../Icons/FilterIcon";
 import { SearchBySkill, SelectedSkills } from "./FIlterStyled";
 import CloseIcon from "../Icons/CloseIcon";
 import CloseFilterIcon from "../Icons/CloseFilterIcon";
 import List from "../List/List";
-import { IstringID } from "../../interfaces/CommonInterfaces/IstringID";
+import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 
 const Filter = ({
+  name = "skills",
   selectedValue = [],
+  updateSkills,
   className,
-  dataSkills = [],
+  setselSkills,
+  dispatchSelected,
 }: {
-  selectedValue?: IstringID[];
+  name?: string;
+  selectedValue?: IskillID[];
+  updateSkills?: (newSkills: IskillID[]) => void;
   className: string;
-  dataSkills: IstringID[];
+  setselSkills?: React.Dispatch<React.SetStateAction<IskillID[]>>;
+  dispatchSelected?: (f: IskillID[]) => void;
 }) => {
+  const { updateFilters, removeFilter, skillList } = useEmployeeContext();
+  const [filterSkills, setFilterSkills] = useState<IskillID[]>(skillList);
   const [showSkills, setShowSkills] = useState(false);
-  const [skillList, setSkillList] = useState(dataSkills);
   const [selectedSkills, setSelectedSkills] =
-    useState<IstringID[]>(selectedValue);
-  const { updateFilters, removeFilter } = useEmployeeContext();
-  const [inputValue, setInputValue] = useState("");
+    useState<IskillID[]>(selectedValue);
+  let inputValue;
 
-  const handleSelectSkill = (skill: IstringID) => {
-    const isExist = selectedSkills.some((sk) => sk.id === skill.id);
+  useEffect(() => {
+    setFilterSkills(skillList);
+  }, [skillList]);
+
+  const handleSelectSkill = (skill: IskillID) => {
+    const isExist = selectedSkills.some((sk) => sk.skill === skill.skill);
     if (!isExist) {
       setSelectedSkills((prev) => [...prev, skill]);
       updateFilters(skill);
+      updateSkills?.([...selectedSkills, skill]);
+      dispatchSelected?.([...selectedSkills, skill]);
     }
   };
 
   const handleRemoveSelectedSkill = (skillName: string) => {
     const updatedList = selectedSkills.filter(
-      (selected) => selected.name !== skillName
+      (selected) => selected.skill !== skillName
     );
     setSelectedSkills(updatedList);
-    // console.log("removed", updatedList);
     removeFilter(updatedList);
+    updateSkills?.(updatedList);
+    dispatchSelected?.(updatedList);
   };
 
   const handleRemoveAllSkill = () => {
     setSelectedSkills([]);
     removeFilter([]);
+    dispatchSelected?.([]);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-
-    setSkillList(
-      dataSkills.filter((indSkill) =>
-        indSkill.name.toLowerCase().includes(e.target.value.toLowerCase())
-      )
-    );
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value.toLowerCase();
+    let temp = skillList;
+    if (inputValue !== "") {
+      temp = temp.filter((indSkill) =>
+        indSkill.skill.toLowerCase().includes(inputValue)
+      );
+    }
+    setFilterSkills([...temp]);
   };
+
+  setselSkills?.(selectedSkills);
   return (
     <SearchBySkill>
       <input
         className={className}
         type="text"
         placeholder="Filter By Skills"
-        name="skills"
+        name={name}
         value={inputValue}
         formNoValidate
         autoComplete="off"
@@ -68,11 +85,11 @@ const Filter = ({
         onBlur={() => {
           setTimeout(() => {
             setShowSkills(false);
-            setSkillList(dataSkills);
+            setFilterSkills(filterSkills);
           }, 100);
-          setInputValue("");
+          inputValue = "";
         }}
-        onChange={handleChange}
+        onInput={handleInput}
       />
       {!selectedSkills.length ? (
         <FilterIcon />
@@ -82,7 +99,8 @@ const Filter = ({
       {showSkills && (
         <List
           position={`${className}-position`}
-          dataArray={skillList}
+          listName="skills"
+          dataArray={filterSkills}
           handleFunction={handleSelectSkill}
         />
       )}
@@ -93,10 +111,10 @@ const Filter = ({
               key={individualSkills.id}
               className="individual-skills flex-row"
             >
-              <p>{individualSkills.name}</p>
+              <p>{individualSkills.skill}</p>
               <CloseIcon
                 removeSelectedSkills={() =>
-                  handleRemoveSelectedSkill(individualSkills.name)
+                  handleRemoveSelectedSkill(individualSkills.skill)
                 }
               />
             </span>

@@ -8,6 +8,7 @@ export const SearchBySkill = styled.div`
     width: 100%;
     border: 1px solid var(--primary);
     padding-left: 10px;
+    background-color: var(--light);
   }
 `;
 

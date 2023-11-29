@@ -1,17 +1,33 @@
 import Button from "../../components/Button/Button";
 import Filter from "../../components/Filter/Filter";
 import AddEmployeeIcon from "../../components/Icons/AddEmployeeIcon";
+import Pagination from "../../components/Pagination/Pagination";
 import Table from "../../components/Table/Table";
+import { useEmployeeContext } from "../../context/EmployeeContext";
+import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { FilterWrapper, MainWrapper, SectionWrapper } from "./DashboardStyled";
-import {
-  // employeeArray,
-  employeeHeaderArray,
-  skills,
-} from "./dashboardConstant";
+import { employeeHeaderArray } from "./dashboardConstant";
 import { useNavigate } from "react-router-dom";
+
+const FilterDashboard = () => {
+  const { selectedFilter, setSelectedFilter } = useEmployeeContext();
+  const dispatchSelected = (f: IskillID[]) => {
+    setSelectedFilter(f);
+  };
+  return (
+    <FilterWrapper>
+      <Filter
+        className="filter-search"
+        selectedValue={selectedFilter}
+        dispatchSelected={dispatchSelected}
+      />
+    </FilterWrapper>
+  );
+};
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
   return (
     <MainWrapper>
       <SectionWrapper className="flex-row">
@@ -21,11 +37,10 @@ const Dashboard = () => {
         >
           <AddEmployeeIcon /> Add Employee
         </Button>
-        <FilterWrapper>
-          <Filter className="filter-search" dataSkills={skills} />
-        </FilterWrapper>
+        <FilterDashboard />
       </SectionWrapper>
-      <Table column={employeeHeaderArray} /*data={employeeArray} */ />
+      <Table column={employeeHeaderArray} />
+      <Pagination />
     </MainWrapper>
   );
 };

@@ -4,8 +4,10 @@ import { DeleteModalWrapper, Overlay } from "./DeleteModalStyled";
 
 const DeleteModal = ({
   handleModalClose,
+  deleteUser,
 }: {
   handleModalClose: () => void;
+  deleteUser: () => void;
 }) => {
   return (
     <Overlay>
@@ -20,7 +22,9 @@ const DeleteModal = ({
           <Button className="primary delete-btns" onClick={handleModalClose}>
             Cancel
           </Button>
-          <Button className="secondary delete-btns">Delete</Button>
+          <Button className="secondary delete-btns" onClick={deleteUser}>
+            Delete
+          </Button>
         </div>
       </DeleteModalWrapper>
     </Overlay>

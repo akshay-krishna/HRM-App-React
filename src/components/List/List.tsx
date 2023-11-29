@@ -1,15 +1,23 @@
+import { handleValue } from "../../utils/handleValue";
 import { ListStyleLi, ListStyledUl } from "./ListStyled";
 
 function List({
+  listName = "",
   position = "",
   dataArray,
   handleFunction,
 }: {
   position?: "top" | string;
-  dataArray: { id: string; name: string }[];
+  listName?: string;
+  dataArray: {
+    id: string;
+    location?: string;
+    role?: string;
+    department?: string;
+    skill?: string;
+  }[];
   handleFunction: (arg: any) => void;
 }) {
-  // console.log("data array in list", dataArray);
   return (
     <ListStyledUl
       className={
@@ -22,7 +30,7 @@ function List({
     >
       {dataArray.map((data) => (
         <ListStyleLi onClick={() => handleFunction(data)} key={data.id}>
-          {data.name}
+          {handleValue(data, listName)}
         </ListStyleLi>
       ))}
     </ListStyledUl>
