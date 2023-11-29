@@ -2,7 +2,6 @@ import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
 import { useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
-import { useEmployeeContext } from "../../context/EmployeeContext";
 import { CdataInvalid } from "../../utils/constant";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
 import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
@@ -10,17 +9,11 @@ import ProgressiveImage from "react-progressive-graceful-image";
 import { getData } from "../../core/api";
 import { useEffect, useState } from "react";
 const ViewDetails = () => {
-  // const { loading, setLoading } = useEmployeeContext();
   window.scrollTo({ top: 0 });
   const { id } = useParams();
-  // if (employeeData.length == 0) {
-  //   return <LoaderComponent />;
-  // }
-
   const [viewEmployee, setViewEmployee] = useState<IallTypeDataListing | null>(
     null
   );
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,8 +33,6 @@ const ViewDetails = () => {
     console.log("vvvv");
     return <LoaderComponent />;
   }
-
-
 
   console.log(viewEmployee);
   let locationVar;
