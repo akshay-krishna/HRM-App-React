@@ -26,7 +26,6 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
     prevState.push(currentIteration.id);
     return prevState;
   }, [] as string[]);
-  console.log("table");
   return (
     <>
       {deleteToggle && (

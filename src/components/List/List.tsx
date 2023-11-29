@@ -1,3 +1,4 @@
+import { handleValue } from "../../utils/handleValue";
 import { ListStyleLi, ListStyledUl } from "./ListStyled";
 
 function List({
@@ -17,20 +18,6 @@ function List({
   }[];
   handleFunction: (arg: any) => void;
 }) {
-  const handleValue = (data: any): string => {
-    switch (listName) {
-      case "role":
-        return data.role;
-      case "department":
-        return data.department;
-      case "location":
-        return data.location;
-      case "skills":
-        return data.skill;
-      default:
-        return "";
-    }
-  };
   return (
     <ListStyledUl
       className={
@@ -43,9 +30,7 @@ function List({
     >
       {dataArray.map((data) => (
         <ListStyleLi onClick={() => handleFunction(data)} key={data.id}>
-          {
-            handleValue(data)
-          }
+          {handleValue(data, listName)}
         </ListStyleLi>
       ))}
     </ListStyledUl>

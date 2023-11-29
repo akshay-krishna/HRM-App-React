@@ -28,7 +28,6 @@ const FilterDashboard = () => {
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  console.log("dashboard");
   return (
     <MainWrapper>
       <SectionWrapper className="flex-row">

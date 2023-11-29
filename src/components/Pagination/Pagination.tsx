@@ -6,7 +6,6 @@ import { PaginationWrapper } from "./PaginationStyled";
 
 function Pagination() {
   const { totalPages, pageNumber, setPageNumber } = useEmployeeContext();
-  console.log(totalPages, pageNumber);
   const handleFirst = () => {
     setPageNumber("1");
   };
@@ -31,7 +30,6 @@ function Pagination() {
   const handleLast = () => {
     setPageNumber(totalPages);
   };
-  console.log("pagination");
   return (
     <PaginationWrapper className="flex-row">
       <Button onClick={handleFirst} className="pagination-btn">

@@ -109,7 +109,6 @@ function AddEdit() {
     );
   }
 
-  console.log(formData);
   setFormChange(false);
   const handleFormSubmit = (values: any) => {
     let payload = {

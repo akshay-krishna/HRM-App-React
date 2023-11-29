@@ -31,7 +31,6 @@ const ViewDetails = () => {
   if (viewEmployee == null) {
     return <LoaderComponent />;
   }
-  console.log(viewEmployee);
   let locationVar;
   let photoVar;
   try {
