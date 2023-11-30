@@ -1,6 +1,7 @@
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import Arrow from "../Icons/Arrow";
+import { SET_SORT_CONFIG } from "../../context/actionTypes";
 
 type TableHeaderProps = {
   column: ItableHeader[];
@@ -8,13 +9,14 @@ type TableHeaderProps = {
 
 const TableHeader = (props: TableHeaderProps) => {
   const { column = [] } = props;
-  const { sortConfig, updateSortConfig } = useEmployeeContext();
+  const { state, dispatch } = useEmployeeContext();
   const handleValue = (element: ItableHeader) => {
     switch (element.id) {
       case "id":
       case "firstName":
       case "lastName":
-        updateSortConfig(element.id);
+        // updateSortConfig(element.id);
+        dispatch({type:SET_SORT_CONFIG,})
         break;
       default:
         "";
@@ -43,8 +45,8 @@ const TableHeader = (props: TableHeaderProps) => {
           >
             <div className={`flex-row ${handleClassName(element)}`}>
               {element.name}
-              {element.id === sortConfig.sortColumn ? (
-                sortConfig.sortOrder === "asc" ? (
+              {element.id === state.sortConfig.sortColumn ? (
+                state.sortConfig.sortOrder === "asc" ? (
                   <Arrow className="ascDirection" />
                 ) : (
                   <Arrow className="descDirection" />

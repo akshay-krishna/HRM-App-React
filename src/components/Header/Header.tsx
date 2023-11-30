@@ -4,12 +4,14 @@ import Logo from "../Icons/Logo";
 import { useNavigate } from "react-router";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import { ChangeEvent } from "react";
+import { SET_FILTERS, SET_SEARCH_VALUE } from "../../context/actionTypes";
 
 const Header = () => {
   const navigate = useNavigate();
-  let { searchValue, updateSearch, setFilters } = useEmployeeContext();
+  let { state, dispatch } = useEmployeeContext();
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    updateSearch(e.target.value);
+    // updateSearch(e.target.value);
+    dispatch({ type: SET_SEARCH_VALUE, payload: e.target.value });
   };
   return (
     <HeaderWrapper>
@@ -17,7 +19,8 @@ const Header = () => {
         <h1>
           <a
             onClick={() => {
-              setFilters([]);
+              // setFilters([]);
+              dispatch({ type: SET_FILTERS, payload: [] });
               navigate("/");
             }}
           >
@@ -34,7 +37,7 @@ const Header = () => {
               id="search"
               formNoValidate
               autoComplete="off"
-              value={searchValue}
+              value={state.searchValue}
               onChange={handleSearch}
             />
             <SearchIcon className="search-icon" />

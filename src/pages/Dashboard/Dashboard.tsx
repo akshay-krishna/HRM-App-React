@@ -4,21 +4,23 @@ import AddEmployeeIcon from "../../components/Icons/AddEmployeeIcon";
 import Pagination from "../../components/Pagination/Pagination";
 import Table from "../../components/Table/Table";
 import { useEmployeeContext } from "../../context/EmployeeContext";
+import { SET_SELECTED_FILTER } from "../../context/actionTypes";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { FilterWrapper, MainWrapper, SectionWrapper } from "./DashboardStyled";
 import { employeeHeaderArray } from "./dashboardConstant";
 import { useNavigate } from "react-router-dom";
 
 const FilterDashboard = () => {
-  const { selectedFilter, setSelectedFilter } = useEmployeeContext();
+  const { state, dispatch } = useEmployeeContext();
   const dispatchSelected = (f: IskillID[]) => {
-    setSelectedFilter(f);
+    // setSelectedFilter(f);
+    dispatch({ type: SET_SELECTED_FILTER, payload: f });
   };
   return (
     <FilterWrapper>
       <Filter
         className="filter-search"
-        selectedValue={selectedFilter}
+        selectedValue={state.selectedFilter}
         dispatchSelected={dispatchSelected}
       />
     </FilterWrapper>

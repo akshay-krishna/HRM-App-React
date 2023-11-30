@@ -19,11 +19,11 @@ import { CdataInvalid } from "../../utils/constant";
 import { uploadImage } from "../../utils/firebase";
 import ProgressiveImage from "react-progressive-graceful-image";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
+import { SET_FILTERS, SET_FORM_CHANGE } from "../../context/actionTypes";
 
 function AddEdit() {
   const navigate = useNavigate();
-  const { employeeData, roleList, deptList, setFormChange, setFilters } =
-    useEmployeeContext();
+  const { state, dispatch } = useEmployeeContext();
 
   const [formData, setFormData] = useState({
     isActive: true,
@@ -76,7 +76,7 @@ function AddEdit() {
       };
       fetchData();
     }
-  }, [employeeData]);
+  }, [state.employeeData]);
   if (id) {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
@@ -109,17 +109,18 @@ function AddEdit() {
     );
   }
 
-  setFormChange(false);
+  // setFormChange(false);
+  dispatch({ type: SET_FORM_CHANGE, payload: false });
   const handleFormSubmit = (values: any) => {
     let payload = {
       ...values,
       role: values.role
-        ? roleList.filter((r) => {
+        ? state.roleList.filter((r) => {
             return r.role == values.role;
           })[0].id
         : null,
       department: values.department
-        ? deptList.filter((d) => {
+        ? state.deptList.filter((d) => {
             return d.department == values.department;
           })[0].id
         : null,
@@ -127,7 +128,6 @@ function AddEdit() {
         ? formData.dateOfJoining
         : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
       skills: selSkills,
-
       moreDetails: JSON.stringify({
         location: values.location,
         photoId: photoUrl,
@@ -138,8 +138,10 @@ function AddEdit() {
       const updateEmployee = async () => {
         try {
           await updateData(`employee/${id}`, payload);
-          setFormChange(true);
-          setFilters([]);
+          // setFormChange(true);
+          dispatch({ type: SET_FORM_CHANGE, payload: true });
+          // setFilters([]);
+          dispatch({ type: SET_FILTERS, payload: [] });
           navigate("/");
           displayToast("Employee updated successfully", "success");
         } catch (error) {
@@ -152,8 +154,10 @@ function AddEdit() {
       const addEmployee = async () => {
         try {
           await postData(`employee`, payload);
-          setFormChange(true);
-          setFilters([]);
+          // setFormChange(true);
+          dispatch({ type: SET_FORM_CHANGE, payload: true });
+          // setFilters([]);
+          dispatch({ type: SET_FILTERS, payload: [] });
           navigate("/");
           displayToast("Employee added successfully", "success");
         } catch (error) {
@@ -254,7 +258,7 @@ function AddEdit() {
                 name="role"
                 type="text"
                 placeholder="Select your Role"
-                renderarray={roleList}
+                renderarray={state.roleList}
               />
 
               <DropDown
@@ -262,7 +266,7 @@ function AddEdit() {
                 name="department"
                 type="text"
                 placeholder="Select your Department"
-                renderarray={deptList}
+                renderarray={state.deptList}
               />
 
               <DropDown
