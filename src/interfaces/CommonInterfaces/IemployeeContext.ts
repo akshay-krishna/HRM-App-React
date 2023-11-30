@@ -7,7 +7,7 @@ export interface IemployeeContext {
   roleList: IallTypeDataListing[];
   deptList: IallTypeDataListing[];
   skillList: IskillID[];
-  sortConfig: { sortColumn: string; sortOrder: "asc" | "desc" };
+  sortConfig: { sortColumn: string; sortOrder: string };
   searchValue?: string;
   filters: IskillID[];
   deleteChange: boolean;

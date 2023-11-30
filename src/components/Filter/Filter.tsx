@@ -29,7 +29,6 @@ const Filter = ({
   const [selectedSkills, setSelectedSkills] =
     useState<IskillID[]>(selectedValue);
   let inputValue;
-  console.log(selectedSkills);
   useEffect(() => {
     setFilterSkills(state.skillList);
   }, [state.skillList]);
@@ -38,7 +37,6 @@ const Filter = ({
     const isExist = selectedSkills.some((sk) => sk.skill === skill.skill);
     if (!isExist) {
       setSelectedSkills((prev) => [...prev, skill]);
-      // updateFilters(skill);
       dispatch({ type: SET_FILTERS, payload: [...state.filters, skill] });
       updateSkills?.([...selectedSkills, skill]);
       dispatchSelected?.([...selectedSkills, skill]);
@@ -50,7 +48,6 @@ const Filter = ({
       (selected) => selected.skill !== skillName
     );
     setSelectedSkills(updatedList);
-    // removeFilter(updatedList);
     dispatch({ type: SET_FILTERS, payload: updatedList });
     updateSkills?.(updatedList);
     dispatchSelected?.(updatedList);
@@ -58,7 +55,6 @@ const Filter = ({
 
   const handleRemoveAllSkill = () => {
     setSelectedSkills([]);
-    // removeFilter([]);
     dispatch({ type: SET_FILTERS, payload: [] });
     dispatchSelected?.([]);
   };

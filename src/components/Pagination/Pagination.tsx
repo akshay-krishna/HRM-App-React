@@ -12,31 +12,15 @@ import { PaginationWrapper } from "./PaginationStyled";
 function Pagination() {
   const { state, dispatch } = useEmployeeContext();
   const handleFirst = () => {
-    // setPageNumber("1");
     dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
   };
   const handlePrev = () => {
-    // setPageNumber((prev) => {
-    //   if (prev < "2") {
-    //     return "1";
-    //   } else {
-    //     return String(Number(prev) - 1);
-    //   }
-    // });
     dispatch({ type: SET_PREVIOUS_PAGE_NUMBER, payload: state.pageNumber });
   };
   const handleNext = () => {
-    // setPageNumber((prev) => {
-    //   if (Number(prev) > Number(totalPages) - 1) {
-    //     return totalPages;
-    //   } else {
-    //     return String(Number(prev) + 1);
-    //   }
-    // });
     dispatch({ type: SET_NEXT_PAGE_NUMBER, payload: state.pageNumber });
   };
   const handleLast = () => {
-    // setPageNumber(totalPages);
     dispatch({ type: SET_PAGE_NUMBER, payload: state.totalPages });
   };
   return (
@@ -56,7 +40,6 @@ function Pagination() {
           type="text"
           value={state.pageNumber}
           onInput={(e) => {
-            // setPageNumber(e.currentTarget.value);
             dispatch({ type: SET_PAGE_NUMBER, payload: e.currentTarget.value });
           }}
         ></input>

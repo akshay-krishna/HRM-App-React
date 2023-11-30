@@ -18,6 +18,7 @@ import {
   SET_SKILL_LIST,
   SET_SORT_CONFIG,
   SET_TOTAL_PAGES,
+  UPDATE_SORT_CONFIG,
 } from "./actionTypes";
 
 export const employeeReducer = (
@@ -36,6 +37,24 @@ export const employeeReducer = (
       return { ...state, skillList: action.payload };
     case SET_SORT_CONFIG:
       return { ...state, sortConfig: action.payload };
+    case UPDATE_SORT_CONFIG:
+      let order;
+      if (state.sortConfig.sortColumn === action.payload) {
+        if (state.sortConfig.sortOrder === "desc") {
+          order = "asc";
+        } else {
+          order = "desc";
+        }
+      } else {
+        order = "asc";
+      }
+      return {
+        ...state,
+        sortConfig: {
+          sortColumn: action.payload,
+          sortOrder: order,
+        },
+      };
     case SET_SEARCH_VALUE:
       return { ...state, searchValue: action.payload };
     case SET_FILTERS:

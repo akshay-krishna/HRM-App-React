@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 const FilterDashboard = () => {
   const { state, dispatch } = useEmployeeContext();
   const dispatchSelected = (f: IskillID[]) => {
-    // setSelectedFilter(f);
     dispatch({ type: SET_SELECTED_FILTER, payload: f });
   };
   return (

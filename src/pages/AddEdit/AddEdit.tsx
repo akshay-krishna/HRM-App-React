@@ -19,7 +19,12 @@ import { CdataInvalid } from "../../utils/constant";
 import { uploadImage } from "../../utils/firebase";
 import ProgressiveImage from "react-progressive-graceful-image";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
-import { SET_FILTERS, SET_FORM_CHANGE } from "../../context/actionTypes";
+import {
+  SET_FILTERS,
+  SET_FORM_CHANGE,
+  SET_PAGE_NUMBER,
+  SET_SORT_CONFIG,
+} from "../../context/actionTypes";
 
 function AddEdit() {
   const navigate = useNavigate();
@@ -38,37 +43,41 @@ function AddEdit() {
     address: "",
     skills: [] as IskillID[],
     designation: "",
-    moreDetails: "",
+    location: "",
   });
   const { id } = useParams();
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
   const date = new Date();
   const [selSkills, setselSkills] = useState(formData.skills);
-  const [photoUrl, setPhotoUrl] = useState("");
+
   let heading;
   let buttonText;
   useEffect(() => {
     if (id) {
+      dispatch({ type: SET_FORM_CHANGE, payload: false });
       const fetchData = async () => {
         try {
           const response = await getData(`/employee/${id}`);
           const result = response.data.data;
           let locationVar;
-          let photoVar;
           try {
             locationVar = JSON.parse(result.moreDetails).location;
           } catch {
             locationVar = CdataInvalid;
           }
           try {
-            setProfilePicture(JSON.parse(result.moreDetails).photoId);
-          } catch {}
+            const photoURL = JSON.parse(result.moreDetails).photoId;
+            if (typeof photoURL === "string" && photoURL !== "")
+              setProfilePicture(photoURL);
+            else setProfilePicture("placeholder");
+          } catch (error) {
+            console.error(error, "errrrror");
+          }
           setFormData({
             ...result,
             role: result.role?.role,
             department: result.department?.department,
             location: locationVar,
-            photoId: photoVar,
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -76,7 +85,8 @@ function AddEdit() {
       };
       fetchData();
     }
-  }, [state.employeeData]);
+  }, [id]);
+
   if (id) {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
@@ -93,24 +103,17 @@ function AddEdit() {
   ) => {
     if (e.target.files) {
       const imgFile = e.target.files[0];
-      setProfilePicture(URL.createObjectURL(imgFile));
+      const imgUrl = URL.createObjectURL(imgFile);
+      setProfilePicture(imgUrl);
       try {
         const url = await uploadImage(imgFile);
-        setPhotoUrl(url);
+        setProfilePicture(url);
       } catch (error) {
         console.error(error);
       }
     }
   };
 
-  if (photoUrl == "") {
-    setPhotoUrl(
-      "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56"
-    );
-  }
-
-  // setFormChange(false);
-  dispatch({ type: SET_FORM_CHANGE, payload: false });
   const handleFormSubmit = (values: any) => {
     let payload = {
       ...values,
@@ -130,17 +133,17 @@ function AddEdit() {
       skills: selSkills,
       moreDetails: JSON.stringify({
         location: values.location,
-        photoId: photoUrl,
+        photoId: profilePicture === "placeholder" ? "" : profilePicture,
       }),
     };
     delete payload.location;
+    delete payload.photoId;
+    console.log(payload);
     if (id) {
       const updateEmployee = async () => {
         try {
           await updateData(`employee/${id}`, payload);
-          // setFormChange(true);
           dispatch({ type: SET_FORM_CHANGE, payload: true });
-          // setFilters([]);
           dispatch({ type: SET_FILTERS, payload: [] });
           navigate("/");
           displayToast("Employee updated successfully", "success");
@@ -154,10 +157,14 @@ function AddEdit() {
       const addEmployee = async () => {
         try {
           await postData(`employee`, payload);
-          // setFormChange(true);
           dispatch({ type: SET_FORM_CHANGE, payload: true });
-          // setFilters([]);
           dispatch({ type: SET_FILTERS, payload: [] });
+          dispatch({
+            type: SET_SORT_CONFIG,
+            payload: { sortColumn: "id", sortOrder: "desc" },
+          });
+          dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
+
           navigate("/");
           displayToast("Employee added successfully", "success");
         } catch (error) {
@@ -216,15 +223,17 @@ function AddEdit() {
                     src={profilePicture}
                     placeholder={initialLoader}
                   >
-                    {(src, loading) => (
-                      <img
-                        className={`image${loading ? "loading" : "loaded"}`}
-                        src={src}
-                        alt="profile picture"
-                        width="150"
-                        height="150"
-                      />
-                    )}
+                    {(src, loading) => {
+                      return (
+                        <img
+                          className={`image${loading ? "loading" : "loaded"}`}
+                          src={src}
+                          alt="profile picture"
+                          width="150"
+                          height="150"
+                        />
+                      );
+                    }}
                   </ProgressiveImage>
                 )
               }

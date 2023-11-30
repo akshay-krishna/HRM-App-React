@@ -10,7 +10,6 @@ const Header = () => {
   const navigate = useNavigate();
   let { state, dispatch } = useEmployeeContext();
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    // updateSearch(e.target.value);
     dispatch({ type: SET_SEARCH_VALUE, payload: e.target.value });
   };
   return (
@@ -19,7 +18,6 @@ const Header = () => {
         <h1>
           <a
             onClick={() => {
-              // setFilters([]);
               dispatch({ type: SET_FILTERS, payload: [] });
               navigate("/");
             }}

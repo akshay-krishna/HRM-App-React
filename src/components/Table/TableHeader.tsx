@@ -1,7 +1,7 @@
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import Arrow from "../Icons/Arrow";
-import { SET_SORT_CONFIG } from "../../context/actionTypes";
+import { UPDATE_SORT_CONFIG } from "../../context/actionTypes";
 
 type TableHeaderProps = {
   column: ItableHeader[];
@@ -15,8 +15,7 @@ const TableHeader = (props: TableHeaderProps) => {
       case "id":
       case "firstName":
       case "lastName":
-        // updateSortConfig(element.id);
-        dispatch({type:SET_SORT_CONFIG,})
+        dispatch({ type: UPDATE_SORT_CONFIG, payload: element.id });
         break;
       default:
         "";

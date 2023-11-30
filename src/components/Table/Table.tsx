@@ -16,6 +16,7 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
   const { state, dispatch } = useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [deleteID, setDeleteID] = useState();
+
   const filteredEmployees = searchFunction(
     filterArray(state.employeeData, {
       skills: state.selectedFilter,
@@ -39,7 +40,6 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
                 await deleteData(`employee/${deleteID}`);
                 displayToast("Record deleted successfully", "success");
                 setDeleteToggle(false);
-                // setDeleteChange(true);
                 dispatch({ type: SET_DELETE_CHANGE, payload: true });
               } catch (error) {
                 displayToast("Couldn't delete the user", "error");
@@ -60,7 +60,6 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
                 setDeleteID(emp.id);
                 setDeleteToggle(true);
                 dispatch({ type: SET_DELETE_CHANGE, payload: false });
-                // setDeleteChange(false);
               }}
               columnIds={columnIds}
               key={emp.id as string}

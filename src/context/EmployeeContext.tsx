@@ -4,13 +4,11 @@ import {
   useContext,
   useEffect,
   useReducer,
-  // useState,
 } from "react";
 import {
   IemployeeContext,
   IreducerContext,
 } from "../interfaces/CommonInterfaces/IemployeeContext";
-// import { IskillID } from "../interfaces/CommonInterfaces/IstringID";
 import { getData } from "../core/api";
 import { rowsPerPage } from "../utils/constant";
 import { employeeReducer } from "./employeeReducerFunction";
@@ -109,30 +107,6 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     state.formChange,
     state.pageNumber,
   ]);
-
-  // const updateSortConfig = (sortColumn: string) => {
-  //   setSortConfig((prevConfig) => ({setFilters
-  //     sortColumn,
-  //     sortOrder:
-  //       prevConfig.sortColumn === sortColumn
-  //         ? prevConfig.sortOrder === "desc"
-  //           ? "asc"
-  //           : "desc"
-  //         : "asc",
-  //   }));
-  // };
-
-  // const updateSearch = (currentSearch: string) => {
-  //   setSearchValue(currentSearch);
-  // };
-
-  // const updateFilters = (filter: IskillID) => {
-  //   setFilters((prev) => [...prev, filter] as IskillID[]);
-  // };
-
-  // const removeFilter = (updatedFilter: IskillID[]) => {
-  //   setFilters(updatedFilter);
-  // };
 
   return (
     <EmployeeContext.Provider value={{ state, dispatch }}>

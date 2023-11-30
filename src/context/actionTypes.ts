@@ -3,6 +3,7 @@ export const SET_ROLE_LIST = "SET_ROLE_LIST";
 export const SET_DEPT_LIST = "SET_DEPT_LIST";
 export const SET_SKILL_LIST = "SET_SKILL_LIST";
 export const SET_SORT_CONFIG = "SET_SORT_CONFIG";
+export const UPDATE_SORT_CONFIG = "UPDATE_SORT_CONFIG";
 export const SET_SEARCH_VALUE = "SET_SEARCH_VALUE";
 export const SET_FILTERS = "SET_FILTERS";
 export const SET_DELETE_CHANGE = "SET_DELETE_CHANGE";
