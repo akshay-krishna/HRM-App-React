@@ -20,6 +20,7 @@ import {
   SET_SKILL_LIST,
   SET_TOTAL_PAGES,
 } from "./actionTypes";
+import { sortFunction } from "../utils/sort";
 
 const initialContextValues: IemployeeContext = {
   employeeData: [],
@@ -29,8 +30,7 @@ const initialContextValues: IemployeeContext = {
   sortConfig: { sortColumn: "id", sortOrder: "asc" },
   searchValue: "",
   filters: [],
-  deleteChange: false,
-  formChange: false,
+  change: 1,
   totalPages: "1",
   pageNumber: "1",
   loading: true,
@@ -56,6 +56,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
           }`
         );
         const result = response.data.data.employees;
+
         dispatch({ type: SET_EMPLOYEE_DATA, payload: result });
         dispatch({
           type: SET_TOTAL_PAGES,
@@ -72,7 +73,10 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await getData("/roles");
         const result = response.data;
-        dispatch({ type: SET_ROLE_LIST, payload: result });
+        dispatch({
+          type: SET_ROLE_LIST,
+          payload: sortFunction(result, "role"),
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -83,7 +87,10 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await getData("/departments");
         const result = response.data;
-        dispatch({ type: SET_DEPT_LIST, payload: result });
+        dispatch({
+          type: SET_DEPT_LIST,
+          payload: sortFunction(result, "department"),
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -94,7 +101,10 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await getData("/skills");
         const result = response.data.data;
-        dispatch({ type: SET_SKILL_LIST, payload: result });
+        dispatch({
+          type: SET_SKILL_LIST,
+          payload: sortFunction(result, "skill"),
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -103,8 +113,7 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   }, [
     state.sortConfig.sortColumn,
     state.sortConfig.sortOrder,
-    state.deleteChange,
-    state.formChange,
+    state.change,
     state.pageNumber,
   ]);
 

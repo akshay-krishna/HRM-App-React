@@ -10,8 +10,9 @@ export interface IemployeeContext {
   sortConfig: { sortColumn: string; sortOrder: string };
   searchValue?: string;
   filters: IskillID[];
-  deleteChange: boolean;
-  formChange: boolean;
+  // deleteChange: boolean;
+  // formChange: boolean;
+  change: number;
   totalPages: string;
   pageNumber: string;
   loading: boolean;

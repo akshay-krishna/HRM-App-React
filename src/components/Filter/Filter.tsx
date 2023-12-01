@@ -76,18 +76,18 @@ const Filter = ({
       <input
         className={className}
         type="text"
-        placeholder="Filter By Skills"
+        placeholder="Search By Skills"
         name={name}
         value={inputValue}
         formNoValidate
         autoComplete="off"
         onFocus={() => setShowSkills(true)}
-        onBlur={() => {
+        onBlur={(e) => {
           setTimeout(() => {
             setShowSkills(false);
-            setFilterSkills(filterSkills);
+            setFilterSkills(state.skillList);
           }, 100);
-          inputValue = "";
+          e.target.value = "";
         }}
         onInput={handleInput}
       />

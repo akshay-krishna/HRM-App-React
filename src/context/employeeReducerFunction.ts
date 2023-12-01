@@ -3,11 +3,12 @@ import {
   IemployeeContext,
 } from "../interfaces/CommonInterfaces/IemployeeContext";
 import {
-  SET_DELETE_CHANGE,
+  SET_CHANGE,
+  // SET_DELETE_CHANGE,
   SET_DEPT_LIST,
   SET_EMPLOYEE_DATA,
   SET_FILTERS,
-  SET_FORM_CHANGE,
+  // SET_FORM_CHANGE,
   SET_LOADING,
   SET_NEXT_PAGE_NUMBER,
   SET_PAGE_NUMBER,
@@ -59,10 +60,10 @@ export const employeeReducer = (
       return { ...state, searchValue: action.payload };
     case SET_FILTERS:
       return { ...state, filters: action.payload };
-    case SET_DELETE_CHANGE:
-      return { ...state, deleteChange: action.payload };
-    case SET_FORM_CHANGE:
-      return { ...state, formChange: action.payload };
+    case SET_CHANGE:
+      console.log(action.payload);
+      console.log(state.change, "change");
+      return { ...state, change: action.payload + state.change };
     case SET_TOTAL_PAGES:
       return { ...state, totalPages: action.payload };
     case SET_PAGE_NUMBER:

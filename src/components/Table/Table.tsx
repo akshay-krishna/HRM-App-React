@@ -10,7 +10,7 @@ import { deleteData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../LoaderComponent/LoaderComponent";
 import { searchFunction } from "../../utils/search";
-import { SET_DELETE_CHANGE } from "../../context/actionTypes";
+import { SET_CHANGE } from "../../context/actionTypes";
 
 const Table = ({ column = [] }: { column: ItableHeader[] }) => {
   const { state, dispatch } = useEmployeeContext();
@@ -40,7 +40,7 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
                 await deleteData(`employee/${deleteID}`);
                 displayToast("Record deleted successfully", "success");
                 setDeleteToggle(false);
-                dispatch({ type: SET_DELETE_CHANGE, payload: true });
+                dispatch({ type: SET_CHANGE, payload: 1 });
               } catch (error) {
                 displayToast("Couldn't delete the user", "error");
                 console.error("Error fetching data:", error);
@@ -59,7 +59,6 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
               handleModalOpen={() => {
                 setDeleteID(emp.id);
                 setDeleteToggle(true);
-                dispatch({ type: SET_DELETE_CHANGE, payload: false });
               }}
               columnIds={columnIds}
               key={emp.id as string}

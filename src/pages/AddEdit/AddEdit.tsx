@@ -20,8 +20,8 @@ import { uploadImage } from "../../utils/firebase";
 import ProgressiveImage from "react-progressive-graceful-image";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
 import {
+  SET_CHANGE,
   SET_FILTERS,
-  SET_FORM_CHANGE,
   SET_PAGE_NUMBER,
   SET_SORT_CONFIG,
 } from "../../context/actionTypes";
@@ -54,7 +54,6 @@ function AddEdit() {
   let buttonText;
   useEffect(() => {
     if (id) {
-      dispatch({ type: SET_FORM_CHANGE, payload: false });
       const fetchData = async () => {
         try {
           const response = await getData(`/employee/${id}`);
@@ -143,8 +142,8 @@ function AddEdit() {
       const updateEmployee = async () => {
         try {
           await updateData(`employee/${id}`, payload);
-          dispatch({ type: SET_FORM_CHANGE, payload: true });
           dispatch({ type: SET_FILTERS, payload: [] });
+          dispatch({ type: SET_CHANGE, payload: 1 });
           navigate("/");
           displayToast("Employee updated successfully", "success");
         } catch (error) {
@@ -157,14 +156,13 @@ function AddEdit() {
       const addEmployee = async () => {
         try {
           await postData(`employee`, payload);
-          dispatch({ type: SET_FORM_CHANGE, payload: true });
           dispatch({ type: SET_FILTERS, payload: [] });
           dispatch({
             type: SET_SORT_CONFIG,
             payload: { sortColumn: "id", sortOrder: "desc" },
           });
           dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
-
+          dispatch({ type: SET_CHANGE, payload: 1 });
           navigate("/");
           displayToast("Employee added successfully", "success");
         } catch (error) {
@@ -175,7 +173,7 @@ function AddEdit() {
       addEmployee();
     }
   };
-
+  console.log(formData);
   return (
     <Formik
       enableReinitialize
