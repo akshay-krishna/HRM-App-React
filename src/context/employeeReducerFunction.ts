@@ -4,11 +4,9 @@ import {
 } from "../interfaces/CommonInterfaces/IemployeeContext";
 import {
   SET_CHANGE,
-  // SET_DELETE_CHANGE,
   SET_DEPT_LIST,
   SET_EMPLOYEE_DATA,
   SET_FILTERS,
-  // SET_FORM_CHANGE,
   SET_LOADING,
   SET_NEXT_PAGE_NUMBER,
   SET_PAGE_NUMBER,

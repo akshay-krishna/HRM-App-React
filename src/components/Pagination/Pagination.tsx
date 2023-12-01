@@ -11,6 +11,7 @@ import { PaginationWrapper } from "./PaginationStyled";
 
 function Pagination() {
   const { state, dispatch } = useEmployeeContext();
+
   const handleFirst = () => {
     dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
   };
@@ -23,14 +24,27 @@ function Pagination() {
   const handleLast = () => {
     dispatch({ type: SET_PAGE_NUMBER, payload: state.totalPages });
   };
+
   return (
     <PaginationWrapper className="flex-row">
-      <Button onClick={handleFirst} className="pagination-btn">
-        <StartEndIcon className="mirror" />
-      </Button>
-      <Button onClick={handlePrev} className="pagination-btn">
-        <PreviousNextPageIcon className="mirror" />
-      </Button>
+      {state.pageNumber == "1" ? (
+        <Button onClick={handleFirst} className="disabled pagination-btn ">
+          <StartEndIcon className="mirror" />
+        </Button>
+      ) : (
+        <Button onClick={handleFirst} className="pagination-btn">
+          <StartEndIcon className="mirror" />
+        </Button>
+      )}
+      {state.pageNumber == "1" ? (
+        <Button onClick={handleFirst} className="disabled pagination-btn">
+          <StartEndIcon className="mirror" />
+        </Button>
+      ) : (
+        <Button onClick={handlePrev} className="pagination-btn">
+          <PreviousNextPageIcon className="mirror" />
+        </Button>
+      )}
       <form
         className="flex-row pagination-input"
         onSubmit={(e) => e.preventDefault()}
@@ -40,17 +54,32 @@ function Pagination() {
           type="text"
           value={state.pageNumber}
           onInput={(e) => {
-            dispatch({ type: SET_PAGE_NUMBER, payload: e.currentTarget.value });
+            dispatch({
+              type: SET_PAGE_NUMBER,
+              payload: e.currentTarget.value,
+            });
           }}
         ></input>
         <span className="page-text">of {state.totalPages} pages</span>
       </form>
-      <Button onClick={handleNext} className="pagination-btn">
-        <PreviousNextPageIcon />
-      </Button>
-      <Button onClick={handleLast} className="pagination-btn">
-        <StartEndIcon />
-      </Button>
+      {state.pageNumber == state.totalPages ? (
+        <Button onClick={handleNext} className="disabled pagination-btn">
+          <PreviousNextPageIcon />
+        </Button>
+      ) : (
+        <Button onClick={handleNext} className="pagination-btn">
+          <PreviousNextPageIcon />
+        </Button>
+      )}
+      {state.pageNumber == state.totalPages ? (
+        <Button onClick={handleLast} className="disabled pagination-btn">
+          <StartEndIcon />
+        </Button>
+      ) : (
+        <Button onClick={handleLast} className="pagination-btn">
+          <StartEndIcon />
+        </Button>
+      )}
     </PaginationWrapper>
   );
 }
