@@ -21,6 +21,7 @@ import {
   SET_TOTAL_PAGES,
 } from "./actionTypes";
 import { sortFunction } from "../utils/sort";
+import { useSearchParams } from "react-router-dom";
 
 const initialContextValues: IemployeeContext = {
   employeeData: [],
@@ -44,17 +45,20 @@ const EmployeeContext = createContext<IreducerContext>({
 
 const EmployeeProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(employeeReducer, initialContextValues);
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         dispatch({ type: SET_LOADING, payload: true });
-        const response = await getData(
-          `/employee?limit=${rowsPerPage}&offset=${
-            (Number(state.pageNumber) - 1) * rowsPerPage
-          }&sortBy=${state.sortConfig.sortColumn}&sortDir=${
-            state.sortConfig.sortOrder
-          }`
-        );
+        const response = await getData("/employee", {
+          params: {
+            limit: rowsPerPage,
+            offset: (Number(searchParams.get("page") || "1") - 1) * rowsPerPage,
+            sortBy: searchParams.get("sortBy") || "id",
+            sortDir: searchParams.get("sortDir") || "asc",
+          },
+        });
         const result = response.data.data.employees;
 
         dispatch({ type: SET_EMPLOYEE_DATA, payload: result });
@@ -111,10 +115,8 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
     };
     fetchSkills();
   }, [
-    state.sortConfig.sortColumn,
-    state.sortConfig.sortOrder,
     state.change,
-    state.pageNumber,
+    searchParams,
   ]);
 
   return (

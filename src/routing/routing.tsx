@@ -2,14 +2,12 @@ import { createBrowserRouter } from "react-router-dom";
 import React from "react";
 import Layout from "../layout/Layout";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
+import LoaderComponent from "../components/LoaderComponent/LoaderComponent";
 const LazyDashboard = React.lazy(() => import("../pages/Dashboard/Dashboard"));
 const LazyViewDetails = React.lazy(
   () => import("../pages/ViewDetails/ViewDetails")
 );
 const LazyAddEdit = React.lazy(() => import("../pages/AddEdit/AddEdit"));
-const LazyDelete = React.lazy(
-  () => import("../components/DeleteModal/DeleteModal")
-);
 
 const routing = createBrowserRouter(
   [
@@ -20,7 +18,7 @@ const routing = createBrowserRouter(
         {
           path: "/",
           element: (
-            <React.Suspense>
+            <React.Suspense fallback={<LoaderComponent />}>
               <LazyDashboard />
             </React.Suspense>
           ),
@@ -28,7 +26,7 @@ const routing = createBrowserRouter(
         {
           path: "/employee-details/:id",
           element: (
-            <React.Suspense>
+            <React.Suspense fallback={<LoaderComponent />}>
               <LazyViewDetails />
             </React.Suspense>
           ),
@@ -36,7 +34,7 @@ const routing = createBrowserRouter(
         {
           path: "/add-page/",
           element: (
-            <React.Suspense>
+            <React.Suspense fallback={<LoaderComponent />}>
               <LazyAddEdit />
             </React.Suspense>
           ),
@@ -44,23 +42,8 @@ const routing = createBrowserRouter(
         {
           path: "/edit-page/:id",
           element: (
-            <React.Suspense>
+            <React.Suspense fallback={<LoaderComponent />}>
               <LazyAddEdit />
-            </React.Suspense>
-          ),
-        },
-        {
-          path: "/delete-page/:id",
-          element: (
-            <React.Suspense>
-              <LazyDelete
-                handleModalClose={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-                deleteUser={function (): void {
-                  throw new Error("Function not implemented.");
-                }}
-              />
             </React.Suspense>
           ),
         },

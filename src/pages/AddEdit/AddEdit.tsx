@@ -23,7 +23,6 @@ import {
   SET_CHANGE,
   SET_FILTERS,
   SET_PAGE_NUMBER,
-  SET_SORT_CONFIG,
 } from "../../context/actionTypes";
 
 function AddEdit() {
@@ -46,10 +45,10 @@ function AddEdit() {
     location: "",
   });
   const { id } = useParams();
+
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
   const date = new Date();
   const [selSkills, setselSkills] = useState(formData.skills);
-
   let heading;
   let buttonText;
   useEffect(() => {
@@ -58,6 +57,9 @@ function AddEdit() {
         try {
           const response = await getData(`/employee/${id}`);
           const result = response.data.data;
+          if (!result) {
+            navigate("/error");
+          }
           let locationVar;
           try {
             locationVar = JSON.parse(result.moreDetails).location;
@@ -70,7 +72,7 @@ function AddEdit() {
               setProfilePicture(photoURL);
             else setProfilePicture("placeholder");
           } catch (error) {
-            console.error(error, "errrrror");
+            console.error(error, "error");
           }
           setFormData({
             ...result,
@@ -137,7 +139,6 @@ function AddEdit() {
     };
     delete payload.location;
     delete payload.photoId;
-    console.log(payload);
     if (id) {
       const updateEmployee = async () => {
         try {
@@ -157,13 +158,9 @@ function AddEdit() {
         try {
           await postData(`employee`, payload);
           dispatch({ type: SET_FILTERS, payload: [] });
-          dispatch({
-            type: SET_SORT_CONFIG,
-            payload: { sortColumn: "id", sortOrder: "desc" },
-          });
           dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
           dispatch({ type: SET_CHANGE, payload: 1 });
-          navigate("/");
+          navigate("/?sortBy=id&sortDir=desc");
           displayToast("Employee added successfully", "success");
         } catch (error) {
           console.error(error);
@@ -173,7 +170,6 @@ function AddEdit() {
       addEmployee();
     }
   };
-  console.log(formData);
   return (
     <Formik
       enableReinitialize

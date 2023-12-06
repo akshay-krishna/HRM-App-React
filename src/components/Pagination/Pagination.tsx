@@ -1,33 +1,54 @@
+import { useSearchParams } from "react-router-dom";
 import { useEmployeeContext } from "../../context/EmployeeContext";
 import {
-  SET_NEXT_PAGE_NUMBER,
   SET_PAGE_NUMBER,
-  SET_PREVIOUS_PAGE_NUMBER,
 } from "../../context/actionTypes";
 import Button from "../Button/Button";
 import PreviousNextPageIcon from "../Icons/PreviousNextPageIcon";
 import StartEndIcon from "../Icons/StartEndIcon";
 import { PaginationWrapper } from "./PaginationStyled";
+import { useEffect } from "react";
 
 function Pagination() {
   const { state, dispatch } = useEmployeeContext();
+  const [searchParam, setSearchParam] = useSearchParams();
+  let currentPageNum;
+  useEffect(() => {
+    dispatch({
+      type: SET_PAGE_NUMBER,
+      payload: searchParam.get("page") || "1",
+    });
+  }, [searchParam]);
 
   const handleFirst = () => {
-    dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
+    searchParam.set("page", "1");
+    setSearchParam(searchParam);
   };
   const handlePrev = () => {
-    dispatch({ type: SET_PREVIOUS_PAGE_NUMBER, payload: state.pageNumber });
+    if (state.pageNumber < "2") {
+      currentPageNum = "1";
+    } else {
+      currentPageNum = String(Number(state.pageNumber) - 1);
+    }
+    searchParam.set("page", currentPageNum);
+    setSearchParam(searchParam);
   };
   const handleNext = () => {
-    dispatch({ type: SET_NEXT_PAGE_NUMBER, payload: state.pageNumber });
+    if (Number(state.pageNumber) > Number(state.totalPages) - 1) {
+      currentPageNum = state.totalPages;
+    } else {
+      currentPageNum = String(Number(state.pageNumber) + 1);
+    }
+    searchParam.set("page", currentPageNum);
+    setSearchParam(searchParam);
   };
   const handleLast = () => {
-    dispatch({ type: SET_PAGE_NUMBER, payload: state.totalPages });
+    searchParam.set("page", state.totalPages);
+    setSearchParam(searchParam);
   };
-
   return (
     <PaginationWrapper className="flex-row">
-      {state.pageNumber == "1" ? (
+      {searchParam.get("page") == "1" || !searchParam.get("page") ? (
         <Button onClick={handleFirst} className="disabled pagination-btn ">
           <StartEndIcon className="mirror" />
         </Button>
@@ -36,7 +57,7 @@ function Pagination() {
           <StartEndIcon className="mirror" />
         </Button>
       )}
-      {state.pageNumber == "1" ? (
+      {searchParam.get("page") == "1" || !searchParam.get("page") ? (
         <Button onClick={handleFirst} className="disabled pagination-btn">
           <StartEndIcon className="mirror" />
         </Button>
@@ -47,13 +68,17 @@ function Pagination() {
       )}
       <form
         className="flex-row pagination-input"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          searchParam.set("page", state.pageNumber);
+          setSearchParam(searchParam);
+        }}
       >
         <input
           className="pagenumber"
           type="text"
           value={state.pageNumber}
-          onInput={(e) => {
+          onChange={(e) => {
             dispatch({
               type: SET_PAGE_NUMBER,
               payload: e.currentTarget.value,
@@ -62,7 +87,7 @@ function Pagination() {
         ></input>
         <span className="page-text">of {state.totalPages} pages</span>
       </form>
-      {state.pageNumber == state.totalPages ? (
+      {state.pageNumber >= state.totalPages ? (
         <Button onClick={handleNext} className="disabled pagination-btn">
           <PreviousNextPageIcon />
         </Button>
@@ -71,7 +96,7 @@ function Pagination() {
           <PreviousNextPageIcon />
         </Button>
       )}
-      {state.pageNumber == state.totalPages ? (
+      {state.pageNumber >= state.totalPages ? (
         <Button onClick={handleLast} className="disabled pagination-btn">
           <StartEndIcon />
         </Button>

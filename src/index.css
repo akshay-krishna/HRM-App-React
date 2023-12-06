@@ -78,19 +78,17 @@ p {
 }
 
 /* arrow styles */
-.ascDirection {
+.descDirection {
   transform: rotateX(0deg);
 }
 
-.descDirection {
+.ascDirection {
   transform: rotateX(180deg);
 }
 
 .hidden {
   visibility: hidden;
 }
-
-
 
 .overlay {
   height: 100%;

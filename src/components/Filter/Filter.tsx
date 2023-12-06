@@ -11,14 +11,12 @@ import { SET_FILTERS } from "../../context/actionTypes";
 const Filter = ({
   name = "skills",
   selectedValue = [],
-  updateSkills,
   className,
   setselSkills,
   dispatchSelected,
 }: {
   name?: string;
   selectedValue?: IskillID[];
-  updateSkills?: (newSkills: IskillID[]) => void;
   className: string;
   setselSkills?: React.Dispatch<React.SetStateAction<IskillID[]>>;
   dispatchSelected?: (f: IskillID[]) => void;
@@ -29,6 +27,11 @@ const Filter = ({
   const [selectedSkills, setSelectedSkills] =
     useState<IskillID[]>(selectedValue);
   let inputValue;
+
+  useEffect(() => {
+    setselSkills?.(selectedSkills);
+  }, [selectedSkills, setselSkills]);
+
   useEffect(() => {
     setFilterSkills(state.skillList);
   }, [state.skillList]);
@@ -36,10 +39,12 @@ const Filter = ({
   const handleSelectSkill = (skill: IskillID) => {
     const isExist = selectedSkills.some((sk) => sk.skill === skill.skill);
     if (!isExist) {
-      setSelectedSkills((prev) => [...prev, skill]);
-      dispatch({ type: SET_FILTERS, payload: [...state.filters, skill] });
-      updateSkills?.([...selectedSkills, skill]);
-      dispatchSelected?.([...selectedSkills, skill]);
+      setSelectedSkills((prev) => {
+        const updatedSkills = [...prev, skill];
+        dispatch({ type: SET_FILTERS, payload: [...state.filters, skill] });
+        dispatchSelected?.(updatedSkills);
+        return updatedSkills;
+      });
     }
   };
 
@@ -49,7 +54,6 @@ const Filter = ({
     );
     setSelectedSkills(updatedList);
     dispatch({ type: SET_FILTERS, payload: updatedList });
-    updateSkills?.(updatedList);
     dispatchSelected?.(updatedList);
   };
 
@@ -70,7 +74,6 @@ const Filter = ({
     setFilterSkills([...temp]);
   };
 
-  setselSkills?.(selectedSkills);
   return (
     <SearchBySkill>
       <input

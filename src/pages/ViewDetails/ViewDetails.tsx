@@ -1,6 +1,6 @@
 import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { CdataInvalid } from "../../utils/constant";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
@@ -14,12 +14,15 @@ const ViewDetails = () => {
   const [viewEmployee, setViewEmployee] = useState<IallTypeDataListing | null>(
     null
   );
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getData(`/employee/${id}`);
         const result = response.data.data;
+        if (!result) {
+          navigate("/error");
+        }
         setViewEmployee(result);
       } catch (error) {
         console.error("Error fetching data:", error);

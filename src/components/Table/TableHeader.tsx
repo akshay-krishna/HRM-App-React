@@ -1,7 +1,6 @@
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
-import { useEmployeeContext } from "../../context/EmployeeContext";
 import Arrow from "../Icons/Arrow";
-import { UPDATE_SORT_CONFIG } from "../../context/actionTypes";
+import { useSearchParams } from "react-router-dom";
 
 type TableHeaderProps = {
   column: ItableHeader[];
@@ -9,13 +8,27 @@ type TableHeaderProps = {
 
 const TableHeader = (props: TableHeaderProps) => {
   const { column = [] } = props;
-  const { state, dispatch } = useEmployeeContext();
+  const [searchParam, setSearchParam] = useSearchParams({
+    page: "1",
+    sortBy: "id",
+    sortDir: "asc",
+  });
   const handleValue = (element: ItableHeader) => {
     switch (element.id) {
       case "id":
       case "firstName":
       case "lastName":
-        dispatch({ type: UPDATE_SORT_CONFIG, payload: element.id });
+        const prevColumn = searchParam.get("sortBy");
+        searchParam.set("sortBy", element.id);
+        searchParam.set(
+          "sortDir",
+          prevColumn == element.id
+            ? searchParam.get("sortDir") === "desc"
+              ? "asc"
+              : "desc"
+            : "asc"
+        );
+        setSearchParam(searchParam);
         break;
       default:
         "";
@@ -32,6 +45,7 @@ const TableHeader = (props: TableHeaderProps) => {
         return "no-direction";
     }
   };
+
   return (
     <thead>
       <tr>
@@ -44,15 +58,13 @@ const TableHeader = (props: TableHeaderProps) => {
           >
             <div className={`flex-row ${handleClassName(element)}`}>
               {element.name}
-              {element.id === state.sortConfig.sortColumn ? (
-                state.sortConfig.sortOrder === "asc" ? (
+              {element.id === searchParam.get("sortBy") ? (
+                searchParam.get("sortDir") === "asc" ? (
                   <Arrow className="ascDirection" />
                 ) : (
                   <Arrow className="descDirection" />
                 )
-              ) : (
-                <Arrow className="hidden" />
-              )}
+              ) : null}
             </div>
           </th>
         ))}

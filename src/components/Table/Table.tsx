@@ -54,21 +54,29 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
       <TableWrapper>
         <TableHeader column={column} />
         <tbody>
-          {filteredEmployees.map((emp: any) => (
-            <TableList
-              handleModalOpen={() => {
-                setDeleteID(emp.id);
-                setDeleteToggle(true);
-              }}
-              columnIds={columnIds}
-              key={emp.id as string}
-              data={{
-                ...emp,
-                role: emp.role ? emp.role.role : "",
-                department: emp.department ? emp.department.department : "",
-              }}
-            />
-          ))}
+          {filteredEmployees.length ? (
+            filteredEmployees.map((emp: any) => (
+              <TableList
+                handleModalOpen={() => {
+                  setDeleteID(emp.id);
+                  setDeleteToggle(true);
+                }}
+                columnIds={columnIds}
+                key={emp.id as string}
+                data={{
+                  ...emp,
+                  role: emp.role ? emp.role.role : "",
+                  department: emp.department ? emp.department.department : "",
+                }}
+              />
+            ))
+          ) : (
+            <tr>
+              <td className="no-data" colSpan={column.length + 1}>
+                No data Found
+              </td>
+            </tr>
+          )}
         </tbody>
       </TableWrapper>
     </>

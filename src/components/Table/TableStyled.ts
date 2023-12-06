@@ -49,7 +49,12 @@ export const TableWrapper = styled.table`
     padding: 0 15px;
     cursor: pointer;
   }
+  
   .no-direction {
     padding: 0 15px;
+  }
+
+  .no-data {
+    text-align: center;
   }
 `;

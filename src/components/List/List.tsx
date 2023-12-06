@@ -29,7 +29,12 @@ function List({
       }
     >
       {dataArray.map((data) => (
-        <ListStyleLi onClick={() => handleFunction(data)} key={data.id}>
+        <ListStyleLi
+          onMouseDown={() => {
+            handleFunction(data);
+          }}
+          key={data.id}
+        >
           {handleValue(data, listName)}
         </ListStyleLi>
       ))}
