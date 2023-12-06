@@ -1,63 +1,110 @@
+import { useSearchParams } from "react-router-dom";
 import { useEmployeeContext } from "../../context/EmployeeContext";
+import {
+  SET_PAGE_NUMBER,
+} from "../../context/actionTypes";
 import Button from "../Button/Button";
 import PreviousNextPageIcon from "../Icons/PreviousNextPageIcon";
 import StartEndIcon from "../Icons/StartEndIcon";
 import { PaginationWrapper } from "./PaginationStyled";
+import { useEffect } from "react";
 
 function Pagination() {
-  const { totalPages, pageNumber, setPageNumber } = useEmployeeContext();
+  const { state, dispatch } = useEmployeeContext();
+  const [searchParam, setSearchParam] = useSearchParams();
+  let currentPageNum;
+  useEffect(() => {
+    dispatch({
+      type: SET_PAGE_NUMBER,
+      payload: searchParam.get("page") || "1",
+    });
+  }, [searchParam]);
+
   const handleFirst = () => {
-    setPageNumber("1");
+    searchParam.set("page", "1");
+    setSearchParam(searchParam);
   };
   const handlePrev = () => {
-    setPageNumber((prev) => {
-      if (prev < "2") {
-        return "1";
-      } else {
-        return String(Number(prev) - 1);
-      }
-    });
+    if (state.pageNumber < "2") {
+      currentPageNum = "1";
+    } else {
+      currentPageNum = String(Number(state.pageNumber) - 1);
+    }
+    searchParam.set("page", currentPageNum);
+    setSearchParam(searchParam);
   };
   const handleNext = () => {
-    setPageNumber((prev) => {
-      if (Number(prev) > Number(totalPages) - 1) {
-        return totalPages;
-      } else {
-        return String(Number(prev) + 1);
-      }
-    });
+    if (Number(state.pageNumber) > Number(state.totalPages) - 1) {
+      currentPageNum = state.totalPages;
+    } else {
+      currentPageNum = String(Number(state.pageNumber) + 1);
+    }
+    searchParam.set("page", currentPageNum);
+    setSearchParam(searchParam);
   };
   const handleLast = () => {
-    setPageNumber(totalPages);
+    searchParam.set("page", state.totalPages);
+    setSearchParam(searchParam);
   };
   return (
     <PaginationWrapper className="flex-row">
-      <Button onClick={handleFirst} className="pagination-btn">
-        <StartEndIcon className="mirror" />
-      </Button>
-      <Button onClick={handlePrev} className="pagination-btn">
-        <PreviousNextPageIcon className="mirror" />
-      </Button>
+      {searchParam.get("page") == "1" || !searchParam.get("page") ? (
+        <Button onClick={handleFirst} className="disabled pagination-btn ">
+          <StartEndIcon className="mirror" />
+        </Button>
+      ) : (
+        <Button onClick={handleFirst} className="pagination-btn">
+          <StartEndIcon className="mirror" />
+        </Button>
+      )}
+      {searchParam.get("page") == "1" || !searchParam.get("page") ? (
+        <Button onClick={handleFirst} className="disabled pagination-btn">
+          <StartEndIcon className="mirror" />
+        </Button>
+      ) : (
+        <Button onClick={handlePrev} className="pagination-btn">
+          <PreviousNextPageIcon className="mirror" />
+        </Button>
+      )}
       <form
         className="flex-row pagination-input"
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={(e) => {
+          e.preventDefault();
+          searchParam.set("page", state.pageNumber);
+          setSearchParam(searchParam);
+        }}
       >
         <input
           className="pagenumber"
           type="text"
-          value={pageNumber}
-          onInput={(e) => {
-            setPageNumber(e.currentTarget.value);
+          value={state.pageNumber}
+          onChange={(e) => {
+            dispatch({
+              type: SET_PAGE_NUMBER,
+              payload: e.currentTarget.value,
+            });
           }}
         ></input>
-        <span className="page-text">of {totalPages} pages</span>
+        <span className="page-text">of {state.totalPages} pages</span>
       </form>
-      <Button onClick={handleNext} className="pagination-btn">
-        <PreviousNextPageIcon />
-      </Button>
-      <Button onClick={handleLast} className="pagination-btn">
-        <StartEndIcon />
-      </Button>
+      {state.pageNumber >= state.totalPages ? (
+        <Button onClick={handleNext} className="disabled pagination-btn">
+          <PreviousNextPageIcon />
+        </Button>
+      ) : (
+        <Button onClick={handleNext} className="pagination-btn">
+          <PreviousNextPageIcon />
+        </Button>
+      )}
+      {state.pageNumber >= state.totalPages ? (
+        <Button onClick={handleLast} className="disabled pagination-btn">
+          <StartEndIcon />
+        </Button>
+      ) : (
+        <Button onClick={handleLast} className="pagination-btn">
+          <StartEndIcon />
+        </Button>
+      )}
     </PaginationWrapper>
   );
 }

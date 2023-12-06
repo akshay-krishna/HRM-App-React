@@ -3,77 +3,70 @@ import {
   createContext,
   useContext,
   useEffect,
-  useState,
+  useReducer,
 } from "react";
-import { IemployeeContext } from "../interfaces/CommonInterfaces/IemployeeContext";
-import { IskillID } from "../interfaces/CommonInterfaces/IstringID";
+import {
+  IemployeeContext,
+  IreducerContext,
+} from "../interfaces/CommonInterfaces/IemployeeContext";
 import { getData } from "../core/api";
 import { rowsPerPage } from "../utils/constant";
+import { employeeReducer } from "./employeeReducerFunction";
+import {
+  SET_DEPT_LIST,
+  SET_EMPLOYEE_DATA,
+  SET_LOADING,
+  SET_ROLE_LIST,
+  SET_SKILL_LIST,
+  SET_TOTAL_PAGES,
+} from "./actionTypes";
+import { sortFunction } from "../utils/sort";
+import { useSearchParams } from "react-router-dom";
 
 const initialContextValues: IemployeeContext = {
   employeeData: [],
   roleList: [],
   deptList: [],
   skillList: [],
-  setSkillList: () => {},
   sortConfig: { sortColumn: "id", sortOrder: "asc" },
-  updateSortConfig: () => {},
   searchValue: "",
-  updateSearch: () => {},
   filters: [],
-  setFilters: () => {},
-  updateFilters: () => {},
-  removeFilter: () => {},
-  setDeleteChange: () => {},
-  setFormChange: () => {},
+  change: 1,
   totalPages: "1",
   pageNumber: "1",
-  setPageNumber: () => {},
   loading: true,
-  setLoading: () => {},
   selectedFilter: [],
-  setSelectedFilter: () => {},
 };
 
-const EmployeeContext = createContext(initialContextValues);
+const EmployeeContext = createContext<IreducerContext>({
+  state: initialContextValues,
+  dispatch: () => {},
+});
 
 const EmployeeProvider = ({ children }: { children: ReactNode }) => {
-  const [employeeData, setEmployeeData] = useState(
-    initialContextValues.employeeData
-  );
-  const [roleList, setRoleList] = useState(initialContextValues.roleList); //the list of roles fetched from api
-  const [deptList, setDeptList] = useState(initialContextValues.deptList); //the list of departments fetched from api
-  const [skillList, setSkillList] = useState(initialContextValues.skillList); //the list of skills fetched from api
-  const [sortConfig, setSortConfig] = useState(initialContextValues.sortConfig); //config of sorting
-  const [searchValue, setSearchValue] = useState(
-    initialContextValues.searchValue
-  );
-  const [filters, setFilters] = useState<IskillID[]>(
-    initialContextValues.filters
-  );
-  const [deleteChange, setDeleteChange] = useState(false);
-  const [formChange, setFormChange] = useState(false);
-  const [totalPages, setTotalPages] = useState(initialContextValues.totalPages);
-  const [pageNumber, setPageNumber] = useState(initialContextValues.pageNumber);
-  const [loading, setLoading] = useState(initialContextValues.loading);
-  const [selectedFilter, setSelectedFilter] = useState(
-    initialContextValues.selectedFilter
-  );
+  const [state, dispatch] = useReducer(employeeReducer, initialContextValues);
+  const [searchParams] = useSearchParams();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
-        const response = await getData(
-          `/employee?limit=${rowsPerPage}&offset=${
-            (Number(pageNumber) - 1) * rowsPerPage
-          }&sortBy=${sortConfig.sortColumn}&sortDir=${sortConfig.sortOrder}`
-        );
+        dispatch({ type: SET_LOADING, payload: true });
+        const response = await getData("/employee", {
+          params: {
+            limit: rowsPerPage,
+            offset: (Number(searchParams.get("page") || "1") - 1) * rowsPerPage,
+            sortBy: searchParams.get("sortBy") || "id",
+            sortDir: searchParams.get("sortDir") || "asc",
+          },
+        });
         const result = response.data.data.employees;
-        setEmployeeData(result);
-        setTotalPages(
-          String(Math.ceil(response.data.data.count / rowsPerPage))
-        );
-        setLoading(false);
+
+        dispatch({ type: SET_EMPLOYEE_DATA, payload: result });
+        dispatch({
+          type: SET_TOTAL_PAGES,
+          payload: String(Math.ceil(response.data.data.count / rowsPerPage)),
+        });
+        dispatch({ type: SET_LOADING, payload: false });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -84,7 +77,10 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await getData("/roles");
         const result = response.data;
-        setRoleList(result);
+        dispatch({
+          type: SET_ROLE_LIST,
+          payload: sortFunction(result, "role"),
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -95,7 +91,10 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await getData("/departments");
         const result = response.data;
-        setDeptList(result);
+        dispatch({
+          type: SET_DEPT_LIST,
+          payload: sortFunction(result, "department"),
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -106,70 +105,22 @@ const EmployeeProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await getData("/skills");
         const result = response.data.data;
-        setSkillList(result);
+        dispatch({
+          type: SET_SKILL_LIST,
+          payload: sortFunction(result, "skill"),
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchSkills();
   }, [
-    sortConfig.sortColumn,
-    sortConfig.sortOrder,
-    deleteChange,
-    formChange,
-    pageNumber,
+    state.change,
+    searchParams,
   ]);
 
-  const updateSortConfig = (sortColumn: string) => {
-    setSortConfig((prevConfig) => ({
-      sortColumn,
-      sortOrder:
-        prevConfig.sortColumn === sortColumn
-          ? prevConfig.sortOrder === "desc"
-            ? "asc"
-            : "desc"
-          : "asc",
-    }));
-  };
-
-  const updateSearch = (currentSearch: string) => {
-    setSearchValue(currentSearch);
-  };
-
-  const updateFilters = (filter: IskillID) => {
-    setFilters((prev) => [...prev, filter] as IskillID[]);
-  };
-
-  const removeFilter = (updatedFilter: IskillID[]) => {
-    setFilters(updatedFilter);
-  };
-
-  const value: IemployeeContext = {
-    employeeData,
-    roleList,
-    deptList,
-    skillList,
-    setSkillList,
-    sortConfig,
-    updateSortConfig,
-    searchValue,
-    updateSearch,
-    filters,
-    setFilters,
-    updateFilters,
-    removeFilter,
-    setDeleteChange,
-    setFormChange,
-    totalPages,
-    pageNumber,
-    setPageNumber,
-    loading,
-    setLoading,
-    selectedFilter,
-    setSelectedFilter,
-  };
   return (
-    <EmployeeContext.Provider value={value}>
+    <EmployeeContext.Provider value={{ state, dispatch }}>
       {children}
     </EmployeeContext.Provider>
   );

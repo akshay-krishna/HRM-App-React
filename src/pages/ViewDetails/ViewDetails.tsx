@@ -1,6 +1,6 @@
 import { ViewDetailsSection } from "./ViewDetailsStyled";
 import { IallTypeDataListing } from "../../interfaces/CommonInterfaces/Icommon";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { CdataInvalid } from "../../utils/constant";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
@@ -14,12 +14,15 @@ const ViewDetails = () => {
   const [viewEmployee, setViewEmployee] = useState<IallTypeDataListing | null>(
     null
   );
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getData(`/employee/${id}`);
         const result = response.data.data;
+        if (!result) {
+          navigate("/error");
+        }
         setViewEmployee(result);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -43,15 +46,13 @@ const ViewDetails = () => {
   }
   try {
     photoVar = JSON.parse(viewEmployee?.moreDetails).photoId;
-    if (photoVar == "") {
+    if (!(typeof photoVar === "string" && photoVar !== ""))
       photoVar =
         "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56";
-    }
   } catch {
     photoVar =
       "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56";
   }
-
   return (
     <ViewDetailsSection className="view-employee-modal flex-row ">
       <div className="flex-column left-bar">

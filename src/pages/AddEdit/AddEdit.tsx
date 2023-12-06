@@ -19,11 +19,15 @@ import { CdataInvalid } from "../../utils/constant";
 import { uploadImage } from "../../utils/firebase";
 import ProgressiveImage from "react-progressive-graceful-image";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
+import {
+  SET_CHANGE,
+  SET_FILTERS,
+  SET_PAGE_NUMBER,
+} from "../../context/actionTypes";
 
 function AddEdit() {
   const navigate = useNavigate();
-  const { employeeData, roleList, deptList, setFormChange, setFilters } =
-    useEmployeeContext();
+  const { state, dispatch } = useEmployeeContext();
 
   const [formData, setFormData] = useState({
     isActive: true,
@@ -38,13 +42,13 @@ function AddEdit() {
     address: "",
     skills: [] as IskillID[],
     designation: "",
-    moreDetails: "",
+    location: "",
   });
   const { id } = useParams();
+
   const [profilePicture, setProfilePicture] = useState<any>("placeholder");
   const date = new Date();
   const [selSkills, setselSkills] = useState(formData.skills);
-  const [photoUrl, setPhotoUrl] = useState("");
   let heading;
   let buttonText;
   useEffect(() => {
@@ -53,22 +57,28 @@ function AddEdit() {
         try {
           const response = await getData(`/employee/${id}`);
           const result = response.data.data;
+          if (!result) {
+            navigate("/error");
+          }
           let locationVar;
-          let photoVar;
           try {
             locationVar = JSON.parse(result.moreDetails).location;
           } catch {
             locationVar = CdataInvalid;
           }
           try {
-            setProfilePicture(JSON.parse(result.moreDetails).photoId);
-          } catch {}
+            const photoURL = JSON.parse(result.moreDetails).photoId;
+            if (typeof photoURL === "string" && photoURL !== "")
+              setProfilePicture(photoURL);
+            else setProfilePicture("placeholder");
+          } catch (error) {
+            console.error(error, "error");
+          }
           setFormData({
             ...result,
             role: result.role?.role,
             department: result.department?.department,
             location: locationVar,
-            photoId: photoVar,
           });
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -76,7 +86,8 @@ function AddEdit() {
       };
       fetchData();
     }
-  }, [employeeData]);
+  }, [id]);
+
   if (id) {
     heading = "Edit Employee";
     buttonText = "Update Employee Profile";
@@ -93,33 +104,27 @@ function AddEdit() {
   ) => {
     if (e.target.files) {
       const imgFile = e.target.files[0];
-      setProfilePicture(URL.createObjectURL(imgFile));
+      const imgUrl = URL.createObjectURL(imgFile);
+      setProfilePicture(imgUrl);
       try {
         const url = await uploadImage(imgFile);
-        setPhotoUrl(url);
+        setProfilePicture(url);
       } catch (error) {
         console.error(error);
       }
     }
   };
 
-  if (photoUrl == "") {
-    setPhotoUrl(
-      "https://firebasestorage.googleapis.com/v0/b/hr-management-app-8caae.appspot.com/o/avatar.svg?alt=media&token=0639e6c3-720b-4c13-bd81-2dd70b4b5f56"
-    );
-  }
-
-  setFormChange(false);
   const handleFormSubmit = (values: any) => {
     let payload = {
       ...values,
       role: values.role
-        ? roleList.filter((r) => {
+        ? state.roleList.filter((r) => {
             return r.role == values.role;
           })[0].id
         : null,
       department: values.department
-        ? deptList.filter((d) => {
+        ? state.deptList.filter((d) => {
             return d.department == values.department;
           })[0].id
         : null,
@@ -127,19 +132,19 @@ function AddEdit() {
         ? formData.dateOfJoining
         : date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate(),
       skills: selSkills,
-
       moreDetails: JSON.stringify({
         location: values.location,
-        photoId: photoUrl,
+        photoId: profilePicture === "placeholder" ? "" : profilePicture,
       }),
     };
     delete payload.location;
+    delete payload.photoId;
     if (id) {
       const updateEmployee = async () => {
         try {
           await updateData(`employee/${id}`, payload);
-          setFormChange(true);
-          setFilters([]);
+          dispatch({ type: SET_FILTERS, payload: [] });
+          dispatch({ type: SET_CHANGE, payload: 1 });
           navigate("/");
           displayToast("Employee updated successfully", "success");
         } catch (error) {
@@ -152,9 +157,10 @@ function AddEdit() {
       const addEmployee = async () => {
         try {
           await postData(`employee`, payload);
-          setFormChange(true);
-          setFilters([]);
-          navigate("/");
+          dispatch({ type: SET_FILTERS, payload: [] });
+          dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
+          dispatch({ type: SET_CHANGE, payload: 1 });
+          navigate("/?sortBy=id&sortDir=desc");
           displayToast("Employee added successfully", "success");
         } catch (error) {
           console.error(error);
@@ -164,7 +170,6 @@ function AddEdit() {
       addEmployee();
     }
   };
-
   return (
     <Formik
       enableReinitialize
@@ -212,15 +217,17 @@ function AddEdit() {
                     src={profilePicture}
                     placeholder={initialLoader}
                   >
-                    {(src, loading) => (
-                      <img
-                        className={`image${loading ? "loading" : "loaded"}`}
-                        src={src}
-                        alt="profile picture"
-                        width="150"
-                        height="150"
-                      />
-                    )}
+                    {(src, loading) => {
+                      return (
+                        <img
+                          className={`image${loading ? "loading" : "loaded"}`}
+                          src={src}
+                          alt="profile picture"
+                          width="150"
+                          height="150"
+                        />
+                      );
+                    }}
                   </ProgressiveImage>
                 )
               }
@@ -254,7 +261,7 @@ function AddEdit() {
                 name="role"
                 type="text"
                 placeholder="Select your Role"
-                renderarray={roleList}
+                renderarray={state.roleList}
               />
 
               <DropDown
@@ -262,7 +269,7 @@ function AddEdit() {
                 name="department"
                 type="text"
                 placeholder="Select your Department"
-                renderarray={deptList}
+                renderarray={state.deptList}
               />
 
               <DropDown

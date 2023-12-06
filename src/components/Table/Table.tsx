@@ -10,15 +10,16 @@ import { deleteData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../LoaderComponent/LoaderComponent";
 import { searchFunction } from "../../utils/search";
+import { SET_CHANGE } from "../../context/actionTypes";
 
 const Table = ({ column = [] }: { column: ItableHeader[] }) => {
-  const { employeeData, setDeleteChange, loading, selectedFilter } =
-    useEmployeeContext();
+  const { state, dispatch } = useEmployeeContext();
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [deleteID, setDeleteID] = useState();
+
   const filteredEmployees = searchFunction(
-    filterArray(employeeData, {
-      skills: selectedFilter,
+    filterArray(state.employeeData, {
+      skills: state.selectedFilter,
     })
   );
 
@@ -39,7 +40,7 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
                 await deleteData(`employee/${deleteID}`);
                 displayToast("Record deleted successfully", "success");
                 setDeleteToggle(false);
-                setDeleteChange(true);
+                dispatch({ type: SET_CHANGE, payload: 1 });
               } catch (error) {
                 displayToast("Couldn't delete the user", "error");
                 console.error("Error fetching data:", error);
@@ -49,26 +50,33 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
           }}
         />
       )}
-      {loading && <LoaderComponent style="overlay" />}
+      {state.loading && <LoaderComponent style="overlay" />}
       <TableWrapper>
         <TableHeader column={column} />
         <tbody>
-          {filteredEmployees.map((emp: any) => (
-            <TableList
-              handleModalOpen={() => {
-                setDeleteID(emp.id);
-                setDeleteToggle(true);
-                setDeleteChange(false);
-              }}
-              columnIds={columnIds}
-              key={emp.id as string}
-              data={{
-                ...emp,
-                role: emp.role ? emp.role.role : "",
-                department: emp.department ? emp.department.department : "",
-              }}
-            />
-          ))}
+          {filteredEmployees.length ? (
+            filteredEmployees.map((emp: any) => (
+              <TableList
+                handleModalOpen={() => {
+                  setDeleteID(emp.id);
+                  setDeleteToggle(true);
+                }}
+                columnIds={columnIds}
+                key={emp.id as string}
+                data={{
+                  ...emp,
+                  role: emp.role ? emp.role.role : "",
+                  department: emp.department ? emp.department.department : "",
+                }}
+              />
+            ))
+          ) : (
+            <tr>
+              <td className="no-data" colSpan={column.length + 1}>
+                No data Found
+              </td>
+            </tr>
+          )}
         </tbody>
       </TableWrapper>
     </>
