@@ -145,7 +145,7 @@ function AddEdit() {
           await updateData(`employee/${id}`, payload);
           dispatch({ type: SET_FILTERS, payload: [] });
           dispatch({ type: SET_CHANGE, payload: 1 });
-          navigate("/");
+          navigate(`/employee-details/${id}`);
           displayToast("Employee updated successfully", "success");
         } catch (error) {
           displayToast("Error updating data", "error");

@@ -1,0 +1,11 @@
+export const SET_EMPLOYEE_DATA = "SET_EMPLOYEE_DATA";
+export const SET_ROLE_LIST = "SET_ROLE_LIST";
+export const SET_DEPT_LIST = "SET_DEPT_LIST";
+export const SET_SKILL_LIST = "SET_SKILL_LIST";
+export const SET_SEARCH_VALUE = "SET_SEARCH_VALUE";
+export const SET_FILTERS = "SET_FILTERS";
+export const SET_CHANGE = "SET_CHANGE";
+export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
+export const SET_PAGE_NUMBER = "SET_PAGE_NUMBER";
+export const SET_LOADING = "SET_LOADING";
+export const SET_SELECTED_FILTER = "SET_SELECTED_FILTER";
