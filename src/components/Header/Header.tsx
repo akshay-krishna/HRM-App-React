@@ -2,13 +2,17 @@ import { HeaderStyle, HeaderWrapper, SearchStyle } from "./HeaderStyled";
 import SearchIcon from "../Icons/SearchIcon";
 import Logo from "../Icons/Logo";
 import { useNavigate } from "react-router";
-import { useEmployeeContext } from "../../context/EmployeeContext";
 import { ChangeEvent } from "react";
-import { SET_FILTERS, SET_SEARCH_VALUE } from "../../context/actionTypes";
+import { SET_FILTERS, SET_SEARCH_VALUE } from "../../redux/actionTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
+import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
 
 const Header = () => {
   const navigate = useNavigate();
-  let { state, dispatch } = useEmployeeContext();
+  const state = useSelector((state: IemployeeContext) => state);
+  const dispatch = useDispatch<Dispatch>();
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: SET_SEARCH_VALUE, payload: e.target.value });
   };

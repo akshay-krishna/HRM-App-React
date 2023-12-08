@@ -11,7 +11,6 @@ import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
 import { useEffect, useState } from "react";
-import { useEmployeeContext } from "../../context/EmployeeContext";
 import { getData, postData, updateData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../../components/LoaderComponent/LoaderComponent";
@@ -19,15 +18,15 @@ import { CdataInvalid } from "../../utils/constant";
 import { uploadImage } from "../../utils/firebase";
 import ProgressiveImage from "react-progressive-graceful-image";
 import initialLoader from "../../assets/LoaderGif/loader.gif";
-import {
-  SET_CHANGE,
-  SET_FILTERS,
-  SET_PAGE_NUMBER,
-} from "../../context/actionTypes";
+import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
+import { SET_CHANGE, SET_FILTERS, SET_PAGE_NUMBER } from "../../redux/actionTypes";
 
 function AddEdit() {
   const navigate = useNavigate();
-  const { state, dispatch } = useEmployeeContext();
+  const state = useSelector((state: IemployeeContext) => state);
+  const dispatch = useDispatch<Dispatch>();
 
   const [formData, setFormData] = useState({
     isActive: true,

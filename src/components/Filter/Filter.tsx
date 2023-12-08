@@ -5,8 +5,10 @@ import CloseIcon from "../Icons/CloseIcon";
 import CloseFilterIcon from "../Icons/CloseFilterIcon";
 import List from "../List/List";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
-import { useEmployeeContext } from "../../context/EmployeeContext";
-import { SET_FILTERS } from "../../context/actionTypes";
+import { SET_FILTERS } from "../../redux/actionTypes";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
+import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
 
 const Filter = ({
   name = "skills",
@@ -21,7 +23,9 @@ const Filter = ({
   setselSkills?: React.Dispatch<React.SetStateAction<IskillID[]>>;
   dispatchSelected?: (f: IskillID[]) => void;
 }) => {
-  const { state, dispatch } = useEmployeeContext();
+  const state = useSelector((state: IemployeeContext) => state);
+  const dispatch = useDispatch<Dispatch>();
+
   const [filterSkills, setFilterSkills] = useState<IskillID[]>(state.skillList);
   const [showSkills, setShowSkills] = useState(false);
   const [selectedSkills, setSelectedSkills] =

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useEmployeeContext } from "../../context/EmployeeContext";
 import { ItableHeader } from "../../interfaces/DashboardInterface/ItableHeader";
 import { filterArray } from "../../utils/filterFunction";
 import DeleteModal from "../DeleteModal/DeleteModal";
@@ -10,10 +9,15 @@ import { deleteData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../LoaderComponent/LoaderComponent";
 import { searchFunction } from "../../utils/search";
-import { SET_CHANGE } from "../../context/actionTypes";
+import { SET_CHANGE } from "../../redux/actionTypes";
+import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
 
 const Table = ({ column = [] }: { column: ItableHeader[] }) => {
-  const { state, dispatch } = useEmployeeContext();
+  const state = useSelector((state: IemployeeContext) => state);
+  const dispatch = useDispatch<Dispatch>();
+
   const [deleteToggle, setDeleteToggle] = useState(false);
   const [deleteID, setDeleteID] = useState();
 

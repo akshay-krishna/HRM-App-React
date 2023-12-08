@@ -1,16 +1,21 @@
 import { useSearchParams } from "react-router-dom";
-import { useEmployeeContext } from "../../context/EmployeeContext";
 import {
   SET_PAGE_NUMBER,
-} from "../../context/actionTypes";
+} from "../../redux/actionTypes";
 import Button from "../Button/Button";
 import PreviousNextPageIcon from "../Icons/PreviousNextPageIcon";
 import StartEndIcon from "../Icons/StartEndIcon";
 import { PaginationWrapper } from "./PaginationStyled";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
+import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
 
 function Pagination() {
-  const { state, dispatch } = useEmployeeContext();
+  const state = useSelector((state: IemployeeContext) => state);
+  const dispatch = useDispatch<Dispatch>();
+
+
   const [searchParam, setSearchParam] = useSearchParams();
   let currentPageNum;
   useEffect(() => {
