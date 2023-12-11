@@ -11,12 +11,11 @@ import { Dispatch } from "redux";
 import { useEffect } from "react";
 import { getData } from "../../core/api";
 import {
-  SET_DEPT_LIST,
-  SET_EMPLOYEE_DATA,
-  SET_LOADING,
-  SET_ROLE_LIST,
-  SET_SKILL_LIST,
-  SET_TOTAL_PAGES,
+  setDeptList,
+  setEmployeeData,
+  setLoading,
+  setRoleList,
+  setTotalPages,
 } from "../../redux/actionTypes";
 import { rowsPerPage } from "../../utils/constant";
 import { sortFunction } from "../../utils/sort";
@@ -30,7 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch({ type: SET_LOADING, payload: true });
+        dispatch(setLoading(true));
         const response = await getData("/employee", {
           params: {
             limit: rowsPerPage,
@@ -41,12 +40,13 @@ const Dashboard = () => {
         });
         const result = response.data.data.employees;
 
-        dispatch({ type: SET_EMPLOYEE_DATA, payload: result });
-        dispatch({
-          type: SET_TOTAL_PAGES,
-          payload: String(Math.ceil(response.data.data.count / rowsPerPage)),
-        });
-        dispatch({ type: SET_LOADING, payload: false });
+        dispatch(setEmployeeData(result));
+        dispatch(
+          setTotalPages(
+            String(Math.ceil(response.data.data.count / rowsPerPage))
+          )
+        );
+        dispatch(setLoading(false));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -57,10 +57,7 @@ const Dashboard = () => {
       try {
         const response = await getData("/roles");
         const result = response.data;
-        dispatch({
-          type: SET_ROLE_LIST,
-          payload: sortFunction(result, "role"),
-        });
+        dispatch(setRoleList(sortFunction(result, "role")));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -71,10 +68,7 @@ const Dashboard = () => {
       try {
         const response = await getData("/departments");
         const result = response.data;
-        dispatch({
-          type: SET_DEPT_LIST,
-          payload: sortFunction(result, "department"),
-        });
+        dispatch(setDeptList(sortFunction(result, "department")));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -85,10 +79,7 @@ const Dashboard = () => {
       try {
         const response = await getData("/skills");
         const result = response.data.data;
-        dispatch({
-          type: SET_SKILL_LIST,
-          payload: sortFunction(result, "skill"),
-        });
+        dispatch(setDeptList(sortFunction(result, "skill")));
       } catch (error) {
         console.error("Error fetching data:", error);
       }

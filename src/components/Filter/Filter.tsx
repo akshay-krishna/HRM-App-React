@@ -5,7 +5,7 @@ import CloseIcon from "../Icons/CloseIcon";
 import CloseFilterIcon from "../Icons/CloseFilterIcon";
 import List from "../List/List";
 import { IskillID } from "../../interfaces/CommonInterfaces/IstringID";
-import { SET_FILTERS } from "../../redux/actionTypes";
+import { setFilters } from "../../redux/actionTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
@@ -45,7 +45,7 @@ const Filter = ({
     if (!isExist) {
       setSelectedSkills((prev) => {
         const updatedSkills = [...prev, skill];
-        dispatch({ type: SET_FILTERS, payload: [...state.filters, skill] });
+        dispatch(setFilters([...state.filters, skill]));
         dispatchSelected?.(updatedSkills);
         return updatedSkills;
       });
@@ -57,13 +57,13 @@ const Filter = ({
       (selected) => selected.skill !== skillName
     );
     setSelectedSkills(updatedList);
-    dispatch({ type: SET_FILTERS, payload: updatedList });
+    dispatch(setFilters([...state.filters, updatedList]));
     dispatchSelected?.(updatedList);
   };
 
   const handleRemoveAllSkill = () => {
     setSelectedSkills([]);
-    dispatch({ type: SET_FILTERS, payload: [] });
+    dispatch(setFilters([]));
     dispatchSelected?.([]);
   };
 

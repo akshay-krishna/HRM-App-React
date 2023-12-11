@@ -3,7 +3,7 @@ import SearchIcon from "../Icons/SearchIcon";
 import Logo from "../Icons/Logo";
 import { useNavigate } from "react-router";
 import { ChangeEvent } from "react";
-import { SET_FILTERS, SET_SEARCH_VALUE } from "../../redux/actionTypes";
+import { setFilters, setSearchValue } from "../../redux/actionTypes";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
@@ -14,7 +14,7 @@ const Header = () => {
   const dispatch = useDispatch<Dispatch>();
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch({ type: SET_SEARCH_VALUE, payload: e.target.value });
+    dispatch(setSearchValue(e.target.value));
   };
   return (
     <HeaderWrapper>
@@ -22,7 +22,7 @@ const Header = () => {
         <h1>
           <a
             onClick={() => {
-              dispatch({ type: SET_FILTERS, payload: [] });
+              dispatch(setFilters([]));
               navigate("/");
             }}
           >

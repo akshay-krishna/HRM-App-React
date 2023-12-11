@@ -9,7 +9,7 @@ import { deleteData } from "../../core/api";
 import displayToast from "../../utils/displayToast";
 import LoaderComponent from "../LoaderComponent/LoaderComponent";
 import { searchFunction } from "../../utils/search";
-import { SET_CHANGE } from "../../redux/actionTypes";
+import { setChange } from "../../redux/actionTypes";
 import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
@@ -44,7 +44,7 @@ const Table = ({ column = [] }: { column: ItableHeader[] }) => {
                 await deleteData(`employee/${deleteID}`);
                 displayToast("Record deleted successfully", "success");
                 setDeleteToggle(false);
-                dispatch({ type: SET_CHANGE, payload: 1 });
+                dispatch(setChange(1));
               } catch (error) {
                 displayToast("Couldn't delete the user", "error");
                 console.error("Error fetching data:", error);

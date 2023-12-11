@@ -1,7 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import {
-  SET_PAGE_NUMBER,
-} from "../../redux/actionTypes";
+import { setPageNumber } from "../../redux/actionTypes";
 import Button from "../Button/Button";
 import PreviousNextPageIcon from "../Icons/PreviousNextPageIcon";
 import StartEndIcon from "../Icons/StartEndIcon";
@@ -15,14 +13,10 @@ function Pagination() {
   const state = useSelector((state: IemployeeContext) => state);
   const dispatch = useDispatch<Dispatch>();
 
-
   const [searchParam, setSearchParam] = useSearchParams();
   let currentPageNum;
   useEffect(() => {
-    dispatch({
-      type: SET_PAGE_NUMBER,
-      payload: searchParam.get("page") || "1",
-    });
+    dispatch(setPageNumber(searchParam.get("page") || "1"));
   }, [searchParam]);
 
   const handleFirst = () => {
@@ -84,10 +78,7 @@ function Pagination() {
           type="text"
           value={state.pageNumber}
           onChange={(e) => {
-            dispatch({
-              type: SET_PAGE_NUMBER,
-              payload: e.currentTarget.value,
-            });
+            dispatch(setPageNumber(e.currentTarget.value));
           }}
         ></input>
         <span className="page-text">of {state.totalPages} pages</span>

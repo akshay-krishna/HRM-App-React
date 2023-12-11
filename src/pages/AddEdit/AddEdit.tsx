@@ -21,7 +21,11 @@ import initialLoader from "../../assets/LoaderGif/loader.gif";
 import { IemployeeContext } from "../../interfaces/CommonInterfaces/IemployeeContext";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { SET_CHANGE, SET_FILTERS, SET_PAGE_NUMBER } from "../../redux/actionTypes";
+import {
+  setChange,
+  setFilters,
+  setPageNumber,
+} from "../../redux/actionTypes";
 
 function AddEdit() {
   const navigate = useNavigate();
@@ -142,8 +146,8 @@ function AddEdit() {
       const updateEmployee = async () => {
         try {
           await updateData(`employee/${id}`, payload);
-          dispatch({ type: SET_FILTERS, payload: [] });
-          dispatch({ type: SET_CHANGE, payload: 1 });
+          dispatch(setFilters([]));
+          dispatch(setChange(1));
           navigate(`/employee-details/${id}`);
           displayToast("Employee updated successfully", "success");
         } catch (error) {
@@ -156,9 +160,9 @@ function AddEdit() {
       const addEmployee = async () => {
         try {
           await postData(`employee`, payload);
-          dispatch({ type: SET_FILTERS, payload: [] });
-          dispatch({ type: SET_PAGE_NUMBER, payload: "1" });
-          dispatch({ type: SET_CHANGE, payload: 1 });
+          dispatch(setFilters([]));
+          dispatch(setPageNumber("1"));
+          dispatch(setChange(1));
           navigate("/?sortBy=id&sortDir=desc");
           displayToast("Employee added successfully", "success");
         } catch (error) {
