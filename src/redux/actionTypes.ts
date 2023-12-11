@@ -1,3 +1,5 @@
+import { IskillID } from "../interfaces/CommonInterfaces/IstringID";
+
 export const SET_EMPLOYEE_DATA = "SET_EMPLOYEE_DATA";
 export const SET_ROLE_LIST = "SET_ROLE_LIST";
 export const SET_DEPT_LIST = "SET_DEPT_LIST";
@@ -26,30 +28,30 @@ export const setSkillList = (payload: any) => {
   return { type: SET_SKILL_LIST, payload };
 };
 
-export const setSearchValue = (payload: any) => {
+export const setSearchValue = (payload: string) => {
   return { type: SET_SEARCH_VALUE, payload };
 };
 
-export const setFilters = (payload: any) => {
+export const setFilters = (payload: (IskillID | IskillID[])[]) => {
   return { type: SET_FILTERS, payload };
 };
 
-export const setChange = (payload: any) => {
+export const setChange = (payload: number) => {
   return { type: SET_CHANGE, payload };
 };
 
-export const setTotalPages = (payload: any) => {
+export const setTotalPages = (payload: string) => {
   return { type: SET_TOTAL_PAGES, payload };
 };
 
-export const setLoading = (payload: any) => {
+export const setLoading = (payload: boolean) => {
   return { type: SET_LOADING, payload };
 };
 
-export const setSelectedFilter = (payload: any) => {
+export const setSelectedFilter = (payload: IskillID[]) => {
   return { type: SET_SELECTED_FILTER, payload };
 };
 
-export const setPageNumber = (payload: any) => {
+export const setPageNumber = (payload: string) => {
   return { type: SET_PAGE_NUMBER, payload };
 };

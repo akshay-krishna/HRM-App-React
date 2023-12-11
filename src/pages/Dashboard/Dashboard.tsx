@@ -15,6 +15,7 @@ import {
   setEmployeeData,
   setLoading,
   setRoleList,
+  setSkillList,
   setTotalPages,
 } from "../../redux/actionTypes";
 import { rowsPerPage } from "../../utils/constant";
@@ -79,7 +80,7 @@ const Dashboard = () => {
       try {
         const response = await getData("/skills");
         const result = response.data.data;
-        dispatch(setDeptList(sortFunction(result, "skill")));
+        dispatch(setSkillList(sortFunction(result, "skill")));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
